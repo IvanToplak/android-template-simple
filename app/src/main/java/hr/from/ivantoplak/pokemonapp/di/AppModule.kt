@@ -1,12 +1,17 @@
 package hr.from.ivantoplak.pokemonapp.di
 
+import androidx.room.Room
+import coil.request.ImageRequest
+import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.coroutines.CoroutineContextProvider
 import hr.from.ivantoplak.pokemonapp.coroutines.CoroutineContextProviderImpl
+import hr.from.ivantoplak.pokemonapp.db.PokemonDatabase
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepository
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepositoryImpl
 import hr.from.ivantoplak.pokemonapp.service.PokemonService
+import hr.from.ivantoplak.pokemonapp.viewmodel.MovesViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
-import org.koin.android.ext.koin.androidApplication
+import hr.from.ivantoplak.pokemonapp.viewmodel.StatsViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -15,12 +20,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 private const val BASE_URL = "https://pokeapi.co/api/v2/"
 
+typealias ImageRequestBuilderLambda = ImageRequest.Builder.() -> Unit
+
 val appModule = module {
 
     single<PokemonService> {
-
-        androidContext().cacheDir
-
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -28,10 +32,31 @@ val appModule = module {
             .create(PokemonService::class.java)
     }
 
-    single<PokemonRepository> { PokemonRepositoryImpl(get()) }
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            PokemonDatabase::class.java,
+            PokemonDatabase.NAME
+        ).build()
+    }
 
     single<CoroutineContextProvider> { CoroutineContextProviderImpl() }
 
+    single { get<PokemonDatabase>().pokemonDao() }
+
+    single<PokemonRepository> { PokemonRepositoryImpl(get(), get(), get()) }
+
+    single<ImageRequestBuilderLambda> {
+        {
+            crossfade(true)
+            placeholder(R.drawable.loading_animation)
+            error(R.drawable.image_placeholder)
+        }
+    }
+
     viewModel { PokemonViewModel(get(), get()) }
 
+    viewModel { (pokemonId: Int) -> MovesViewModel(pokemonId, get(), get()) }
+
+    viewModel { (pokemonId: Int) -> StatsViewModel(pokemonId, get(), get()) }
 }

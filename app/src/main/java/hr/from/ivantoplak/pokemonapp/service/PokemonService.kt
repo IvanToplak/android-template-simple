@@ -1,7 +1,7 @@
 package hr.from.ivantoplak.pokemonapp.service
 
-import hr.from.ivantoplak.pokemonapp.service.response.PokemonNamesResponse
-import hr.from.ivantoplak.pokemonapp.service.response.PokemonResponse
+import hr.from.ivantoplak.pokemonapp.service.model.ApiPokemonNames
+import hr.from.ivantoplak.pokemonapp.service.model.ApiPokemon
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -12,8 +12,8 @@ interface PokemonService {
     suspend fun getPokemonNames(
         @Query("limit") limit: Int,
         @Query("offset") offset: Int
-    ): PokemonNamesResponse
+    ): ApiPokemonNames
 
     @GET("pokemon/{name}")
-    suspend fun getPokemon(@Path("name") name: String): PokemonResponse
+    suspend fun getPokemon(@Path("name") name: String): ApiPokemon
 }

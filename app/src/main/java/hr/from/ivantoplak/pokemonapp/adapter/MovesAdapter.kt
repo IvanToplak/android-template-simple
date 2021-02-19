@@ -6,19 +6,22 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import hr.from.ivantoplak.pokemonapp.databinding.ListItemMoveBinding
+import hr.from.ivantoplak.pokemonapp.ui.model.MoveViewData
 
-class MovesAdapter : ListAdapter<String, MovesAdapter.ViewHolder>(MovesDiffCallback()) {
+class MovesAdapter : ListAdapter<MoveViewData, MovesAdapter.ViewHolder>(MovesDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder.from(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+        ViewHolder.from(parent)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    class ViewHolder private constructor(private val binding: ListItemMoveBinding) : RecyclerView.ViewHolder(binding.root){
+    class ViewHolder private constructor(private val binding: ListItemMoveBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: String) {
-            binding.moveText.text = item
+        fun bind(item: MoveViewData) {
+            binding.moveText.text = item.name
         }
 
         companion object {
@@ -31,13 +34,13 @@ class MovesAdapter : ListAdapter<String, MovesAdapter.ViewHolder>(MovesDiffCallb
     }
 }
 
-private class MovesDiffCallback : DiffUtil.ItemCallback<String>() {
+private class MovesDiffCallback : DiffUtil.ItemCallback<MoveViewData>() {
 
-    override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-        return oldItem == newItem
+    override fun areItemsTheSame(oldItem: MoveViewData, newItem: MoveViewData): Boolean {
+        return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+    override fun areContentsTheSame(oldItem: MoveViewData, newItem: MoveViewData): Boolean {
         return oldItem == newItem
     }
 }

@@ -1,0 +1,27 @@
+package hr.from.ivantoplak.pokemonapp.db.model
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+
+@Entity(
+    tableName = "pokemon_move",
+    primaryKeys = ["pokemon_id", "move_id"],
+    foreignKeys = [
+        ForeignKey(
+            entity = DbPokemon::class,
+            parentColumns = ["id"],
+            childColumns = ["pokemon_id"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = DbMove::class,
+            parentColumns = ["id"],
+            childColumns = ["move_id"],
+            onDelete = ForeignKey.CASCADE
+        )]
+)
+data class DbPokemonMove(
+    @ColumnInfo(name = "pokemon_id") val pokemonId: Int = 0,
+    @ColumnInfo(name = "move_id") val moveId: Int = 0
+)

@@ -7,21 +7,23 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
-import hr.from.ivantoplak.pokemonapp.R
+import coil.load
 import hr.from.ivantoplak.pokemonapp.databinding.FragmentPokemonBinding
+import hr.from.ivantoplak.pokemonapp.di.ImageRequestBuilderLambda
 import hr.from.ivantoplak.pokemonapp.extensions.disable
 import hr.from.ivantoplak.pokemonapp.extensions.enable
 import hr.from.ivantoplak.pokemonapp.extensions.hide
 import hr.from.ivantoplak.pokemonapp.extensions.show
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.ViewState
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PokemonFragment : Fragment() {
 
     private lateinit var binding: FragmentPokemonBinding
-    private val viewModel by sharedViewModel<PokemonViewModel>()
+    private val viewModel by viewModel<PokemonViewModel>()
+    private val imageRequestBuilder by inject<ImageRequestBuilderLambda>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +37,7 @@ class PokemonFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupControls()
-        setupObservers(view)
+        setupObservers()
     }
 
     private fun setupControls() {
@@ -45,15 +47,23 @@ class PokemonFragment : Fragment() {
         }
 
         binding.pokemonMovesButton.setOnClickListener {
-            findNavController().navigate(PokemonFragmentDirections.actionPokemonFragmentToMovesFragment())
+            findNavController().navigate(
+                PokemonFragmentDirections.actionPokemonFragmentToMovesFragment(
+                    pokemonId = viewModel.pokemon.value?.id ?: 0
+                )
+            )
         }
 
         binding.pokemonStatsButton.setOnClickListener {
-            findNavController().navigate(PokemonFragmentDirections.actionPokemonFragmentToStatsFragment())
+            findNavController().navigate(
+                PokemonFragmentDirections.actionPokemonFragmentToStatsFragment(
+                    pokemonId = viewModel.pokemon.value?.id ?: 0
+                )
+            )
         }
     }
 
-    private fun setupObservers(view: View) {
+    private fun setupObservers() {
 
         // view state
         viewModel.viewState.observe(viewLifecycleOwner) { viewState ->
@@ -62,20 +72,21 @@ class PokemonFragment : Fragment() {
             }
         }
 
-        // images
+        // images and text views
         viewModel.pokemon.observe(viewLifecycleOwner) { pokemon ->
 
-            binding.pokemonName.text = pokemon.name
+            binding.pokemonName.text = pokemon?.name
 
             // foreground image
-            Glide.with(view).load(pokemon?.frontSpriteUrl)
-                .error(R.drawable.image_placeholder)
-                .into(binding.pokemonSpriteForeground)
-
+            binding.pokemonSpriteForeground.load(
+                uri = pokemon?.frontSpriteUrl,
+                builder = imageRequestBuilder
+            )
             // background image
-            Glide.with(view).load(pokemon?.backSpriteUrl)
-                .error(R.drawable.image_placeholder)
-                .into(binding.pokemonSpriteBackground)
+            binding.pokemonSpriteBackground.load(
+                uri = pokemon?.backSpriteUrl,
+                builder = imageRequestBuilder
+            )
         }
 
         // error messages

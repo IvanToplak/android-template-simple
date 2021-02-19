@@ -1,4 +1,4 @@
-package hr.from.ivantoplak.pokemonapp.model
+package hr.from.ivantoplak.pokemonapp.ui.model
 
 data class PokemonViewData(
     val id: Int = 0,

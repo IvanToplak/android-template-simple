@@ -3,10 +3,8 @@ package hr.from.ivantoplak.pokemonapp.viewmodel
 import androidx.lifecycle.*
 import hr.from.ivantoplak.pokemonapp.coroutines.CoroutineContextProvider
 import hr.from.ivantoplak.pokemonapp.mappings.toPokemonViewData
-import hr.from.ivantoplak.pokemonapp.mappings.toStatViewData
 import hr.from.ivantoplak.pokemonapp.model.Pokemon
-import hr.from.ivantoplak.pokemonapp.model.PokemonViewData
-import hr.from.ivantoplak.pokemonapp.model.StatViewData
+import hr.from.ivantoplak.pokemonapp.ui.model.PokemonViewData
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepository
 import kotlinx.coroutines.launch
 
@@ -22,7 +20,7 @@ enum class ViewState {
 
 class PokemonViewModel(
     private val repository: PokemonRepository,
-    private val coroutineContext: CoroutineContextProvider
+    private val dispatcher: CoroutineContextProvider
 ) : ViewModel() {
 
     private val _viewState = MutableLiveData<ViewState>()
@@ -32,16 +30,8 @@ class PokemonViewModel(
 
     private val currentPokemon = MutableLiveData<Pokemon>()
 
-    val pokemon: LiveData<PokemonViewData> = Transformations.map(currentPokemon) {
-        it.toPokemonViewData()
-    }
-
-    val moves: LiveData<List<String>> = Transformations.map(currentPokemon) {
-        it.moves
-    }
-
-    val stats: LiveData<List<StatViewData>> = Transformations.map(currentPokemon) {
-        it.stats.toStatViewData()
+    val pokemon: LiveData<PokemonViewData?> = Transformations.map(currentPokemon) {
+        it?.toPokemonViewData()
     }
 
     private val _toastMessage = MutableLiveData<String>()
@@ -49,7 +39,7 @@ class PokemonViewModel(
 
     init {
         _viewState.value = ViewState.INITIAL_LOADING
-        viewModelScope.launch(coroutineContext.io()) {
+        viewModelScope.launch {
             runCatching {
                 pokemonNames = repository.getPokemonNames()
                 val randIndex = (0..pokemonNames.lastIndex).random()
@@ -69,7 +59,7 @@ class PokemonViewModel(
     fun onRefresh() {
         _viewState.value =
             if (currentPokemon.value != null) ViewState.LOADING else ViewState.INITIAL_LOADING
-        viewModelScope.launch(coroutineContext.io()) {
+        viewModelScope.launch(dispatcher.io()) {
             runCatching {
                 val randIndex = (0..pokemonNames.lastIndex).random()
                 currentPokemon.postValue(repository.getPokemon(pokemonNames[randIndex]))

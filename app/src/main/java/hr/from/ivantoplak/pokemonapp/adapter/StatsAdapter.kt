@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import hr.from.ivantoplak.pokemonapp.databinding.ListItemStatBinding
-import hr.from.ivantoplak.pokemonapp.model.StatViewData
+import hr.from.ivantoplak.pokemonapp.ui.model.StatViewData
 
 class StatsAdapter : ListAdapter<StatViewData, StatsAdapter.ViewHolder>(StatsDiffCallback()) {
 
@@ -38,7 +38,7 @@ class StatsAdapter : ListAdapter<StatViewData, StatsAdapter.ViewHolder>(StatsDif
 private class StatsDiffCallback : DiffUtil.ItemCallback<StatViewData>() {
 
     override fun areItemsTheSame(oldItem: StatViewData, newItem: StatViewData): Boolean {
-        return oldItem.name == newItem.name
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: StatViewData, newItem: StatViewData): Boolean {

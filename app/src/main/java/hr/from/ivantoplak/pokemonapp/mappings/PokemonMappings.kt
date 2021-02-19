@@ -1,17 +1,18 @@
 package hr.from.ivantoplak.pokemonapp.mappings
 
+import hr.from.ivantoplak.pokemonapp.db.model.DbMove
+import hr.from.ivantoplak.pokemonapp.db.model.DbPokemon
 import hr.from.ivantoplak.pokemonapp.model.Pokemon
-import hr.from.ivantoplak.pokemonapp.model.PokemonViewData
-import hr.from.ivantoplak.pokemonapp.model.Stat
-import hr.from.ivantoplak.pokemonapp.service.response.PokemonResponse
+import hr.from.ivantoplak.pokemonapp.service.model.ApiPokemon
+import hr.from.ivantoplak.pokemonapp.ui.model.PokemonViewData
 
-fun PokemonResponse.toPokemon(): Pokemon = Pokemon(
-    id = id,
+fun ApiPokemon.toDbMoves(): List<DbMove> =
+    this.moves.mapNotNull { it.move?.name }.map { name -> DbMove(name = name) }
+
+fun ApiPokemon.toDbPokemon(): DbPokemon = DbPokemon(
     name = name,
     frontSpriteUrl = sprites?.frontDefault ?: "",
     backSpriteUrl = sprites?.backDefault ?: "",
-    moves = moves.map { it.move?.name ?: "" },
-    stats = stats.map { Stat(name = it.stat?.name ?: "", value = it.baseStat) }
 )
 
 fun Pokemon.toPokemonViewData(): PokemonViewData = PokemonViewData(
@@ -21,4 +22,9 @@ fun Pokemon.toPokemonViewData(): PokemonViewData = PokemonViewData(
     backSpriteUrl = backSpriteUrl
 )
 
-
+fun DbPokemon.toPokemon(): Pokemon = Pokemon(
+    id = id,
+    name = name,
+    frontSpriteUrl = frontSpriteUrl,
+    backSpriteUrl = backSpriteUrl
+)

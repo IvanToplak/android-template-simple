@@ -20,10 +20,20 @@
         android:id="@+id/movesFragment"
         android:name="hr.from.ivantoplak.pokemonapp.ui.MovesFragment"
         android:label="Moves"
-        tools:layout="@layout/fragment_moves" />
+        tools:layout="@layout/fragment_moves" >
+        <argument
+            android:name="pokemonId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
     <fragment
         android:id="@+id/statsFragment"
         android:name="hr.from.ivantoplak.pokemonapp.ui.StatsFragment"
         android:label="Stats"
-        tools:layout="@layout/fragment_stats" />
+        tools:layout="@layout/fragment_stats" >
+        <argument
+            android:name="pokemonId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>
