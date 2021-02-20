@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
+import androidx.room.Index
 
 @Entity(
     tableName = "pokemon_stat",
@@ -20,7 +21,8 @@ import androidx.room.ForeignKey.CASCADE
             parentColumns = ["id"],
             childColumns = ["stat_id"],
             onDelete = CASCADE
-        )]
+        )],
+    indices = [Index("stat_id")]
 )
 data class DbPokemonStat(
     @ColumnInfo(name = "pokemon_id") val pokemonId: Int = 0,

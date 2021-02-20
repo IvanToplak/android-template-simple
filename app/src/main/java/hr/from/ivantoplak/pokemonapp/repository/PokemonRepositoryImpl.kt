@@ -1,9 +1,8 @@
 package hr.from.ivantoplak.pokemonapp.repository
 
-import kotlinx.coroutines.flow.distinctUntilChanged
-import android.util.Log
 import hr.from.ivantoplak.pokemonapp.coroutines.CoroutineContextProvider
 import hr.from.ivantoplak.pokemonapp.db.dao.PokemonDao
+import hr.from.ivantoplak.pokemonapp.db.model.DbPokemonName
 import hr.from.ivantoplak.pokemonapp.mappings.toMoves
 import hr.from.ivantoplak.pokemonapp.mappings.toPokemon
 import hr.from.ivantoplak.pokemonapp.mappings.toStats
@@ -12,8 +11,13 @@ import hr.from.ivantoplak.pokemonapp.model.Pokemon
 import hr.from.ivantoplak.pokemonapp.model.Stat
 import hr.from.ivantoplak.pokemonapp.service.PokemonService
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import timber.log.Timber
+
+private const val ERROR_GET_POKEMON_NAMES = "Error while retrieving and saving pokemon names."
+private const val ERROR_GET_POKEMON = "Error while retrieving and saving pokemon."
 
 class PokemonRepositoryImpl(
     private val pokemonService: PokemonService,
@@ -21,20 +25,35 @@ class PokemonRepositoryImpl(
     private val dispatcher: CoroutineContextProvider
 ) : PokemonRepository {
 
+    // Get pokemon names from the remote API and save them to the local db.
+    // Return the list from local db.
     override suspend fun getPokemonNames(): List<String> = withContext(dispatcher.io()) {
-        pokemonService.getPokemonNames(Int.MAX_VALUE, 0).results.map { it.name }
+        val pokemonNames = mutableListOf<String>()
+        try {
+            val dbPokemonNames = pokemonService.getPokemonNames(
+                Int.MAX_VALUE,
+                0
+            ).results.map { DbPokemonName(name = it.name) }
+            pokemonDao.insertPokemonNames(dbPokemonNames)
+        } catch (ex: Exception) {
+            Timber.e(ex, ERROR_GET_POKEMON_NAMES)
+        } finally {
+            pokemonNames.addAll(pokemonDao.getPokemonNames().map { it.name })
+        }
+        pokemonNames
     }
 
+    /**
+     * Get pokemon by [name] from the remote API and save it to the local db.
+     * If it was successful, return it, otherwise get random pokemon from the local db.
+     */
     override suspend fun getPokemon(name: String): Pokemon? = withContext(dispatcher.io()) {
-        // try to get pokemon from the remote API
         var pokemon: Pokemon?
         try {
-            pokemon = refreshPokemon(name)
+            pokemon = if (name.isNotBlank()) refreshPokemon(name) else getRandomPokemon()
         } catch (ex: Exception) {
-            // get random pokemon from db
             pokemon = getRandomPokemon()
-            // log exception TODO
-            Log.e("", "")
+            Timber.e(ex, ERROR_GET_POKEMON)
         }
         pokemon
     }
@@ -57,14 +76,13 @@ class PokemonRepositoryImpl(
         return pokemonDao.savePokemonData(pokemon)
     }
 
+    /**
+     * Get random pokemon from the local db.
+     */
     private suspend fun getRandomPokemon(): Pokemon? {
-        // get list of ID-s from db
         val ids = pokemonDao.getPokemonIds()
         if (ids.isEmpty()) return null
-        val randIndex = (0..ids.lastIndex).random()
-        val randId = ids[randIndex].toInt()
-        // get pokemon from db with random ID
-        return pokemonDao.getPokemonById(randId)?.toPokemon()
+        return pokemonDao.getPokemonById(ids.random().toInt())?.toPokemon()
     }
 }
 

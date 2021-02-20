@@ -1,6 +1,5 @@
 package hr.from.ivantoplak.pokemonapp.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,6 +13,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
+
+private const val ERROR_LOADING_MOVES = "Error loading pokemon moves from local store."
 
 class MovesViewModel(
     private val pokemonId: Int,
@@ -30,7 +32,7 @@ class MovesViewModel(
                 repository.getPokemonMoves(pokemonId).map { it.toMovesViewData() }
             }
             flow.catch { ex ->
-                Log.e("", "$ex") //log exception TODO
+                Timber.e(ex, ERROR_LOADING_MOVES)
             }.collect { movesList ->
                 _moves.value = movesList
             }

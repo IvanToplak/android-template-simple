@@ -1,21 +1,28 @@
 package hr.from.ivantoplak.pokemonapp.viewmodel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import hr.from.ivantoplak.pokemonapp.coroutines.CoroutineContextProvider
 import hr.from.ivantoplak.pokemonapp.mappings.toPokemonViewData
-import hr.from.ivantoplak.pokemonapp.model.Pokemon
-import hr.from.ivantoplak.pokemonapp.ui.model.PokemonViewData
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepository
+import hr.from.ivantoplak.pokemonapp.ui.model.PokemonViewData
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 
-private const val ERROR_LOADING_POKEMON =
-    "Error loading pokemon. Please check your internet connection."
+private const val ERROR_LOADING_POKEMON_API =
+    "Error loading pokemons. Please check your internet connection."
+
+private const val ERROR_LOADING_POKEMON_LOCAL =
+    "Error loading pokemons from local store."
 
 enum class ViewState {
-    INITIAL_LOADING,
     LOADING,
-    EMPTY,
-    READY
+    ERROR_NO_DATA,
+    ERROR_HAS_DATA,
+    SUCCESS,
 }
 
 class PokemonViewModel(
@@ -26,51 +33,55 @@ class PokemonViewModel(
     private val _viewState = MutableLiveData<ViewState>()
     val viewState: LiveData<ViewState> = _viewState
 
-    private lateinit var pokemonNames: List<String>
+    private val pokemonNames = mutableListOf<String>()
 
-    private val currentPokemon = MutableLiveData<Pokemon>()
-
-    val pokemon: LiveData<PokemonViewData?> = Transformations.map(currentPokemon) {
-        it?.toPokemonViewData()
-    }
+    private val _pokemon = MutableLiveData<PokemonViewData>()
+    val pokemon: LiveData<PokemonViewData?> = _pokemon
 
     private val _toastMessage = MutableLiveData<String>()
     val toastMessage: LiveData<String> = _toastMessage
 
     init {
-        _viewState.value = ViewState.INITIAL_LOADING
         viewModelScope.launch {
-            runCatching {
-                pokemonNames = repository.getPokemonNames()
-                val randIndex = (0..pokemonNames.lastIndex).random()
-                currentPokemon.postValue(repository.getPokemon(pokemonNames[randIndex]))
-            }.apply {
-                onSuccess {
-                    _viewState.postValue(ViewState.READY)
-                }
-                onFailure {
-                    _viewState.postValue(ViewState.EMPTY)
-                    _toastMessage.postValue(ERROR_LOADING_POKEMON)
-                }
-            }
+            getRandomPokemon()
         }
     }
 
     fun onRefresh() {
-        _viewState.value =
-            if (currentPokemon.value != null) ViewState.LOADING else ViewState.INITIAL_LOADING
-        viewModelScope.launch(dispatcher.io()) {
-            runCatching {
-                val randIndex = (0..pokemonNames.lastIndex).random()
-                currentPokemon.postValue(repository.getPokemon(pokemonNames[randIndex]))
-            }.apply {
-                onSuccess {
-                    _viewState.postValue(ViewState.READY)
+        viewModelScope.launch {
+            getRandomPokemon()
+        }
+    }
+
+    private suspend fun getRandomPokemon() {
+        _viewState.value = ViewState.LOADING
+        runCatching {
+            withContext(dispatcher.default()) {
+                if (pokemonNames.isEmpty()) pokemonNames.addAll(repository.getPokemonNames())
+                repository.getPokemon(pokemonNames.random())?.toPokemonViewData()
+            }
+        }.apply {
+            onSuccess { pokemon ->
+                when {
+                    pokemon != null -> {
+                        _pokemon.value = pokemon
+                        _viewState.value = ViewState.SUCCESS
+                    }
+                    _pokemon.value != null -> {
+                        _viewState.value = ViewState.SUCCESS
+                    }
+                    // show error message only when there is no API data and no local data
+                    else -> {
+                        _viewState.value = ViewState.ERROR_NO_DATA
+                        _toastMessage.value = ERROR_LOADING_POKEMON_API
+                    }
                 }
-                onFailure {
-                    _viewState.postValue(if (currentPokemon.value != null) ViewState.READY else ViewState.EMPTY)
-                    _toastMessage.postValue(ERROR_LOADING_POKEMON)
-                }
+            }
+            onFailure { ex ->
+                _viewState.value =
+                    if (_pokemon.value != null) ViewState.ERROR_HAS_DATA else ViewState.ERROR_NO_DATA
+                _toastMessage.value = ERROR_LOADING_POKEMON_LOCAL
+                Timber.e(ex, ERROR_LOADING_POKEMON_LOCAL)
             }
         }
     }

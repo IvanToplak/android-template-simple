@@ -12,8 +12,6 @@ import hr.from.ivantoplak.pokemonapp.databinding.FragmentPokemonBinding
 import hr.from.ivantoplak.pokemonapp.di.ImageRequestBuilderLambda
 import hr.from.ivantoplak.pokemonapp.extensions.disable
 import hr.from.ivantoplak.pokemonapp.extensions.enable
-import hr.from.ivantoplak.pokemonapp.extensions.hide
-import hr.from.ivantoplak.pokemonapp.extensions.show
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.ViewState
 import org.koin.android.ext.android.inject
@@ -99,60 +97,47 @@ class PokemonFragment : Fragment() {
 
     private fun setViewState(viewState: ViewState) {
         when (viewState) {
-            ViewState.INITIAL_LOADING -> {
-                binding.apply {
-                    loadingProgressBar.show()
-                    pokemonName.hide()
-                    pokemonSpriteForeground.hide()
-                    pokemonSpriteBackground.hide()
-                    pokemonMovesButton.hide()
-                    pokemonStatsButton.hide()
-                    pokemonRefreshButton.hide()
-                }
-            }
-
             ViewState.LOADING -> {
-                binding.apply {
-                    loadingProgressBar.show()
-                    pokemonName.show()
-                    pokemonSpriteForeground.show()
-                    pokemonSpriteBackground.show()
-                    pokemonMovesButton.show()
-                    pokemonMovesButton.disable()
-                    pokemonStatsButton.show()
-                    pokemonStatsButton.disable()
-                    pokemonRefreshButton.show()
-                    pokemonRefreshButton.disable()
-                }
+                setLoadingState()
+            }
+            ViewState.ERROR_NO_DATA -> {
+                setNoDataState()
             }
 
-            ViewState.READY -> {
-                binding.apply {
-                    loadingProgressBar.hide()
-                    pokemonName.show()
-                    pokemonSpriteForeground.show()
-                    pokemonSpriteBackground.show()
-                    pokemonMovesButton.show()
-                    pokemonMovesButton.enable()
-                    pokemonStatsButton.show()
-                    pokemonStatsButton.enable()
-                    pokemonRefreshButton.show()
-                    pokemonRefreshButton.enable()
-                }
+            ViewState.ERROR_HAS_DATA -> {
+                setHasDataState()
             }
 
-            ViewState.EMPTY -> {
-                binding.apply {
-                    loadingProgressBar.hide()
-                    pokemonName.hide()
-                    pokemonSpriteForeground.hide()
-                    pokemonSpriteBackground.hide()
-                    pokemonMovesButton.hide()
-                    pokemonStatsButton.hide()
-                    pokemonRefreshButton.show()
-                    pokemonRefreshButton.enable()
-                }
+            ViewState.SUCCESS -> {
+                setHasDataState()
             }
+        }
+    }
+
+    private fun setLoadingState() {
+        binding.apply {
+            loadingProgressBar.show()
+            pokemonMovesButton.disable()
+            pokemonStatsButton.disable()
+            pokemonRefreshButton.disable()
+        }
+    }
+
+    private fun setNoDataState() {
+        binding.apply {
+            loadingProgressBar.hide()
+            pokemonMovesButton.disable()
+            pokemonStatsButton.disable()
+            pokemonRefreshButton.enable()
+        }
+    }
+
+    private fun setHasDataState() {
+        binding.apply {
+            loadingProgressBar.hide()
+            pokemonMovesButton.enable()
+            pokemonStatsButton.enable()
+            pokemonRefreshButton.enable()
         }
     }
 }

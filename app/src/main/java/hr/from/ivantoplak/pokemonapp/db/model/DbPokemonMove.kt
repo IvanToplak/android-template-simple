@@ -3,6 +3,7 @@ package hr.from.ivantoplak.pokemonapp.db.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 
 @Entity(
     tableName = "pokemon_move",
@@ -19,7 +20,8 @@ import androidx.room.ForeignKey
             parentColumns = ["id"],
             childColumns = ["move_id"],
             onDelete = ForeignKey.CASCADE
-        )]
+        )],
+    indices = [Index("move_id")]
 )
 data class DbPokemonMove(
     @ColumnInfo(name = "pokemon_id") val pokemonId: Int = 0,

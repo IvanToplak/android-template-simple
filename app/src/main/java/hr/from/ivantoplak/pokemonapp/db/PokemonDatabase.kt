@@ -7,7 +7,12 @@ import hr.from.ivantoplak.pokemonapp.db.dao.PokemonDao
 import hr.from.ivantoplak.pokemonapp.db.model.*
 
 @Database(
-    entities = [DbPokemon::class, DbMove::class, DbStat::class, DbPokemonMove::class, DbPokemonStat::class],
+    entities = [DbPokemon::class,
+        DbMove::class,
+        DbStat::class,
+        DbPokemonMove::class,
+        DbPokemonStat::class,
+        DbPokemonName::class],
     version = VERSION,
     exportSchema = false
 )
