@@ -88,7 +88,7 @@ abstract class PokemonDao {
         val dbStats = statMap.keys.map { stat -> DbStat(name = stat) }
         insertStats(dbStats)
 
-        // get stat by name for each stat, map list to pokemon stat list, insert it
+        // get stat by name for each stat, create pokemon stat list, insert it
         val dbPokemonStats = mutableListOf<DbPokemonStat>()
         for (stat in statMap.keys) {
             getStatByName(stat)?.let { dbStat ->

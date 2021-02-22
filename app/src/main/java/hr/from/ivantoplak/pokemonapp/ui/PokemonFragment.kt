@@ -5,21 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import coil.load
 import hr.from.ivantoplak.pokemonapp.databinding.FragmentPokemonBinding
 import hr.from.ivantoplak.pokemonapp.di.ImageRequestBuilderLambda
 import hr.from.ivantoplak.pokemonapp.extensions.disable
 import hr.from.ivantoplak.pokemonapp.extensions.enable
+import hr.from.ivantoplak.pokemonapp.ui.common.BaseFragment
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.ViewState
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PokemonFragment : Fragment() {
+class PokemonFragment : BaseFragment() {
 
-    private lateinit var binding: FragmentPokemonBinding
+    private var _binding: FragmentPokemonBinding? = null
+
+    // this property is only valid between onCreateView and onDestroyView
+    private val binding get() = _binding!!
+
     private val viewModel by viewModel<PokemonViewModel>()
     private val imageRequestBuilder by inject<ImageRequestBuilderLambda>()
 
@@ -27,15 +31,17 @@ class PokemonFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPokemonBinding.inflate(inflater, container, false)
+        _binding = FragmentPokemonBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun doOnViewCreated(view: View, savedInstanceState: Bundle?) {
         setupControls()
         setupObservers()
+    }
+
+    override fun doOnDestroyView() {
+        _binding = null
     }
 
     private fun setupControls() {

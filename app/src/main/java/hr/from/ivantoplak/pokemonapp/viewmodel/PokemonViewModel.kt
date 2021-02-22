@@ -56,7 +56,7 @@ class PokemonViewModel(
     private suspend fun getRandomPokemon() {
         _viewState.value = ViewState.LOADING
         runCatching {
-            withContext(dispatcher.default()) {
+            withContext(dispatcher.io()) {
                 if (pokemonNames.isEmpty()) pokemonNames.addAll(repository.getPokemonNames())
                 repository.getPokemon(pokemonNames.random())?.toPokemonViewData()
             }

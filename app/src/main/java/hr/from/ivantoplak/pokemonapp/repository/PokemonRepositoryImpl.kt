@@ -25,8 +25,10 @@ class PokemonRepositoryImpl(
     private val dispatcher: CoroutineContextProvider
 ) : PokemonRepository {
 
-    // Get pokemon names from the remote API and save them to the local db.
-    // Return the list from local db.
+    /**
+     * Get pokemon names from the remote API and save them to the local db.
+     * Return the list of names from local db.
+     */
     override suspend fun getPokemonNames(): List<String> = withContext(dispatcher.io()) {
         val pokemonNames = mutableListOf<String>()
         try {
