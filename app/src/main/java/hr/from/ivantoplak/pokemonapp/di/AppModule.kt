@@ -9,6 +9,9 @@ import hr.from.ivantoplak.pokemonapp.db.PokemonDatabase
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepository
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepositoryImpl
 import hr.from.ivantoplak.pokemonapp.service.PokemonService
+import hr.from.ivantoplak.pokemonapp.ui.MovesFragment
+import hr.from.ivantoplak.pokemonapp.ui.PokemonFragment
+import hr.from.ivantoplak.pokemonapp.ui.StatsFragment
 import hr.from.ivantoplak.pokemonapp.viewmodel.MovesViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.StatsViewModel
@@ -46,17 +49,27 @@ val appModule = module {
 
     single<PokemonRepository> { PokemonRepositoryImpl(get(), get(), get()) }
 
-    single<ImageRequestBuilderLambda> {
-        {
-            crossfade(true)
-            placeholder(R.drawable.loading_animation)
-            error(R.drawable.image_placeholder)
+    // Fragment scopes
+    scope<PokemonFragment> {
+        scoped {
+            provideImageRequestBuilderLambda()
         }
     }
 
+    scope<MovesFragment> { scoped<Unit> { get() } }
+
+    scope<StatsFragment> { scoped<Unit> { get() } }
+
+    // ViewModels
     viewModel { PokemonViewModel(get(), get()) }
 
     viewModel { (pokemonId: Int) -> MovesViewModel(pokemonId, get(), get()) }
 
     viewModel { (pokemonId: Int) -> StatsViewModel(pokemonId, get(), get()) }
+}
+
+private fun provideImageRequestBuilderLambda(): ImageRequestBuilderLambda = {
+    crossfade(true)
+    placeholder(R.drawable.loading_animation)
+    error(R.drawable.image_placeholder)
 }

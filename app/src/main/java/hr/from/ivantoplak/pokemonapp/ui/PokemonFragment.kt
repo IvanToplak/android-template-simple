@@ -14,7 +14,6 @@ import hr.from.ivantoplak.pokemonapp.extensions.enable
 import hr.from.ivantoplak.pokemonapp.ui.common.BaseFragment
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.ViewState
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PokemonFragment : BaseFragment() {

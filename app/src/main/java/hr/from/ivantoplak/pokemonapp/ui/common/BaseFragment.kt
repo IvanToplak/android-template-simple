@@ -2,9 +2,9 @@ package hr.from.ivantoplak.pokemonapp.ui.common
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
+import org.koin.androidx.scope.ScopeFragment
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment : ScopeFragment() {
 
     final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
