@@ -3,7 +3,7 @@ package hr.from.ivantoplak.pokemonapp.coroutines
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 
-class CoroutineContextProviderImpl : CoroutineContextProvider {
+class DispatcherProviderImpl : DispatcherProvider {
 
     override fun main(): CoroutineContext = Dispatchers.Main
 

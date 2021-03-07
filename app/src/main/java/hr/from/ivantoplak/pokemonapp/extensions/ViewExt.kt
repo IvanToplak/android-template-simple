@@ -1,7 +1,9 @@
 package hr.from.ivantoplak.pokemonapp.extensions
 
 import android.view.View
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 
 fun View.show() {
     if (visibility == VISIBLE) return

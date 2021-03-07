@@ -2,7 +2,7 @@ package hr.from.ivantoplak.pokemonapp.coroutines
 
 import kotlin.coroutines.CoroutineContext
 
-interface CoroutineContextProvider {
+interface DispatcherProvider {
 
     fun main(): CoroutineContext
 

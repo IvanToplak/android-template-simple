@@ -3,8 +3,8 @@ package hr.from.ivantoplak.pokemonapp.di
 import androidx.room.Room
 import coil.request.ImageRequest
 import hr.from.ivantoplak.pokemonapp.R
-import hr.from.ivantoplak.pokemonapp.coroutines.CoroutineContextProvider
-import hr.from.ivantoplak.pokemonapp.coroutines.CoroutineContextProviderImpl
+import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProvider
+import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProviderImpl
 import hr.from.ivantoplak.pokemonapp.db.PokemonDatabase
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepository
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepositoryImpl
@@ -43,7 +43,7 @@ val appModule = module {
         ).build()
     }
 
-    single<CoroutineContextProvider> { CoroutineContextProviderImpl() }
+    single<DispatcherProvider> { DispatcherProviderImpl() }
 
     single { get<PokemonDatabase>().pokemonDao() }
 

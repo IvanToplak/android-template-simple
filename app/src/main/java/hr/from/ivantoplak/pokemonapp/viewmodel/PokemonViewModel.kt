@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import hr.from.ivantoplak.pokemonapp.coroutines.CoroutineContextProvider
+import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProvider
 import hr.from.ivantoplak.pokemonapp.mappings.toPokemonViewData
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepository
 import hr.from.ivantoplak.pokemonapp.ui.model.PokemonViewData
@@ -27,7 +27,7 @@ enum class ViewState {
 
 class PokemonViewModel(
     private val repository: PokemonRepository,
-    private val dispatcher: CoroutineContextProvider
+    private val dispatcher: DispatcherProvider
 ) : ViewModel() {
 
     private val _viewState = MutableLiveData<ViewState>()

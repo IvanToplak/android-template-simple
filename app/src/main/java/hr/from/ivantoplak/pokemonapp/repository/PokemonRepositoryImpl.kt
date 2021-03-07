@@ -1,6 +1,6 @@
 package hr.from.ivantoplak.pokemonapp.repository
 
-import hr.from.ivantoplak.pokemonapp.coroutines.CoroutineContextProvider
+import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProvider
 import hr.from.ivantoplak.pokemonapp.db.dao.PokemonDao
 import hr.from.ivantoplak.pokemonapp.db.model.DbPokemonName
 import hr.from.ivantoplak.pokemonapp.mappings.toMoves
@@ -12,6 +12,7 @@ import hr.from.ivantoplak.pokemonapp.model.Stat
 import hr.from.ivantoplak.pokemonapp.service.PokemonService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -22,7 +23,7 @@ private const val ERROR_GET_POKEMON = "Error while retrieving and saving pokemon
 class PokemonRepositoryImpl(
     private val pokemonService: PokemonService,
     private val pokemonDao: PokemonDao,
-    private val dispatcher: CoroutineContextProvider
+    private val dispatcher: DispatcherProvider
 ) : PokemonRepository {
 
     /**
@@ -60,15 +61,17 @@ class PokemonRepositoryImpl(
         pokemon
     }
 
-    override suspend fun getPokemonMoves(pokemonId: Int): Flow<List<Move>> =
-        withContext(dispatcher.io()) {
-            pokemonDao.getMoves(pokemonId).distinctUntilChanged().map { it.toMoves() }
-        }
+    override fun getPokemonMoves(pokemonId: Int): Flow<List<Move>> =
+        pokemonDao.getMoves(pokemonId)
+            .distinctUntilChanged()
+            .map { it.toMoves() }
+            .flowOn(dispatcher.io())
 
-    override suspend fun getPokemonStats(pokemonId: Int): Flow<List<Stat>> =
-        withContext(dispatcher.io()) {
-            pokemonDao.getStats(pokemonId).distinctUntilChanged().map { it.toStats() }
-        }
+    override fun getPokemonStats(pokemonId: Int): Flow<List<Stat>> =
+        pokemonDao.getStats(pokemonId)
+            .distinctUntilChanged()
+            .map { it.toStats() }
+            .flowOn(dispatcher.io())
 
     /**
      * Get pokemon by [name] from the remote API and save it to the local db.

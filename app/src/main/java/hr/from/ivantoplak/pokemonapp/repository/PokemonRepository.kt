@@ -11,7 +11,7 @@ interface PokemonRepository {
 
     suspend fun getPokemon(name: String): Pokemon?
 
-    suspend fun getPokemonMoves(pokemonId: Int): Flow<List<Move>>
+    fun getPokemonMoves(pokemonId: Int): Flow<List<Move>>
 
-    suspend fun getPokemonStats(pokemonId: Int): Flow<List<Stat>>
+    fun getPokemonStats(pokemonId: Int): Flow<List<Stat>>
 }
