@@ -1,17 +1,21 @@
 package hr.from.ivantoplak.pokemonapp.di
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.room.Room
 import coil.request.ImageRequest
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProvider
 import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProviderImpl
 import hr.from.ivantoplak.pokemonapp.db.PokemonDatabase
+import hr.from.ivantoplak.pokemonapp.managers.InternetManager
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepository
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepositoryImpl
 import hr.from.ivantoplak.pokemonapp.service.PokemonService
 import hr.from.ivantoplak.pokemonapp.ui.MovesFragment
 import hr.from.ivantoplak.pokemonapp.ui.PokemonFragment
 import hr.from.ivantoplak.pokemonapp.ui.StatsFragment
+import hr.from.ivantoplak.pokemonapp.viewmodel.ConnectivityViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.MovesViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.StatsViewModel
@@ -49,6 +53,10 @@ val appModule = module {
 
     single<PokemonRepository> { PokemonRepositoryImpl(get(), get(), get()) }
 
+    single {
+        InternetManager(androidContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+    }
+
     // Fragment scopes
     scope<PokemonFragment> {
         scoped {
@@ -66,6 +74,8 @@ val appModule = module {
     viewModel { (pokemonId: Int) -> MovesViewModel(pokemonId, get(), get()) }
 
     viewModel { (pokemonId: Int) -> StatsViewModel(pokemonId, get(), get()) }
+
+    viewModel { ConnectivityViewModel(get()) }
 }
 
 private fun provideImageRequestBuilderLambda(): ImageRequestBuilderLambda = {

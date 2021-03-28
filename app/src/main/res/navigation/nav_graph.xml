@@ -10,10 +10,10 @@
         android:name="hr.from.ivantoplak.pokemonapp.ui.PokemonFragment"
         android:label="Pokemon">
         <action
-            android:id="@+id/action_pokemonFragment_to_movesFragment"
+            android:id="@+id/showMovesScreen"
             app:destination="@id/movesFragment" />
         <action
-            android:id="@+id/action_pokemonFragment_to_statsFragment"
+            android:id="@+id/showStatsScreen"
             app:destination="@id/statsFragment" />
     </fragment>
     <fragment

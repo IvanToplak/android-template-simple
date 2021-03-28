@@ -59,9 +59,11 @@
         android:layout_marginTop="@dimen/margin_32"
         android:layout_marginEnd="@dimen/margin_16"
         android:text="@string/moves"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pokemon_sprite_background" />
+        app:layout_constraintTop_toBottomOf="@+id/pokemon_sprite_background"
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/pokemon_stats_button"
@@ -71,9 +73,11 @@
         android:layout_marginTop="@dimen/margin_16"
         android:layout_marginEnd="@dimen/margin_16"
         android:text="@string/stats"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pokemon_moves_button" />
+        app:layout_constraintTop_toBottomOf="@+id/pokemon_moves_button"
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/pokemon_refresh_button"
@@ -84,11 +88,13 @@
         android:layout_marginEnd="@dimen/margin_16"
         android:layout_marginBottom="@dimen/margin_32"
         android:text="@string/refresh"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pokemon_stats_button"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0"
+        tools:visibility="visible" />
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/loading_progress_bar"
