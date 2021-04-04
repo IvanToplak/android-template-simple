@@ -1,7 +1,17 @@
 package hr.from.ivantoplak.pokemonapp.db.dao
 
-import androidx.room.*
-import hr.from.ivantoplak.pokemonapp.db.model.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import hr.from.ivantoplak.pokemonapp.db.model.DbMove
+import hr.from.ivantoplak.pokemonapp.db.model.DbPokemon
+import hr.from.ivantoplak.pokemonapp.db.model.DbPokemonMove
+import hr.from.ivantoplak.pokemonapp.db.model.DbPokemonName
+import hr.from.ivantoplak.pokemonapp.db.model.DbPokemonStat
+import hr.from.ivantoplak.pokemonapp.db.model.DbStat
+import hr.from.ivantoplak.pokemonapp.db.model.DbStatNameValue
 import hr.from.ivantoplak.pokemonapp.mappings.toDbMoves
 import hr.from.ivantoplak.pokemonapp.mappings.toDbPokemon
 import hr.from.ivantoplak.pokemonapp.mappings.toPokemon

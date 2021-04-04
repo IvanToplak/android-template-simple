@@ -20,7 +20,8 @@ import androidx.room.Index
             parentColumns = ["id"],
             childColumns = ["move_id"],
             onDelete = ForeignKey.CASCADE
-        )],
+        )
+    ],
     indices = [Index("move_id")]
 )
 data class DbPokemonMove(

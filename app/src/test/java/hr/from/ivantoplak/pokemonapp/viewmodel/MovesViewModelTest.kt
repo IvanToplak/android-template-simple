@@ -1,9 +1,6 @@
 package hr.from.ivantoplak.pokemonapp.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProvider
 import hr.from.ivantoplak.pokemonapp.mappings.toMoveViewData
 import hr.from.ivantoplak.pokemonapp.model.Move
@@ -20,6 +17,9 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 @ExperimentalCoroutinesApi
 class MovesViewModelTest {

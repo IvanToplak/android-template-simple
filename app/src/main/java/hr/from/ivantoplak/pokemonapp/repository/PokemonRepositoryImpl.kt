@@ -90,4 +90,3 @@ class PokemonRepositoryImpl(
         return pokemonDao.getPokemonById(ids.random().toInt())?.toPokemon()
     }
 }
-

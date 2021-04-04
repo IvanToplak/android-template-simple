@@ -1,7 +1,7 @@
 package hr.from.ivantoplak.pokemonapp.service
 
-import hr.from.ivantoplak.pokemonapp.service.model.ApiPokemonNames
 import hr.from.ivantoplak.pokemonapp.service.model.ApiPokemon
+import hr.from.ivantoplak.pokemonapp.service.model.ApiPokemonNames
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

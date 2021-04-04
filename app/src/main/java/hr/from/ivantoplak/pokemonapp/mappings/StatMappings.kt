@@ -19,4 +19,3 @@ fun Stat.toStatViewData(): StatViewData = StatViewData(
 fun List<DbStatNameValue>.toStats(): List<Stat> = map { it.toStat() }
 
 fun List<Stat>.toStatsViewData(): List<StatViewData> = map { it.toStatViewData() }
-

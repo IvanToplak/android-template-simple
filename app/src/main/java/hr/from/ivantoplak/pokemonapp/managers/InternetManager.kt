@@ -47,8 +47,8 @@ class InternetManager(
             val actNw =
                 connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
             return actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                    actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                    actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
         }
 
     @FlowPreview

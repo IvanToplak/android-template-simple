@@ -21,7 +21,8 @@ import androidx.room.Index
             parentColumns = ["id"],
             childColumns = ["stat_id"],
             onDelete = CASCADE
-        )],
+        )
+    ],
     indices = [Index("stat_id")]
 )
 data class DbPokemonStat(

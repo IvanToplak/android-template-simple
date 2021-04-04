@@ -34,6 +34,4 @@ class PokemonApplication : Application() {
             modules(listOf(appModule))
         }
     }
-
-
 }
