@@ -1,6 +1,7 @@
 package hr.from.ivantoplak.pokemonapp.app
 
 import android.app.Application
+import hr.from.ivantoplak.pokemonapp.BuildConfig
 import hr.from.ivantoplak.pokemonapp.di.appModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,17 +18,19 @@ class PokemonApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        delayedInit()
+        initKoin()
+        initTimber()
     }
 
-    private fun delayedInit() {
-        applicationScope.launch {
-            setupKoin()
-            Timber.plant(Timber.DebugTree())
+    private fun initTimber() {
+        if (BuildConfig.DEBUG) {
+            applicationScope.launch {
+                Timber.plant(Timber.DebugTree())
+            }
         }
     }
 
-    private fun setupKoin() {
+    private fun initKoin() {
         startKoin {
             androidContext(this@PokemonApplication)
             androidLogger()

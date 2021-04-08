@@ -19,6 +19,7 @@ import hr.from.ivantoplak.pokemonapp.viewmodel.ConnectivityViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonState
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
 import kotlinx.coroutines.FlowPreview
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
