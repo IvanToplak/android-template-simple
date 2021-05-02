@@ -5,9 +5,11 @@ import android.view.View
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.transition.MaterialContainerTransform
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.adapter.StatsAdapter
 import hr.from.ivantoplak.pokemonapp.databinding.FragmentStatsBinding
+import hr.from.ivantoplak.pokemonapp.extensions.setupActionBar
 import hr.from.ivantoplak.pokemonapp.extensions.viewBinding
 import hr.from.ivantoplak.pokemonapp.ui.common.BaseFragment
 import hr.from.ivantoplak.pokemonapp.viewmodel.StatsViewModel
@@ -21,7 +23,12 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
     private val args: StatsFragmentArgs by navArgs()
     private val viewModel by viewModel<StatsViewModel> { parametersOf(args.pokemonId) }
 
+    override fun doOnCreate(savedInstanceState: Bundle?) {
+        setScreenTransitions()
+    }
+
     override fun doOnViewCreated(view: View, savedInstanceState: Bundle?) {
+        setupActionBar(binding.toolbar)
         setupRecyclerView()
         setupObservers()
     }
@@ -40,5 +47,10 @@ class StatsFragment : BaseFragment(R.layout.fragment_stats) {
         viewModel.stats.observe(viewLifecycleOwner) { stats ->
             statsAdapter.submitList(stats)
         }
+    }
+
+    private fun setScreenTransitions() {
+        sharedElementEnterTransition = MaterialContainerTransform()
+        sharedElementReturnTransition = null
     }
 }

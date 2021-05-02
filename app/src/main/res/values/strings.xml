@@ -8,4 +8,14 @@
     <string name="refresh">Refresh</string>
     <string name="no_internet_connection">There is no internet connection available</string>
     <string name="error_loading_pokemons">Error loading pokemons</string>
+    <string name="logo">Logo</string>
+    <string name="pokemon_screen_title">Pokemon</string>
+
+    <!-- Screen titles -->
+    <string name="moves_screen_title">Moves</string>
+    <string name="stats_screen_title">Stats</string>
+
+    <!-- Transitions-->
+    <string name="pokemon_to_pokemon_moves_transition">pokemon_to_pokemon_moves</string>
+    <string name="pokemon_to_pokemon_stats_transition">pokemon_to_pokemon_stats</string>
 </resources>

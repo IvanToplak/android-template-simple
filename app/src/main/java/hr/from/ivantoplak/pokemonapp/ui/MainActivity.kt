@@ -4,23 +4,24 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
 import hr.from.ivantoplak.pokemonapp.R
+import hr.from.ivantoplak.pokemonapp.databinding.ActivityMainBinding
+import hr.from.ivantoplak.pokemonapp.extensions.viewBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
+    private val binding by viewBinding(ActivityMainBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        navController =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment)!!.findNavController()
-        NavigationUI.setupActionBarWithNavController(this, navController)
+        setTheme(R.style.Theme_PokemonApp)
+        setContentView(binding.root)
+        setNavController()
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp()
+    private fun setNavController() {
+        navController =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment)!!.findNavController()
     }
 }

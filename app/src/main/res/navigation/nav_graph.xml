@@ -1,39 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/pokemonFragment">
+    app:startDestination="@id/splash_fragment">
 
     <fragment
-        android:id="@+id/pokemonFragment"
+        android:id="@+id/splash_fragment"
+        android:name="hr.from.ivantoplak.pokemonapp.ui.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/show_pokemon_screen"
+            app:destination="@id/pokemon_fragment"
+            app:popUpTo="@id/splash_fragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/pokemon_fragment"
         android:name="hr.from.ivantoplak.pokemonapp.ui.PokemonFragment"
         android:label="Pokemon">
         <action
-            android:id="@+id/showMovesScreen"
-            app:destination="@id/movesFragment" />
+            android:id="@+id/show_moves_screen"
+            app:destination="@id/moves_fragment" />
         <action
-            android:id="@+id/showStatsScreen"
-            app:destination="@id/statsFragment" />
+            android:id="@+id/show_stats_screen"
+            app:destination="@id/stats_fragment" />
     </fragment>
     <fragment
-        android:id="@+id/movesFragment"
+        android:id="@+id/moves_fragment"
         android:name="hr.from.ivantoplak.pokemonapp.ui.MovesFragment"
         android:label="Moves"
-        tools:layout="@layout/fragment_moves" >
+        tools:layout="@layout/fragment_moves">
         <argument
             android:name="pokemonId"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="integer" />
     </fragment>
     <fragment
-        android:id="@+id/statsFragment"
+        android:id="@+id/stats_fragment"
         android:name="hr.from.ivantoplak.pokemonapp.ui.StatsFragment"
         android:label="Stats"
-        tools:layout="@layout/fragment_stats" >
+        tools:layout="@layout/fragment_stats">
         <argument
             android:name="pokemonId"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="integer" />
     </fragment>
 </navigation>

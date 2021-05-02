@@ -14,6 +14,7 @@ import hr.from.ivantoplak.pokemonapp.repository.PokemonRepositoryImpl
 import hr.from.ivantoplak.pokemonapp.service.PokemonService
 import hr.from.ivantoplak.pokemonapp.ui.MovesFragment
 import hr.from.ivantoplak.pokemonapp.ui.PokemonFragment
+import hr.from.ivantoplak.pokemonapp.ui.SplashFragment
 import hr.from.ivantoplak.pokemonapp.ui.StatsFragment
 import hr.from.ivantoplak.pokemonapp.viewmodel.ConnectivityViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.MovesViewModel
@@ -63,6 +64,8 @@ val appModule = module {
             provideImageRequestBuilderLambda()
         }
     }
+
+    scope<SplashFragment> { scoped<Unit> { get() } }
 
     scope<MovesFragment> { scoped<Unit> { get() } }
 

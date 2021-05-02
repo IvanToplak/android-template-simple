@@ -2,8 +2,11 @@ package hr.from.ivantoplak.pokemonapp.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import coil.load
+import com.google.android.material.transition.MaterialElevationScale
+import com.google.android.material.transition.MaterialFadeThrough
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.databinding.FragmentPokemonBinding
 import hr.from.ivantoplak.pokemonapp.di.ImageRequestBuilderLambda
@@ -11,6 +14,7 @@ import hr.from.ivantoplak.pokemonapp.extensions.disable
 import hr.from.ivantoplak.pokemonapp.extensions.enable
 import hr.from.ivantoplak.pokemonapp.extensions.fadeIn
 import hr.from.ivantoplak.pokemonapp.extensions.fadeOut
+import hr.from.ivantoplak.pokemonapp.extensions.setupActionBar
 import hr.from.ivantoplak.pokemonapp.extensions.showToast
 import hr.from.ivantoplak.pokemonapp.extensions.viewBinding
 import hr.from.ivantoplak.pokemonapp.managers.InternetManager
@@ -30,8 +34,13 @@ class PokemonFragment : BaseFragment(R.layout.fragment_pokemon) {
     private val imageRequestBuilder by inject<ImageRequestBuilderLambda>()
     private val connectivityViewModel by sharedViewModel<ConnectivityViewModel>()
 
+    override fun doOnCreate(savedInstanceState: Bundle?) {
+        setScreenTransitions()
+    }
+
     @FlowPreview
     override fun doOnViewCreated(view: View, savedInstanceState: Bundle?) {
+        setupActionBar(binding.toolbar)
         setupControls()
         setupObservers()
     }
@@ -42,19 +51,25 @@ class PokemonFragment : BaseFragment(R.layout.fragment_pokemon) {
             viewModel.onRefresh()
         }
 
-        binding.pokemonMovesButton.setOnClickListener {
+        binding.pokemonMovesButton.setOnClickListener { button ->
+            val extras =
+                FragmentNavigatorExtras(button to getString(R.string.pokemon_to_pokemon_moves_transition))
             findNavController().navigate(
                 PokemonFragmentDirections.showMovesScreen(
                     pokemonId = viewModel.pokemon.value?.id ?: 0
-                )
+                ),
+                extras
             )
         }
 
-        binding.pokemonStatsButton.setOnClickListener {
+        binding.pokemonStatsButton.setOnClickListener { button ->
+            val extras =
+                FragmentNavigatorExtras(button to getString(R.string.pokemon_to_pokemon_stats_transition))
             findNavController().navigate(
                 PokemonFragmentDirections.showStatsScreen(
                     pokemonId = viewModel.pokemon.value?.id ?: 0
-                )
+                ),
+                extras
             )
         }
     }
@@ -196,5 +211,11 @@ class PokemonFragment : BaseFragment(R.layout.fragment_pokemon) {
             pokemonStatsButton.fadeOut(toAlpha)
             pokemonRefreshButton.fadeOut(toAlpha)
         }
+    }
+
+    private fun setScreenTransitions() {
+        enterTransition = MaterialFadeThrough()
+        reenterTransition = MaterialElevationScale(true)
+        exitTransition = MaterialElevationScale(false)
     }
 }

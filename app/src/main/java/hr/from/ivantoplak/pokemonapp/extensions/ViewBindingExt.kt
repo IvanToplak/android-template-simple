@@ -3,6 +3,7 @@ package hr.from.ivantoplak.pokemonapp.extensions
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
@@ -10,6 +11,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
+
+/**
+ * Returns activity binding property delegate, which may be used between onCreate and onDestroy (inclusive).
+ */
+inline fun <T : ViewBinding> AppCompatActivity.viewBinding(crossinline inflate: (LayoutInflater) -> T) =
+    lazy(LazyThreadSafetyMode.NONE) {
+        inflate(layoutInflater)
+    }
 
 /**
  * Returns fragment binding property delegate, which may be used between onViewCreated and onDestroyView (inclusive).
