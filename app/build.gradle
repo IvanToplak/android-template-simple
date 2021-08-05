@@ -49,7 +49,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "com.google.android.material:material:$material_version"
-    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
     implementation "androidx.activity:activity-ktx:$activity_ktx_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
@@ -63,7 +62,6 @@ dependencies {
 
     // Koin
     implementation "io.insert-koin:koin-android:$koin_version"
-    implementation "io.insert-koin:koin-android-ext:$koin_version"
     testImplementation "io.insert-koin:koin-test:$koin_version"
 
     // Coroutines
@@ -101,7 +99,7 @@ dependencies {
 
     // Test
     // Unit testing framework
-    androidTestImplementation "com.android.support.test:rules:$test_rule_version"
+    androidTestImplementation "androidx.test:rules:$test_rule_version"
     testImplementation "androidx.test.ext:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$junit_version"
 
@@ -115,9 +113,5 @@ dependencies {
     // to avoid conflict in the test libraries
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     testImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    testImplementation("androidx.arch.core:core-testing:$core_testing_version", {
-        exclude group: 'com.android.support', module: 'support-compat'
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.android.support', module: 'support-core-utils'
-    })
+    testImplementation "androidx.arch.core:core-testing:$core_testing_version"
 }
