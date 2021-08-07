@@ -1,27 +1,21 @@
 package hr.from.ivantoplak.pokemonapp.ui
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import hr.from.ivantoplak.pokemonapp.R
-import hr.from.ivantoplak.pokemonapp.databinding.ActivityMainBinding
-import hr.from.ivantoplak.pokemonapp.extensions.viewBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var navController: NavController
-    private val binding by viewBinding(ActivityMainBinding::inflate)
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        // Switch from splash screen theme to main app theme with delay of 400 ms to avoid UI flashing
+        if (savedInstanceState == null) {
+            Thread.sleep(400)
+        }
         setTheme(R.style.Theme_PokemonApp)
-        setContentView(binding.root)
-        setNavController()
-    }
-
-    private fun setNavController() {
-        navController =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment)!!.findNavController()
+        super.onCreate(savedInstanceState)
+        setContent {
+            PokemonApp()
+        }
     }
 }
