@@ -1,0 +1,27 @@
+package hr.from.ivantoplak.pokemonapp.ui.stats
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
+
+@Composable
+fun StatsScreen(
+    title: String = "",
+) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(text = "$title screen")
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun StatsScreenPreview() {
+    PokemonAppTheme {
+        StatsScreen("Stats")
+    }
+}
