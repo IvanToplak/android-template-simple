@@ -118,22 +118,18 @@ class PokemonFragment : BaseFragment(R.layout.fragment_pokemon) {
 //        when (pokemonState) {
 //            PokemonState.LOADING -> {
 //                setLoadingState()
-//                fadeOut()
 //            }
 //
 //            PokemonState.ERROR_NO_DATA -> {
 //                setNoDataState()
-//                fadeIn()
 //            }
 //
 //            PokemonState.ERROR_HAS_DATA -> {
 //                setHasDataState()
-//                fadeIn()
 //            }
 //
 //            PokemonState.SUCCESS -> {
 //                setHasDataState()
-//                fadeIn()
 //            }
 //        }
 //    }
@@ -165,29 +161,6 @@ class PokemonFragment : BaseFragment(R.layout.fragment_pokemon) {
 //        }
 //    }
 //
-//    private fun fadeIn() {
-//        val fromAlpha = 0.5F
-//        binding.apply {
-//            pokemonName.fadeIn(fromAlpha)
-//            pokemonSpriteForeground.fadeIn(fromAlpha)
-//            pokemonSpriteBackground.fadeIn(fromAlpha)
-//            pokemonMovesButton.fadeIn(fromAlpha)
-//            pokemonStatsButton.fadeIn(fromAlpha)
-//            pokemonRefreshButton.fadeIn(fromAlpha)
-//        }
-//    }
-//
-//    private fun fadeOut() {
-//        val toAlpha = 0.5F
-//        binding.apply {
-//            pokemonName.fadeOut(toAlpha)
-//            pokemonSpriteForeground.fadeOut(toAlpha)
-//            pokemonSpriteBackground.fadeOut(toAlpha)
-//            pokemonMovesButton.fadeOut(toAlpha)
-//            pokemonStatsButton.fadeOut(toAlpha)
-//            pokemonRefreshButton.fadeOut(toAlpha)
-//        }
-//    }
 //
 //    private fun setScreenTransitions() {
 //        enterTransition = MaterialFadeThrough()

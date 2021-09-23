@@ -21,14 +21,13 @@ fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifi
     ) {
         composable(Pokemon.name) {
             PokemonScreen(
-                title = Pokemon.title,
                 onClickShowMoves = { navController.navigate(Moves.name) },
                 onClickShowStats = { navController.navigate(Stats.name) },
             )
         }
         composable(Moves.name) {
             MovesScreen(
-                title = Moves.title
+                onClickBack = { navController.navigateUp() }
             )
         }
         composable(Stats.name) {

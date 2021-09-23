@@ -138,7 +138,7 @@ fun PokemonScreenContent(
     }
 }
 
-fun getConstraints(isLandscape: Boolean): ConstraintSet {
+private fun getConstraints(isLandscape: Boolean): ConstraintSet {
     return ConstraintSet {
         val textPokemonName = createRefFor("pokemon_name")
         val imagePokemonSpriteForeground = createRefFor("pokemon_sprite_foreground")
