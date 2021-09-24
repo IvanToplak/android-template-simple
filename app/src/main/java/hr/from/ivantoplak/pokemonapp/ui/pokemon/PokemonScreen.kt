@@ -13,7 +13,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -26,10 +25,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ChainStyle
+import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.ConstraintSetScope
 import androidx.constraintlayout.compose.Dimension
 import hr.from.ivantoplak.pokemonapp.R
+import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
 import java.util.Locale
 
@@ -41,8 +43,9 @@ fun PokemonScreen(
     onClickRefresh: () -> Unit = {},
 ) {
     Scaffold(topBar = {
-        TopAppBar(
-            title = { Text(text = title, maxLines = 1) }
+        PokemonTopAppBar(
+            title = title,
+            showBackButton = false
         )
     }) { innerPadding ->
         PokemonScreenContent(
@@ -140,113 +143,135 @@ fun PokemonScreenContent(
 
 private fun getConstraints(isLandscape: Boolean): ConstraintSet {
     return ConstraintSet {
-        val textPokemonName = createRefFor("pokemon_name")
-        val imagePokemonSpriteForeground = createRefFor("pokemon_sprite_foreground")
-        val imagePokemonSpriteBackground = createRefFor("pokemon_sprite_background")
-        val spriteSpacer = createRefFor("sprite_spacer")
-        val buttonMoves = createRefFor("pokemon_moves_button")
-        val buttonStats = createRefFor("pokemon_stats_button")
-        val buttonRefresh = createRefFor("pokemon_refresh_button")
-        val progressIndicator = createRefFor("loading_progress_indicator")
+
+        val refs = ComponentRefs(
+            textPokemonName = createRefFor("pokemon_name"),
+            imagePokemonSpriteForeground = createRefFor("pokemon_sprite_foreground"),
+            imagePokemonSpriteBackground = createRefFor("pokemon_sprite_background"),
+            spriteSpacer = createRefFor("sprite_spacer"),
+            buttonMoves = createRefFor("pokemon_moves_button"),
+            buttonStats = createRefFor("pokemon_stats_button"),
+            buttonRefresh = createRefFor("pokemon_refresh_button"),
+            progressIndicator = createRefFor("loading_progress_indicator")
+        )
 
         if (isLandscape) {
-            constrain(textPokemonName) {
-                top.linkTo(parent.top, margin = 32.dp)
-                start.linkTo(parent.start, margin = 16.dp)
-                end.linkTo(parent.end, margin = 16.dp)
-            }
-
-            constrain(imagePokemonSpriteForeground) {
-                top.linkTo(textPokemonName.bottom, margin = 32.dp)
-                start.linkTo(parent.start, margin = 32.dp)
-            }
-
-            constrain(imagePokemonSpriteBackground) {
-                bottom.linkTo(imagePokemonSpriteForeground.bottom)
-                start.linkTo(imagePokemonSpriteForeground.end, margin = 32.dp)
-            }
-
-            constrain(buttonMoves) {
-                top.linkTo(imagePokemonSpriteBackground.top, margin = 8.dp)
-                start.linkTo(buttonStats.start)
-            }
-
-            constrain(buttonStats) {
-                top.linkTo(buttonMoves.bottom, margin = 16.dp)
-                start.linkTo(imagePokemonSpriteBackground.end, margin = 32.dp)
-            }
-
-            constrain(buttonRefresh) {
-                height = Dimension.fillToConstraints
-                top.linkTo(buttonMoves.top)
-                bottom.linkTo(buttonStats.bottom)
-                end.linkTo(parent.end, margin = 32.dp)
-            }
-
-            constrain(progressIndicator) {
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                start.linkTo(buttonStats.end)
-                end.linkTo(buttonRefresh.start)
-            }
+            landscapeConstraints(refs)
         } else {
-            constrain(textPokemonName) {
-                top.linkTo(parent.top, margin = 32.dp)
-                start.linkTo(parent.start, margin = 16.dp)
-                end.linkTo(parent.end, margin = 16.dp)
-            }
-
-            createHorizontalChain(
-                imagePokemonSpriteForeground,
-                spriteSpacer,
-                imagePokemonSpriteBackground,
-                chainStyle = ChainStyle.Packed(0.5F)
-            )
-
-            constrain(imagePokemonSpriteForeground) {
-                top.linkTo(textPokemonName.bottom, margin = 32.dp)
-                start.linkTo(parent.start, margin = 16.dp)
-            }
-
-            constrain(imagePokemonSpriteBackground) {
-                bottom.linkTo(imagePokemonSpriteForeground.bottom)
-                end.linkTo(parent.end, margin = 16.dp)
-            }
-
-            constrain(buttonMoves) {
-                top.linkTo(imagePokemonSpriteBackground.bottom, margin = 32.dp)
-                end.linkTo(parent.end, margin = 16.dp)
-                start.linkTo(parent.start, margin = 16.dp)
-            }
-
-            constrain(buttonStats) {
-                top.linkTo(buttonMoves.bottom, margin = 16.dp)
-                end.linkTo(parent.end, margin = 16.dp)
-                start.linkTo(parent.start, margin = 16.dp)
-            }
-
-            constrain(buttonRefresh) {
-                height = Dimension.wrapContent
-                end.linkTo(parent.end, margin = 16.dp)
-                start.linkTo(parent.start, margin = 16.dp)
-                linkTo(
-                    top = buttonStats.bottom,
-                    bottom = parent.bottom,
-                    topMargin = 16.dp,
-                    bottomMargin = 32.dp,
-                    bias = 1F
-                )
-            }
-
-            constrain(progressIndicator) {
-                end.linkTo(parent.end)
-                start.linkTo(parent.start)
-                top.linkTo(buttonStats.bottom)
-                bottom.linkTo(buttonRefresh.top)
-            }
+            portraitConstraints(refs)
         }
     }
 }
+
+private fun ConstraintSetScope.portraitConstraints(refs: ComponentRefs) {
+    constrain(refs.textPokemonName) {
+        top.linkTo(parent.top, margin = 32.dp)
+        start.linkTo(parent.start, margin = 16.dp)
+        end.linkTo(parent.end, margin = 16.dp)
+    }
+
+    createHorizontalChain(
+        refs.imagePokemonSpriteForeground,
+        refs.spriteSpacer,
+        refs.imagePokemonSpriteBackground,
+        chainStyle = ChainStyle.Packed(0.5F)
+    )
+
+    constrain(refs.imagePokemonSpriteForeground) {
+        top.linkTo(refs.textPokemonName.bottom, margin = 32.dp)
+        start.linkTo(parent.start, margin = 16.dp)
+    }
+
+    constrain(refs.imagePokemonSpriteBackground) {
+        bottom.linkTo(refs.imagePokemonSpriteForeground.bottom)
+        end.linkTo(parent.end, margin = 16.dp)
+    }
+
+    constrain(refs.buttonMoves) {
+        top.linkTo(refs.imagePokemonSpriteBackground.bottom, margin = 32.dp)
+        end.linkTo(parent.end, margin = 16.dp)
+        start.linkTo(parent.start, margin = 16.dp)
+    }
+
+    constrain(refs.buttonStats) {
+        top.linkTo(refs.buttonMoves.bottom, margin = 16.dp)
+        end.linkTo(parent.end, margin = 16.dp)
+        start.linkTo(parent.start, margin = 16.dp)
+    }
+
+    constrain(refs.buttonRefresh) {
+        height = Dimension.wrapContent
+        end.linkTo(parent.end, margin = 16.dp)
+        start.linkTo(parent.start, margin = 16.dp)
+        linkTo(
+            top = refs.buttonStats.bottom,
+            bottom = parent.bottom,
+            topMargin = 16.dp,
+            bottomMargin = 32.dp,
+            bias = 1F
+        )
+    }
+
+    constrain(refs.progressIndicator) {
+        end.linkTo(parent.end)
+        start.linkTo(parent.start)
+        top.linkTo(refs.buttonStats.bottom)
+        bottom.linkTo(refs.buttonRefresh.top)
+    }
+}
+
+private fun ConstraintSetScope.landscapeConstraints(refs: ComponentRefs) {
+    constrain(refs.textPokemonName) {
+        top.linkTo(parent.top, margin = 32.dp)
+        start.linkTo(parent.start, margin = 16.dp)
+        end.linkTo(parent.end, margin = 16.dp)
+    }
+
+    constrain(refs.imagePokemonSpriteForeground) {
+        top.linkTo(refs.textPokemonName.bottom, margin = 32.dp)
+        start.linkTo(parent.start, margin = 32.dp)
+    }
+
+    constrain(refs.imagePokemonSpriteBackground) {
+        bottom.linkTo(refs.imagePokemonSpriteForeground.bottom)
+        start.linkTo(refs.imagePokemonSpriteForeground.end, margin = 32.dp)
+    }
+
+    constrain(refs.buttonMoves) {
+        top.linkTo(refs.imagePokemonSpriteBackground.top, margin = 8.dp)
+        start.linkTo(refs.buttonStats.start)
+    }
+
+    constrain(refs.buttonStats) {
+        top.linkTo(refs.buttonMoves.bottom, margin = 16.dp)
+        start.linkTo(refs.imagePokemonSpriteBackground.end, margin = 32.dp)
+    }
+
+    constrain(refs.buttonRefresh) {
+        height = Dimension.fillToConstraints
+        top.linkTo(refs.buttonMoves.top)
+        bottom.linkTo(refs.buttonStats.bottom)
+        end.linkTo(parent.end, margin = 32.dp)
+    }
+
+    constrain(refs.progressIndicator) {
+        top.linkTo(parent.top)
+        bottom.linkTo(parent.bottom)
+        start.linkTo(refs.buttonStats.end)
+        end.linkTo(refs.buttonRefresh.start)
+    }
+}
+
+private class ComponentRefs(
+    val textPokemonName: ConstrainedLayoutReference,
+    val imagePokemonSpriteForeground: ConstrainedLayoutReference,
+    val imagePokemonSpriteBackground: ConstrainedLayoutReference,
+    val spriteSpacer: ConstrainedLayoutReference,
+    val buttonMoves: ConstrainedLayoutReference,
+    val buttonStats: ConstrainedLayoutReference,
+    val buttonRefresh: ConstrainedLayoutReference,
+    val progressIndicator: ConstrainedLayoutReference,
+)
 
 @Preview(showBackground = true)
 @Composable

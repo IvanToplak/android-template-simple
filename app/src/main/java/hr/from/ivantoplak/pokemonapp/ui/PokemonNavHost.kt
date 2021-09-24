@@ -32,7 +32,7 @@ fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifi
         }
         composable(Stats.name) {
             StatsScreen(
-                title = Stats.title
+                onClickBack = { navController.navigateUp() }
             )
         }
     }

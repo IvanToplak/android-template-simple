@@ -3,18 +3,10 @@ package hr.from.ivantoplak.pokemonapp.ui
 /**
  * Screen metadata.
  */
-enum class PokemonAppScreen(
-    val title: String,
-) {
-    Pokemon(
-        title = "Pokemon",
-    ),
-    Moves(
-        title = "Moves",
-    ),
-    Stats(
-        title = "Stats",
-    );
+enum class PokemonAppScreen {
+    Pokemon,
+    Moves,
+    Stats;
 
     companion object {
         fun fromRoute(route: String?): PokemonAppScreen =

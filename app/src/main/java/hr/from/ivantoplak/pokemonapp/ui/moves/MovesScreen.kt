@@ -5,13 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
@@ -21,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import hr.from.ivantoplak.pokemonapp.R
+import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.ui.model.MoveViewData
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
 
@@ -31,13 +27,9 @@ fun MovesScreen(
     moves: List<MoveViewData> = emptyList(),
 ) {
     Scaffold(topBar = {
-        TopAppBar(
-            title = { Text(text = title, maxLines = 1) },
-            navigationIcon = {
-                IconButton(onClick = { onClickBack() }) {
-                    Icon(Icons.Filled.ArrowBack, contentDescription = null)
-                }
-            }
+        PokemonTopAppBar(
+            title = title,
+            onClickBack = onClickBack
         )
     }) { innerPadding ->
         MovesScreenContent(
@@ -99,6 +91,17 @@ private fun getConstraints(): ConstraintSet {
 @Preview(showBackground = true)
 @Composable
 fun MovesScreenPreview() {
+    PokemonAppTheme {
+        MovesScreen(
+            title = "Moves",
+            moves = List(15) { MoveViewData(id = it, name = "roundhouse kick") }
+        )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 720, heightDp = 360)
+@Composable
+fun MovesScreenPreviewLandscape() {
     PokemonAppTheme {
         MovesScreen(
             title = "Moves",
