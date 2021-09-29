@@ -1,26 +1,27 @@
 package hr.from.ivantoplak.pokemonapp.ui.pokemon
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,13 +31,24 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.ConstraintSetScope
 import androidx.constraintlayout.compose.Dimension
+import coil.ImageLoader
+import coil.compose.LocalImageLoader
+import coil.compose.rememberImagePainter
 import hr.from.ivantoplak.pokemonapp.R
+import hr.from.ivantoplak.pokemonapp.extensions.titleCaseFirstChar
+import hr.from.ivantoplak.pokemonapp.ui.common.PokemonLoadingIndicator
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
+import hr.from.ivantoplak.pokemonapp.ui.model.PokemonViewData
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
+import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonState
+import org.koin.androidx.compose.get
 import java.util.Locale
 
 @Composable
 fun PokemonScreen(
+    imageLoader: ImageLoader = get(),
+    pokemon: PokemonViewData? = null,
+    pokemonState: PokemonState = PokemonState.LOADING,
     title: String = stringResource(id = R.string.pokemon_screen_title),
     onClickShowMoves: () -> Unit = {},
     onClickShowStats: () -> Unit = {},
@@ -50,6 +62,9 @@ fun PokemonScreen(
     }) { innerPadding ->
         PokemonScreenContent(
             modifier = Modifier.padding(innerPadding),
+            imageLoader = imageLoader,
+            pokemon = pokemon,
+            pokemonState = pokemonState,
             onClickShowMoves = onClickShowMoves,
             onClickShowStats = onClickShowStats,
             onClickRefresh = onClickRefresh,
@@ -57,9 +72,13 @@ fun PokemonScreen(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PokemonScreenContent(
     modifier: Modifier = Modifier,
+    imageLoader: ImageLoader,
+    pokemon: PokemonViewData? = null,
+    pokemonState: PokemonState = PokemonState.LOADING,
     onClickShowMoves: () -> Unit = {},
     onClickShowStats: () -> Unit = {},
     onClickRefresh: () -> Unit = {},
@@ -69,18 +88,23 @@ fun PokemonScreenContent(
         val constraints = getConstraints(isLandscape)
         ConstraintLayout(
             constraintSet = constraints,
-            animateChanges = true,
             modifier = modifier.fillMaxSize()
         ) {
+            // pokemon name
             Text(
-                text = stringResource(id = R.string.default_pokemon_name),
+                text = pokemon?.name?.titleCaseFirstChar() ?: "",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
                 modifier = Modifier.layoutId("pokemon_name")
             )
 
+            // foreground image
             Image(
-                painter = painterResource(id = R.drawable.loading_img),
+                painter = rememberImagePainter(
+                    data = pokemon?.frontSpriteUrl,
+                    imageLoader = imageLoader
+                ),
                 contentDescription = stringResource(id = R.string.pokemon_image_front),
                 modifier = Modifier
                     .layoutId("pokemon_sprite_foreground")
@@ -93,34 +117,59 @@ fun PokemonScreenContent(
                     .width(32.dp)
             )
 
+            // background image
             Image(
-                painter = painterResource(id = R.drawable.loading_img),
+                painter = rememberImagePainter(
+                    data = pokemon?.backSpriteUrl,
+                    imageLoader = imageLoader
+                ),
                 contentDescription = stringResource(id = R.string.pokemon_image_back),
                 modifier = Modifier
                     .layoutId("pokemon_sprite_background")
                     .size(dimensionResource(id = R.dimen.sprite_image_size))
             )
 
-            Button(
-                onClick = { onClickShowMoves() },
-                modifier = Modifier
-                    .layoutId("pokemon_moves_button")
-                    .wrapContentHeight()
-                    .width(dimensionResource(id = R.dimen.button_width))
+            // moves button
+            AnimatedVisibility(
+                visible = pokemonState in arrayOf(
+                    PokemonState.ERROR_HAS_DATA,
+                    PokemonState.SUCCESS
+                ),
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier.layoutId("pokemon_moves_button")
             ) {
-                Text(text = stringResource(id = R.string.moves).uppercase(Locale.getDefault()))
+                Button(
+                    onClick = { onClickShowMoves() },
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        .width(dimensionResource(id = R.dimen.button_width))
+                ) {
+                    Text(text = stringResource(id = R.string.moves).uppercase(Locale.getDefault()))
+                }
             }
 
-            Button(
-                onClick = { onClickShowStats() },
-                modifier = Modifier
-                    .layoutId("pokemon_stats_button")
-                    .wrapContentHeight()
-                    .width(dimensionResource(id = R.dimen.button_width))
+            // stats button
+            AnimatedVisibility(
+                visible = pokemonState in arrayOf(
+                    PokemonState.ERROR_HAS_DATA,
+                    PokemonState.SUCCESS
+                ),
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier.layoutId("pokemon_stats_button")
             ) {
-                Text(text = stringResource(id = R.string.stats).uppercase(Locale.getDefault()))
+                Button(
+                    onClick = { onClickShowStats() },
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        .width(dimensionResource(id = R.dimen.button_width))
+                ) {
+                    Text(text = stringResource(id = R.string.stats).uppercase(Locale.getDefault()))
+                }
             }
 
+            // refresh button
             Button(
                 onClick = { onClickRefresh() },
                 modifier = Modifier
@@ -130,13 +179,31 @@ fun PokemonScreenContent(
                 Text(text = stringResource(id = R.string.refresh).uppercase(Locale.getDefault()))
             }
 
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .layoutId("loading_progress_indicator")
-                    .width(dimensionResource(id = R.dimen.progress_bar_size))
-                    .height(dimensionResource(id = R.dimen.progress_bar_size))
-                    .alpha(0.6F)
-            )
+            // info message
+            AnimatedVisibility(
+                visible = pokemonState == PokemonState.ERROR_NO_DATA,
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier.layoutId("text_info")
+            ) {
+                Text(
+                    text = stringResource(id = R.string.pokemon_info),
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 32.dp)
+                )
+            }
+
+            // loading indicator
+            AnimatedVisibility(
+                visible = pokemonState == PokemonState.LOADING,
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier.layoutId("loading_progress_indicator")
+            ) {
+                PokemonLoadingIndicator()
+            }
         }
     }
 }
@@ -152,7 +219,8 @@ private fun getConstraints(isLandscape: Boolean): ConstraintSet {
             buttonMoves = createRefFor("pokemon_moves_button"),
             buttonStats = createRefFor("pokemon_stats_button"),
             buttonRefresh = createRefFor("pokemon_refresh_button"),
-            progressIndicator = createRefFor("loading_progress_indicator")
+            progressIndicator = createRefFor("loading_progress_indicator"),
+            textInfo = createRefFor("text_info")
         )
 
         if (isLandscape) {
@@ -215,8 +283,15 @@ private fun ConstraintSetScope.portraitConstraints(refs: ComponentRefs) {
     constrain(refs.progressIndicator) {
         end.linkTo(parent.end)
         start.linkTo(parent.start)
-        top.linkTo(refs.buttonStats.bottom)
-        bottom.linkTo(refs.buttonRefresh.top)
+        top.linkTo(parent.top)
+        bottom.linkTo(parent.bottom)
+    }
+
+    constrain(refs.textInfo) {
+        end.linkTo(parent.end, margin = 16.dp)
+        start.linkTo(parent.start, margin = 16.dp)
+        top.linkTo(parent.top, margin = 16.dp)
+        bottom.linkTo(refs.buttonRefresh.top, margin = 16.dp)
     }
 }
 
@@ -249,16 +324,23 @@ private fun ConstraintSetScope.landscapeConstraints(refs: ComponentRefs) {
 
     constrain(refs.buttonRefresh) {
         height = Dimension.fillToConstraints
-        top.linkTo(refs.buttonMoves.top)
-        bottom.linkTo(refs.buttonStats.bottom)
+        top.linkTo(refs.imagePokemonSpriteForeground.top)
+        bottom.linkTo(refs.imagePokemonSpriteForeground.bottom)
         end.linkTo(parent.end, margin = 32.dp)
     }
 
     constrain(refs.progressIndicator) {
         top.linkTo(parent.top)
         bottom.linkTo(parent.bottom)
-        start.linkTo(refs.buttonStats.end)
-        end.linkTo(refs.buttonRefresh.start)
+        start.linkTo(parent.start)
+        end.linkTo(parent.end)
+    }
+
+    constrain(refs.textInfo) {
+        end.linkTo(refs.buttonRefresh.start, margin = 16.dp)
+        start.linkTo(parent.start, margin = 16.dp)
+        top.linkTo(parent.top, margin = 16.dp)
+        bottom.linkTo(parent.bottom, margin = 16.dp)
     }
 }
 
@@ -271,13 +353,14 @@ private class ComponentRefs(
     val buttonStats: ConstrainedLayoutReference,
     val buttonRefresh: ConstrainedLayoutReference,
     val progressIndicator: ConstrainedLayoutReference,
+    val textInfo: ConstrainedLayoutReference,
 )
 
 @Preview(showBackground = true)
 @Composable
 fun PokemonScreenPreview() {
     PokemonAppTheme {
-        PokemonScreen("Pokemon", {}, {})
+        GetPokemonScreen()
     }
 }
 
@@ -285,6 +368,18 @@ fun PokemonScreenPreview() {
 @Composable
 fun PokemonScreenPreviewLandscape() {
     PokemonAppTheme {
-        PokemonScreen("Pokemon", {}, {})
+        GetPokemonScreen()
     }
+}
+
+@Composable
+private fun GetPokemonScreen() {
+    PokemonScreen(
+        imageLoader = LocalImageLoader.current,
+        pokemon = PokemonViewData(id = 1, "Pikachu"),
+        title = "Pokemon",
+        onClickShowStats = {},
+        onClickShowMoves = {},
+        onClickRefresh = {}
+    )
 }

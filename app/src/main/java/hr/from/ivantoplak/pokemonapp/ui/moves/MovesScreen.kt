@@ -23,8 +23,8 @@ import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
 @Composable
 fun MovesScreen(
     title: String = stringResource(id = R.string.moves_screen_title),
-    onClickBack: () -> Unit = {},
     moves: List<MoveViewData> = emptyList(),
+    onClickBack: () -> Unit = {},
 ) {
     Scaffold(topBar = {
         PokemonTopAppBar(
@@ -72,7 +72,7 @@ fun MoveRow(
     modifier: Modifier = Modifier,
     move: MoveViewData
 ) {
-    Text(text = move.name, modifier = modifier.padding(16.dp))
+    Text(text = move.name, modifier = modifier.padding(horizontal = 32.dp, vertical = 16.dp))
 }
 
 private fun getConstraints(): ConstraintSet {

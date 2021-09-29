@@ -30,8 +30,8 @@ import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
 @Composable
 fun StatsScreen(
     title: String = stringResource(id = R.string.stats_screen_title),
-    onClickBack: () -> Unit = {},
     stats: List<StatViewData> = emptyList(),
+    onClickBack: () -> Unit = {},
 ) {
     Scaffold(topBar = {
         PokemonTopAppBar(

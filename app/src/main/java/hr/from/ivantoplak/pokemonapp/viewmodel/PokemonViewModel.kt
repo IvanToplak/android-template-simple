@@ -8,7 +8,6 @@ import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProvider
 import hr.from.ivantoplak.pokemonapp.mappings.toPokemonViewData
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepository
 import hr.from.ivantoplak.pokemonapp.ui.model.PokemonViewData
-import hr.from.ivantoplak.pokemonapp.viewmodel.event.Event
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -36,11 +35,8 @@ class PokemonViewModel(
     private val _pokemon = MutableLiveData<PokemonViewData?>(null)
     val pokemon: LiveData<PokemonViewData?> = _pokemon
 
-    private val _showMessage = MutableLiveData<Event<Boolean>>()
-    val showMessage: LiveData<Event<Boolean>> = _showMessage
-
-    private val _message = MutableLiveData<Event<String>>()
-    val message: LiveData<Event<String>> = _message
+    private val _showErrorMessage = MutableLiveData<Boolean>()
+    val showErrorMessage: LiveData<Boolean> = _showErrorMessage
 
     init {
         viewModelScope.launch {
@@ -54,8 +50,13 @@ class PokemonViewModel(
         }
     }
 
+    fun onShowErrorMessage() {
+        _showErrorMessage.value = false
+    }
+
     private suspend fun getRandomPokemon() {
         _pokemonState.value = PokemonState.LOADING
+        _showErrorMessage.value = false
         runCatching {
             withContext(dispatcher.io()) {
                 if (pokemonNames.isEmpty()) pokemonNames.addAll(repository.getPokemonNames())
@@ -67,29 +68,25 @@ class PokemonViewModel(
                     pokemon != null -> {
                         _pokemon.value = pokemon
                         _pokemonState.value = PokemonState.SUCCESS
-                        _showMessage.value = Event(false)
+                        _showErrorMessage.value = false
                     }
                     _pokemon.value != null -> {
                         _pokemonState.value = PokemonState.SUCCESS
-                        _showMessage.value = Event(false)
+                        _showErrorMessage.value = false
                     }
                     // show error message only when there is no API data and no local data
                     else -> {
                         _pokemonState.value = PokemonState.ERROR_NO_DATA
-                        _showMessage.value = Event(true)
+                        _showErrorMessage.value = true
                     }
                 }
             }
             onFailure { ex ->
                 _pokemonState.value =
                     if (_pokemon.value != null) PokemonState.ERROR_HAS_DATA else PokemonState.ERROR_NO_DATA
-                _showMessage.value = Event(true)
+                _showErrorMessage.value = true
                 Timber.e(ex, ERROR_LOADING_POKEMONS)
             }
         }
-    }
-
-    fun showMessage(message: String) {
-        _message.value = Event(message)
     }
 }

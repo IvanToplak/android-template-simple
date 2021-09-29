@@ -30,8 +30,8 @@ class MovesViewModel(
         viewModelScope.launch {
             repository.getPokemonMoves(pokemonId)
                 .map { it.toMovesViewData() }
-                .flowOn(dispatcher.default())
-                .catch { ex -> Timber.e(ex, ERROR_LOADING_MOVES) }
+                .flowOn(dispatcher.io())
+                .catch { e -> Timber.e(e, ERROR_LOADING_MOVES) }
                 .collect { movesList -> _moves.value = movesList }
         }
     }

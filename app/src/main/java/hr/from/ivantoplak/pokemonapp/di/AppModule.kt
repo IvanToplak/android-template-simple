@@ -3,7 +3,7 @@ package hr.from.ivantoplak.pokemonapp.di
 import android.content.Context
 import android.net.ConnectivityManager
 import androidx.room.Room
-import coil.request.ImageRequest
+import coil.ImageLoader
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProvider
 import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProviderImpl
@@ -12,9 +12,6 @@ import hr.from.ivantoplak.pokemonapp.managers.InternetManager
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepository
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepositoryImpl
 import hr.from.ivantoplak.pokemonapp.service.PokemonService
-import hr.from.ivantoplak.pokemonapp.ui.MovesFragment
-import hr.from.ivantoplak.pokemonapp.ui.PokemonFragment
-import hr.from.ivantoplak.pokemonapp.ui.StatsFragment
 import hr.from.ivantoplak.pokemonapp.viewmodel.ConnectivityViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.MovesViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
@@ -26,8 +23,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 private const val BASE_URL = "https://pokeapi.co/api/v2/"
-
-typealias ImageRequestBuilderLambda = ImageRequest.Builder.() -> Unit
 
 val appModule = module {
 
@@ -57,16 +52,13 @@ val appModule = module {
         InternetManager(androidContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
     }
 
-    // Fragment scopes
-    scope<PokemonFragment> {
-        scoped {
-            provideImageRequestBuilderLambda()
-        }
+    single {
+        ImageLoader.Builder(androidContext())
+            .crossfade(true)
+            .placeholder(R.drawable.loading_animation)
+            .error(R.drawable.image_placeholder)
+            .build()
     }
-
-    scope<MovesFragment> { scoped<Unit> { get() } }
-
-    scope<StatsFragment> { scoped<Unit> { get() } }
 
     // ViewModels
     viewModel { PokemonViewModel(get(), get()) }
@@ -76,10 +68,4 @@ val appModule = module {
     viewModel { (pokemonId: Int) -> StatsViewModel(pokemonId, get(), get()) }
 
     viewModel { ConnectivityViewModel(get()) }
-}
-
-private fun provideImageRequestBuilderLambda(): ImageRequestBuilderLambda = {
-    crossfade(true)
-    placeholder(R.drawable.loading_animation)
-    error(R.drawable.image_placeholder)
 }

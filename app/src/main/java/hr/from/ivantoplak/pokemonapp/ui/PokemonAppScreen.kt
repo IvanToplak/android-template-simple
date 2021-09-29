@@ -6,7 +6,8 @@ package hr.from.ivantoplak.pokemonapp.ui
 enum class PokemonAppScreen {
     Pokemon,
     Moves,
-    Stats;
+    Stats,
+    Error;
 
     companion object {
         fun fromRoute(route: String?): PokemonAppScreen =
@@ -14,6 +15,7 @@ enum class PokemonAppScreen {
                 Pokemon.name -> Pokemon
                 Moves.name -> Moves
                 Stats.name -> Stats
+                Error.name -> Error
                 null -> Pokemon
                 else -> throw IllegalArgumentException("Route $route is not recognized.")
             }
