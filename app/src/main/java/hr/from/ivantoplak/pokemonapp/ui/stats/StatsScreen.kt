@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -90,6 +91,7 @@ fun StatsRow(
             Text(
                 text = stat.name,
                 textAlign = TextAlign.End,
+                style = MaterialTheme.typography.body1,
                 modifier = modifier
                     .padding(vertical = 16.dp)
             )
@@ -99,6 +101,7 @@ fun StatsRow(
             Text(
                 text = stat.value.toString(),
                 textAlign = TextAlign.End,
+                style = MaterialTheme.typography.body1,
                 modifier = modifier
                     .padding(vertical = 16.dp)
                     .width(dimensionResource(id = R.dimen.stat_value_width))

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,11 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -93,9 +92,8 @@ fun PokemonScreenContent(
             // pokemon name
             Text(
                 text = pokemon?.name?.titleCaseFirstChar() ?: "",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.h5,
                 modifier = Modifier.layoutId("pokemon_name")
             )
 
@@ -145,7 +143,10 @@ fun PokemonScreenContent(
                         .wrapContentHeight()
                         .width(dimensionResource(id = R.dimen.button_width))
                 ) {
-                    Text(text = stringResource(id = R.string.moves).uppercase(Locale.getDefault()))
+                    Text(
+                        text = stringResource(id = R.string.moves).uppercase(Locale.getDefault()),
+                        style = MaterialTheme.typography.button
+                    )
                 }
             }
 
@@ -165,7 +166,10 @@ fun PokemonScreenContent(
                         .wrapContentHeight()
                         .width(dimensionResource(id = R.dimen.button_width))
                 ) {
-                    Text(text = stringResource(id = R.string.stats).uppercase(Locale.getDefault()))
+                    Text(
+                        text = stringResource(id = R.string.stats).uppercase(Locale.getDefault()),
+                        style = MaterialTheme.typography.button
+                    )
                 }
             }
 
@@ -176,7 +180,10 @@ fun PokemonScreenContent(
                     .layoutId("pokemon_refresh_button")
                     .width(dimensionResource(id = R.dimen.button_width))
             ) {
-                Text(text = stringResource(id = R.string.refresh).uppercase(Locale.getDefault()))
+                Text(
+                    text = stringResource(id = R.string.refresh).uppercase(Locale.getDefault()),
+                    style = MaterialTheme.typography.button
+                )
             }
 
             // info message
@@ -188,9 +195,8 @@ fun PokemonScreenContent(
             ) {
                 Text(
                     text = stringResource(id = R.string.pokemon_info),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.h5,
                     modifier = Modifier.padding(horizontal = 32.dp)
                 )
             }
@@ -313,12 +319,12 @@ private fun ConstraintSetScope.landscapeConstraints(refs: ComponentRefs) {
     }
 
     constrain(refs.buttonMoves) {
-        top.linkTo(refs.imagePokemonSpriteBackground.top, margin = 8.dp)
+        top.linkTo(refs.imagePokemonSpriteBackground.top)
         start.linkTo(refs.buttonStats.start)
     }
 
     constrain(refs.buttonStats) {
-        top.linkTo(refs.buttonMoves.bottom, margin = 16.dp)
+        bottom.linkTo(refs.imagePokemonSpriteBackground.bottom)
         start.linkTo(refs.imagePokemonSpriteBackground.end, margin = 32.dp)
     }
 

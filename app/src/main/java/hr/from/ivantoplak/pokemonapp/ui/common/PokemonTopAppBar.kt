@@ -2,6 +2,7 @@ package hr.from.ivantoplak.pokemonapp.ui.common
 
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -17,7 +18,7 @@ fun PokemonTopAppBar(
     onClickBack: () -> Unit = {}
 ) {
     TopAppBar(
-        title = { Text(text = title, maxLines = 1) },
+        title = { Text(text = title, maxLines = 1, style = MaterialTheme.typography.h6) },
         navigationIcon = if (showBackButton) {
             {
                 PokemonBackButton(onClickBack = onClickBack)
