@@ -1,6 +1,7 @@
 package hr.from.ivantoplak.pokemonapp.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
@@ -9,24 +10,24 @@ import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
     // Primary brand color
-    primary = PrimaryColor,
-    primaryVariant = PrimaryDarkColor,
+    primary = PokemonRed,
+    primaryVariant = PokemonDarkRed,
     onPrimary = White,
     // Secondary brand color
-    secondary = SecondaryColor,
-    secondaryVariant = SecondaryDarkColor,
+    secondary = PokemonBlue,
+    secondaryVariant = PokemonDarkBlue,
     onSecondary = White,
     background = Color.White,
 )
 
 private val LightColorPalette = lightColors(
     // Primary brand color
-    primary = PrimaryColor,
-    primaryVariant = PrimaryDarkColor,
+    primary = PokemonRed,
+    primaryVariant = PokemonDarkRed,
     onPrimary = White,
     // Secondary brand color
-    secondary = SecondaryColor,
-    secondaryVariant = SecondaryDarkColor,
+    secondary = PokemonBlue,
+    secondaryVariant = PokemonDarkBlue,
     onSecondary = White,
     background = Color.White,
 
@@ -56,3 +57,6 @@ fun PokemonAppTheme(
         content = content
     )
 }
+
+val Colors.loadingIndicatorBackground: Color
+    @Composable get() = BlackTransparent

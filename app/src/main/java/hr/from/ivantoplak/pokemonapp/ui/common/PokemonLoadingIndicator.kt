@@ -7,19 +7,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import hr.from.ivantoplak.pokemonapp.R
-import hr.from.ivantoplak.pokemonapp.ui.theme.BlackTransparent
+import hr.from.ivantoplak.pokemonapp.ui.theme.loadingIndicatorBackground
 
 @Composable
 fun PokemonLoadingIndicator() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = BlackTransparent)
+            .background(color = MaterialTheme.colors.loadingIndicatorBackground)
             .clickable { }
     ) {
         CircularProgressIndicator(

@@ -26,7 +26,6 @@ import androidx.constraintlayout.compose.ConstraintSet
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
-import hr.from.ivantoplak.pokemonapp.ui.theme.PrimaryDarkColor
 import java.util.Locale
 
 enum class ErrorScreenParameter(val param: String) {
@@ -78,7 +77,7 @@ fun ErrorScreenContent(
                 modifier = Modifier
                     .layoutId("image_error")
                     .size(dimensionResource(id = R.dimen.error_image_size)),
-                colorFilter = ColorFilter.tint(color = PrimaryDarkColor)
+                colorFilter = ColorFilter.tint(color = MaterialTheme.colors.primaryVariant)
             )
 
             // title text
