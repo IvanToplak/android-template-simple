@@ -9,8 +9,8 @@ import com.google.android.material.color.MaterialColors
 import com.google.android.material.transition.MaterialFadeThrough
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.databinding.FragmentSplashBinding
-import hr.from.ivantoplak.pokemonapp.extensions.hideSystemUI
-import hr.from.ivantoplak.pokemonapp.extensions.showSystemUI
+import hr.from.ivantoplak.pokemonapp.extensions.hideNavBar
+import hr.from.ivantoplak.pokemonapp.extensions.showNavBar
 import hr.from.ivantoplak.pokemonapp.extensions.viewBinding
 import hr.from.ivantoplak.pokemonapp.ui.common.BaseFragment
 import kotlinx.coroutines.delay
@@ -32,7 +32,7 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
 
     override fun doOnViewCreated(view: View, savedInstanceState: Bundle?) {
         removeStatusBarColor()
-        hideSystemUI(binding.root)
+        hideNavBar(binding.root)
     }
 
     override fun doOnResume() {
@@ -43,7 +43,7 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
     }
 
     override fun doOnDestroyView() {
-        showSystemUI(binding.root)
+        showNavBar(binding.root)
     }
 
     private fun runAfterDelay(delay: Long = SHOW_SCREEN_DURATION, action: () -> Unit) {

@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import hr.from.ivantoplak.pokemonapp.managers.InternetManager
 import hr.from.ivantoplak.pokemonapp.viewmodel.event.Event
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.map
 
 /**
@@ -14,6 +13,5 @@ class ConnectivityViewModel(
     manager: InternetManager
 ) : ViewModel() {
 
-    @FlowPreview
     val status = manager.observeConnectivityStatus().map { Event(it) }.asLiveData()
 }

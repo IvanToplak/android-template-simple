@@ -10,11 +10,15 @@ import com.google.android.material.transition.MaterialFadeThrough
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.databinding.FragmentPokemonBinding
 import hr.from.ivantoplak.pokemonapp.di.ImageRequestBuilderLambda
+import hr.from.ivantoplak.pokemonapp.extensions.dialog
 import hr.from.ivantoplak.pokemonapp.extensions.disable
 import hr.from.ivantoplak.pokemonapp.extensions.enable
 import hr.from.ivantoplak.pokemonapp.extensions.fadeIn
 import hr.from.ivantoplak.pokemonapp.extensions.fadeOut
+import hr.from.ivantoplak.pokemonapp.extensions.hide
+import hr.from.ivantoplak.pokemonapp.extensions.observeEvent
 import hr.from.ivantoplak.pokemonapp.extensions.setupActionBar
+import hr.from.ivantoplak.pokemonapp.extensions.show
 import hr.from.ivantoplak.pokemonapp.extensions.showToast
 import hr.from.ivantoplak.pokemonapp.extensions.viewBinding
 import hr.from.ivantoplak.pokemonapp.managers.InternetManager
@@ -22,7 +26,6 @@ import hr.from.ivantoplak.pokemonapp.ui.common.BaseFragment
 import hr.from.ivantoplak.pokemonapp.viewmodel.ConnectivityViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonState
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
-import kotlinx.coroutines.FlowPreview
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -38,7 +41,6 @@ class PokemonFragment : BaseFragment(R.layout.fragment_pokemon) {
         setScreenTransitions()
     }
 
-    @FlowPreview
     override fun doOnViewCreated(view: View, savedInstanceState: Bundle?) {
         setupActionBar(binding.toolbar)
         setupControls()
@@ -74,11 +76,10 @@ class PokemonFragment : BaseFragment(R.layout.fragment_pokemon) {
         }
     }
 
-    @FlowPreview
     private fun setupObservers() {
         observeViewState()
         observePokemon()
-        observeMessages()
+        observeErrorMessages()
         observeConnectivityStatus()
     }
 
@@ -108,32 +109,23 @@ class PokemonFragment : BaseFragment(R.layout.fragment_pokemon) {
         }
     }
 
-    private fun observeMessages() {
+    private fun observeErrorMessages() {
 
-        viewModel.showMessage.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let { showMessage ->
-                if (showMessage) viewModel.showMessage(getString(R.string.error_loading_pokemons))
-            }
-        }
-
-        viewModel.message.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let { message ->
-                if (message.isNotBlank()) requireContext().showToast(message)
+        viewModel.showErrorMessage.observeEvent(viewLifecycleOwner) { showMessage ->
+            if (showMessage) {
+                showErrorMessageDialog()
             }
         }
     }
 
-    @FlowPreview
     private fun observeConnectivityStatus() {
-        connectivityViewModel.status.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let { status ->
-                if (status == InternetManager.ConnectivityStatus.CONNECTED) {
-                    if (viewModel.pokemonState.value == PokemonState.ERROR_NO_DATA) {
-                        viewModel.onRefresh()
-                    }
-                } else {
-                    requireContext().showToast(getString(R.string.no_internet_connection))
+        connectivityViewModel.status.observeEvent(viewLifecycleOwner) { status ->
+            if (status == InternetManager.ConnectivityStatus.CONNECTED) {
+                if (viewModel.pokemonState.value == PokemonState.ERROR_NO_DATA) {
+                    viewModel.onRefresh()
                 }
+            } else {
+                requireContext().showToast(getString(R.string.no_internet_connection))
             }
         }
     }
@@ -217,5 +209,18 @@ class PokemonFragment : BaseFragment(R.layout.fragment_pokemon) {
         enterTransition = MaterialFadeThrough()
         reenterTransition = MaterialElevationScale(true)
         exitTransition = MaterialElevationScale(false)
+    }
+
+    private fun showErrorMessageDialog() {
+        dialog {
+            titleRes = R.string.error_dialog_title
+            contentRes = R.string.error_dialog_body
+            positiveTextRes = R.string.error_dialog_button_retry
+            positiveAction = {
+                viewModel.onRefresh()
+            }
+            negativeTextRes = R.string.error_dialog_button_cancel
+            negativeAction = { }
+        }
     }
 }

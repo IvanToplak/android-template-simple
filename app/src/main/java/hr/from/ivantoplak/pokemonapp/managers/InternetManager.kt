@@ -51,7 +51,7 @@ class InternetManager(
                 actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
         }
 
-    @FlowPreview
+    @OptIn(FlowPreview::class)
     fun observeConnectivityStatus(): Flow<ConnectivityStatus> =
         connectivityStatus
             .debounce(500)
