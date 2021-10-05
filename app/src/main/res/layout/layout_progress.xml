@@ -6,7 +6,7 @@
     android:fitsSystemWindows="true"
     android:clickable="true"
     android:focusable="true"
-    android:background="@color/black_transparent_40">
+    android:background="?attr/loadingIndicatorBackground">
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:layout_width="@dimen/progress_bar_size"

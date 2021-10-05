@@ -36,8 +36,7 @@
             android:layout_marginStart="@dimen/margin_16"
             android:layout_marginTop="@dimen/margin_32"
             android:layout_marginEnd="@dimen/margin_16"
-            android:textSize="@dimen/name_size"
-            android:textStyle="bold"
+            android:textAppearance="?attr/textAppearanceHeadline5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -106,8 +105,8 @@
 
     <include
         android:id="@+id/loading_progress_bar"
-        layout="@layout/layout_progress"
         android:visibility="gone"
+        layout="@layout/layout_progress"
         tools:visibility="visible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

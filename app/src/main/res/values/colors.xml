@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primaryColor">#d32f2f</color>
-    <color name="primaryLightColor">#ff6659</color>
-    <color name="primaryDarkColor">#9a0007</color>
-    <color name="secondaryColor">#1976d2</color>
-    <color name="secondaryLightColor">#63a4ff</color>
-    <color name="secondaryDarkColor">#004ba0</color>
+    <color name="pokemon_red">#d32f2f</color>
+    <color name="pokemon_light_red">#ff6659</color>
+    <color name="pokemon_dark_red">#9a0007</color>
+    <color name="pokemon_blue">#1976d2</color>
+    <color name="pokemon_light_blue">#63a4ff</color>
+    <color name="pokemon_dark_blue">#004ba0</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black_transparent_40">#66000000</color>

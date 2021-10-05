@@ -20,6 +20,7 @@ import hr.from.ivantoplak.pokemonapp.extensions.observeEvent
 import hr.from.ivantoplak.pokemonapp.extensions.setupActionBar
 import hr.from.ivantoplak.pokemonapp.extensions.show
 import hr.from.ivantoplak.pokemonapp.extensions.showToast
+import hr.from.ivantoplak.pokemonapp.extensions.titleCaseFirstChar
 import hr.from.ivantoplak.pokemonapp.extensions.viewBinding
 import hr.from.ivantoplak.pokemonapp.managers.InternetManager
 import hr.from.ivantoplak.pokemonapp.ui.common.BaseFragment
@@ -94,7 +95,7 @@ class PokemonFragment : BaseFragment(R.layout.fragment_pokemon) {
     private fun observePokemon() {
         viewModel.pokemon.observe(viewLifecycleOwner) { pokemon ->
 
-            binding.pokemonName.text = pokemon?.name
+            binding.pokemonName.text = pokemon?.name?.titleCaseFirstChar()
 
             // foreground image
             binding.pokemonSpriteForeground.load(

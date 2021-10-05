@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Theme_PokemonApp)
+        setTheme(R.style.Theme_Pokemon_Main)
         setContentView(binding.root)
         setNavController()
     }

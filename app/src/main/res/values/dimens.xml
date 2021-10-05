@@ -4,7 +4,7 @@
     <dimen name="margin_32">32dp</dimen>
     <dimen name="button_width">150dp</dimen>
     <dimen name="sprite_image_size">96dp</dimen>
-    <dimen name="progress_bar_size">40dp</dimen>
+    <dimen name="progress_bar_size">100dp</dimen>
     <dimen name="name_size">24sp</dimen>
     <dimen name="stat_value_width">50dp</dimen>
     <dimen name="small_toolbar_height">56dp</dimen>
