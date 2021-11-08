@@ -17,6 +17,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.dimensionResource
@@ -30,21 +33,51 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.ConstraintSetScope
 import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavHostController
 import coil.ImageLoader
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.LocalImageLoader
 import coil.compose.rememberImagePainter
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.extensions.titleCaseFirstChar
+import hr.from.ivantoplak.pokemonapp.ui.PokemonAppScreen
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonLoadingIndicator
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.ui.model.PokemonViewData
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonState
+import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
 import org.koin.androidx.compose.get
 import java.util.Locale
 
 @Composable
 fun PokemonScreen(
+    viewModel: PokemonViewModel,
+    navController: NavHostController
+) {
+    val pokemon: PokemonViewData? by viewModel.pokemon.observeAsState()
+    val pokemonState: PokemonState by viewModel.pokemonState.observeAsState(PokemonState.LOADING)
+    val showErrorMessage: Boolean by viewModel.showErrorMessage.observeAsState(false)
+
+    // show error screen
+    if (showErrorMessage) {
+        LaunchedEffect(key1 = showErrorMessage) {
+            navController.navigate(PokemonAppScreen.Error.name)
+            viewModel.onShowErrorMessage()
+        }
+    }
+
+    PokemonScreenContent(
+        pokemon = pokemon,
+        pokemonState = pokemonState,
+        onClickShowMoves = { navController.navigate("${PokemonAppScreen.Moves.name}/${pokemon?.id}") },
+        onClickShowStats = { navController.navigate("${PokemonAppScreen.Stats.name}/${pokemon?.id}") },
+        onClickRefresh = viewModel::onRefresh,
+    )
+}
+
+@Composable
+fun PokemonScreenContent(
     imageLoader: ImageLoader = get(),
     pokemon: PokemonViewData? = null,
     pokemonState: PokemonState = PokemonState.LOADING,
@@ -59,7 +92,7 @@ fun PokemonScreen(
             showBackButton = false
         )
     }) { innerPadding ->
-        PokemonScreenContent(
+        PokemonScreenBody(
             modifier = Modifier.padding(innerPadding),
             imageLoader = imageLoader,
             pokemon = pokemon,
@@ -71,9 +104,9 @@ fun PokemonScreen(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalCoilApi::class)
 @Composable
-fun PokemonScreenContent(
+fun PokemonScreenBody(
     modifier: Modifier = Modifier,
     imageLoader: ImageLoader,
     pokemon: PokemonViewData? = null,
@@ -380,9 +413,10 @@ fun PokemonScreenPreviewLandscape() {
 
 @Composable
 private fun GetPokemonScreen() {
-    PokemonScreen(
+    PokemonScreenContent(
         imageLoader = LocalImageLoader.current,
         pokemon = PokemonViewData(id = 1, "Pikachu"),
+        pokemonState = PokemonState.SUCCESS,
         title = "Pokemon",
         onClickShowStats = {},
         onClickShowMoves = {},

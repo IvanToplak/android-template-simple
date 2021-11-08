@@ -9,6 +9,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.stringResource
@@ -16,13 +18,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.navigation.NavHostController
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.ui.model.MoveViewData
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
+import hr.from.ivantoplak.pokemonapp.viewmodel.MovesViewModel
 
 @Composable
 fun MovesScreen(
+    viewModel: MovesViewModel,
+    navController: NavHostController
+) {
+    val moves: List<MoveViewData> by viewModel.moves.observeAsState(emptyList())
+
+    MovesScreenContent(
+        moves = moves,
+        onClickBack = { navController.navigateUp() }
+    )
+}
+
+@Composable
+fun MovesScreenContent(
     title: String = stringResource(id = R.string.moves_screen_title),
     moves: List<MoveViewData> = emptyList(),
     onClickBack: () -> Unit = {},
@@ -33,7 +50,7 @@ fun MovesScreen(
             onClickBack = onClickBack
         )
     }) { innerPadding ->
-        MovesScreenContent(
+        MovesScreenBody(
             modifier = Modifier.padding(innerPadding),
             moves = moves
         )
@@ -41,7 +58,7 @@ fun MovesScreen(
 }
 
 @Composable
-fun MovesScreenContent(
+fun MovesScreenBody(
     modifier: Modifier = Modifier,
     moves: List<MoveViewData> = emptyList()
 ) {
@@ -97,7 +114,7 @@ private fun getConstraints(): ConstraintSet {
 @Composable
 fun MovesScreenPreview() {
     PokemonAppTheme {
-        MovesScreen(
+        MovesScreenContent(
             title = "Moves",
             moves = List(15) { MoveViewData(id = it, name = "roundhouse kick") }
         )
@@ -108,7 +125,7 @@ fun MovesScreenPreview() {
 @Composable
 fun MovesScreenPreviewLandscape() {
     PokemonAppTheme {
-        MovesScreen(
+        MovesScreenContent(
             title = "Moves",
             moves = List(15) { MoveViewData(id = it, name = "roundhouse kick") }
         )

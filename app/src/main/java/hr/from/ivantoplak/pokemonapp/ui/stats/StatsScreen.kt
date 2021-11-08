@@ -13,6 +13,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
@@ -23,13 +25,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.navigation.NavHostController
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.ui.model.StatViewData
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
+import hr.from.ivantoplak.pokemonapp.viewmodel.StatsViewModel
 
 @Composable
 fun StatsScreen(
+    viewModel: StatsViewModel,
+    navController: NavHostController
+) {
+    val stats: List<StatViewData> by viewModel.stats.observeAsState(emptyList())
+
+    StatsScreenContent(
+        stats = stats,
+        onClickBack = { navController.navigateUp() }
+    )
+}
+
+@Composable
+fun StatsScreenContent(
     title: String = stringResource(id = R.string.stats_screen_title),
     stats: List<StatViewData> = emptyList(),
     onClickBack: () -> Unit = {},
@@ -40,7 +57,7 @@ fun StatsScreen(
             onClickBack = onClickBack
         )
     }) { innerPadding ->
-        StatsScreenContent(
+        StatsScreenBody(
             modifier = Modifier.padding(innerPadding),
             stats = stats
         )
@@ -48,7 +65,7 @@ fun StatsScreen(
 }
 
 @Composable
-fun StatsScreenContent(
+fun StatsScreenBody(
     modifier: Modifier = Modifier,
     stats: List<StatViewData> = emptyList()
 ) {
@@ -127,7 +144,7 @@ private fun getConstraints(): ConstraintSet {
 @Composable
 fun StatsScreenPreview() {
     PokemonAppTheme {
-        StatsScreen(
+        StatsScreenContent(
             title = "Stats",
             stats = List(15) {
                 StatViewData(
@@ -144,7 +161,7 @@ fun StatsScreenPreview() {
 @Composable
 fun StatsScreenPreviewLandscape() {
     PokemonAppTheme {
-        StatsScreen(
+        StatsScreenContent(
             title = "Stats",
             stats = List(15) {
                 StatViewData(

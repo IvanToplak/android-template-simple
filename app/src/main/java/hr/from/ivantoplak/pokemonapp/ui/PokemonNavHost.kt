@@ -1,9 +1,6 @@
 package hr.from.ivantoplak.pokemonapp.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
@@ -17,14 +14,10 @@ import hr.from.ivantoplak.pokemonapp.ui.PokemonAppScreen.Pokemon
 import hr.from.ivantoplak.pokemonapp.ui.PokemonAppScreen.Stats
 import hr.from.ivantoplak.pokemonapp.ui.error.ErrorScreen
 import hr.from.ivantoplak.pokemonapp.ui.error.ErrorScreenParameter
-import hr.from.ivantoplak.pokemonapp.ui.model.MoveViewData
-import hr.from.ivantoplak.pokemonapp.ui.model.PokemonViewData
-import hr.from.ivantoplak.pokemonapp.ui.model.StatViewData
 import hr.from.ivantoplak.pokemonapp.ui.moves.MovesScreen
 import hr.from.ivantoplak.pokemonapp.ui.pokemon.PokemonScreen
 import hr.from.ivantoplak.pokemonapp.ui.stats.StatsScreen
 import hr.from.ivantoplak.pokemonapp.viewmodel.MovesViewModel
-import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonState
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.StatsViewModel
 import org.koin.androidx.compose.getViewModel
@@ -40,25 +33,8 @@ fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifi
         // pokemon screen
         composable(Pokemon.name) {
             val viewModel = getViewModel<PokemonViewModel>()
-            val pokemon: PokemonViewData? by viewModel.pokemon.observeAsState()
-            val pokemonState: PokemonState by viewModel.pokemonState.observeAsState(PokemonState.LOADING)
-            val showErrorMessage: Boolean by viewModel.showErrorMessage.observeAsState(false)
 
-            // show error screen
-            if (showErrorMessage) {
-                LaunchedEffect(key1 = showErrorMessage) {
-                    navController.navigate(PokemonAppScreen.Error.name)
-                    viewModel.onShowErrorMessage()
-                }
-            }
-
-            PokemonScreen(
-                pokemon = pokemon,
-                pokemonState = pokemonState,
-                onClickShowMoves = { navController.navigate("${Moves.name}/${pokemon?.id}") },
-                onClickShowStats = { navController.navigate("${Stats.name}/${pokemon?.id}") },
-                onClickRefresh = viewModel::onRefresh,
-            )
+            PokemonScreen(viewModel, navController)
         }
 
         // pokemon moves screen
@@ -68,12 +44,8 @@ fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifi
         ) { backStackEntry ->
             val pokemonId = backStackEntry.arguments?.getInt("pokemonId")
             val viewModel = getViewModel<MovesViewModel> { parametersOf(pokemonId) }
-            val moves: List<MoveViewData> by viewModel.moves.observeAsState(emptyList())
 
-            MovesScreen(
-                moves = moves,
-                onClickBack = { navController.navigateUp() }
-            )
+            MovesScreen(viewModel, navController)
         }
 
         // pokemon stats screen
@@ -83,12 +55,8 @@ fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifi
         ) { backStackEntry ->
             val pokemonId = backStackEntry.arguments?.getInt("pokemonId")
             val viewModel = getViewModel<StatsViewModel> { parametersOf(pokemonId) }
-            val stats: List<StatViewData> by viewModel.stats.observeAsState(emptyList())
 
-            StatsScreen(
-                stats = stats,
-                onClickBack = { navController.navigateUp() }
-            )
+            StatsScreen(viewModel, navController)
         }
 
         // error screen
