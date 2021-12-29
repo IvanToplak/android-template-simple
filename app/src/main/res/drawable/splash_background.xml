@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:opacity="opaque">
-    <item android:drawable="@color/white" />
-    <item
-        android:bottom="100dp"
-        android:left="100dp"
-        android:right="100dp"
-        android:top="100dp">
+    <item>
         <bitmap
             android:gravity="center"
             android:src="@drawable/ic_pokeball_48"
-            android:tint="@color/primaryDarkColor"/>
+            android:tint="@color/primaryDarkColor" />
     </item>
 </layer-list>

@@ -1,10 +1,10 @@
 <resources>
 
     <!-- Splash screen theme -->
-    <style name="Theme.SplashScreen" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/white</item>
-        <item name="android:windowBackground">@drawable/splash_background</item>
-        <item name="android:windowTranslucentNavigation">true</item>
+    <style name="Theme.PokemonApp.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_background</item>
+        <item name="postSplashScreenTheme">@style/Theme.PokemonApp</item>
     </style>
 
     <!-- Base application theme. -->
