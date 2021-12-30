@@ -73,7 +73,6 @@ fun StatsScreenBody(
         val constraints = getConstraints()
         ConstraintLayout(
             constraintSet = constraints,
-            animateChanges = true,
             modifier = modifier.fillMaxSize()
         ) {
             LazyColumn(

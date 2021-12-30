@@ -5,13 +5,13 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
 
 @Composable
 fun PokemonApp() {
     PokemonAppTheme {
-        val navController = rememberNavController()
+        val navController = rememberAnimatedNavController()
         Scaffold { innerPadding ->
             PokemonNavHost(
                 navController = navController,
