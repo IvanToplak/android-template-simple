@@ -19,7 +19,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.dimensionResource
@@ -55,9 +54,8 @@ fun PokemonScreen(
     viewModel: PokemonViewModel,
     navController: NavHostController
 ) {
-    val pokemon: PokemonViewData? by viewModel.pokemon.observeAsState()
-    val pokemonState: PokemonState by viewModel.pokemonState.observeAsState(PokemonState.LOADING)
-    val showErrorMessage: Boolean by viewModel.showErrorMessage.observeAsState(false)
+    val pokemon: PokemonViewData? by viewModel.pokemon
+    val showErrorMessage: Boolean by viewModel.showErrorMessage
 
     // show error screen
     if (showErrorMessage) {
@@ -68,8 +66,8 @@ fun PokemonScreen(
     }
 
     PokemonScreenContent(
-        pokemon = pokemon,
-        pokemonState = pokemonState,
+        pokemon = viewModel.pokemon.value,
+        pokemonState = viewModel.pokemonState.value,
         onClickShowMoves = { navController.navigate("${PokemonAppScreen.Moves.name}/${pokemon?.id}") },
         onClickShowStats = { navController.navigate("${PokemonAppScreen.Stats.name}/${pokemon?.id}") },
         onClickRefresh = viewModel::onRefresh,

@@ -146,7 +146,7 @@ private fun getConstraints(): ConstraintSet {
                 bottom = parent.bottom,
                 topMargin = 16.dp,
                 bottomMargin = 32.dp,
-                bias = 1F
+                bias = 0F
             )
         }
     }

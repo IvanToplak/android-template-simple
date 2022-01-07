@@ -1,7 +1,7 @@
 package hr.from.ivantoplak.pokemonapp.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProvider
@@ -27,16 +27,16 @@ class PokemonViewModel(
     private val dispatcher: DispatcherProvider
 ) : ViewModel() {
 
-    private val _pokemonState = MutableLiveData<PokemonState>()
-    val pokemonState: LiveData<PokemonState> = _pokemonState
+    private val _pokemonState = mutableStateOf(PokemonState.LOADING)
+    val pokemonState: State<PokemonState> get() = _pokemonState
 
     private val pokemonNames = mutableListOf<String>()
 
-    private val _pokemon = MutableLiveData<PokemonViewData?>(null)
-    val pokemon: LiveData<PokemonViewData?> = _pokemon
+    private val _pokemon = mutableStateOf<PokemonViewData?>(null)
+    val pokemon: State<PokemonViewData?> get() = _pokemon
 
-    private val _showErrorMessage = MutableLiveData<Boolean>()
-    val showErrorMessage: LiveData<Boolean> = _showErrorMessage
+    private val _showErrorMessage = mutableStateOf(false)
+    val showErrorMessage: State<Boolean> get() = _showErrorMessage
 
     init {
         viewModelScope.launch {

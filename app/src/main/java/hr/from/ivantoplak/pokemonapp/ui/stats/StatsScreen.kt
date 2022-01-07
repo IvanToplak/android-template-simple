@@ -13,8 +13,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
@@ -37,10 +35,8 @@ fun StatsScreen(
     viewModel: StatsViewModel,
     navController: NavHostController
 ) {
-    val stats: List<StatViewData> by viewModel.stats.observeAsState(emptyList())
-
     StatsScreenContent(
-        stats = stats,
+        stats = viewModel.stats.value,
         onClickBack = { navController.navigateUp() }
     )
 }

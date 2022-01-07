@@ -9,8 +9,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.stringResource
@@ -30,10 +28,8 @@ fun MovesScreen(
     viewModel: MovesViewModel,
     navController: NavHostController
 ) {
-    val moves: List<MoveViewData> by viewModel.moves.observeAsState(emptyList())
-
     MovesScreenContent(
-        moves = moves,
+        moves = viewModel.moves.value,
         onClickBack = { navController.navigateUp() }
     )
 }

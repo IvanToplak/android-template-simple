@@ -1,7 +1,7 @@
 package hr.from.ivantoplak.pokemonapp.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProvider
@@ -9,7 +9,6 @@ import hr.from.ivantoplak.pokemonapp.mappings.toStatsViewData
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepository
 import hr.from.ivantoplak.pokemonapp.ui.model.StatViewData
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -23,8 +22,8 @@ class StatsViewModel(
     private val dispatcher: DispatcherProvider
 ) : ViewModel() {
 
-    private val _stats = MutableLiveData<List<StatViewData>>(emptyList())
-    val stats: LiveData<List<StatViewData>> = _stats
+    private val _stats = mutableStateOf<List<StatViewData>>(emptyList())
+    val stats: State<List<StatViewData>> get() = _stats
 
     init {
         viewModelScope.launch {
