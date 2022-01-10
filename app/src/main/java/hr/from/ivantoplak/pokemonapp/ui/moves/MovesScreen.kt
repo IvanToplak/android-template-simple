@@ -3,9 +3,10 @@ package hr.from.ivantoplak.pokemonapp.ui.moves
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.ui.model.MoveViewData
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
+import hr.from.ivantoplak.pokemonapp.ui.theme.listDivider
 import hr.from.ivantoplak.pokemonapp.viewmodel.MovesViewModel
 
 @Composable
@@ -66,11 +68,14 @@ fun MovesScreenBody(
                 .layoutId("moves_list")
                 .fillMaxSize()
         ) {
-            items(moves, key = { move -> move.id }) { move ->
+            itemsIndexed(moves, key = { _, move -> move.id }) { index, move ->
                 MoveRow(
                     modifier = Modifier,
                     move = move
                 )
+                if (index < moves.lastIndex) {
+                    Divider(color = MaterialTheme.colors.listDivider)
+                }
             }
         }
     }

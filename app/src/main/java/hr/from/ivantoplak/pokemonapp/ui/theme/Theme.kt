@@ -60,3 +60,6 @@ fun PokemonAppTheme(
 
 val Colors.loadingIndicatorBackground: Color
     @Composable get() = BlackTransparent
+
+val Colors.listDivider: Color
+    @Composable get() = PokemonGray

@@ -7,9 +7,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,6 +28,7 @@ import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.ui.model.StatViewData
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
+import hr.from.ivantoplak.pokemonapp.ui.theme.listDivider
 import hr.from.ivantoplak.pokemonapp.viewmodel.StatsViewModel
 
 @Composable
@@ -73,11 +75,14 @@ fun StatsScreenBody(
                 .layoutId("stats_list")
                 .fillMaxSize()
         ) {
-            items(stats, key = { stat -> stat.id }) { stat ->
+            itemsIndexed(stats, key = { _, stat -> stat.id }) { index, stat ->
                 StatsRow(
                     modifier = Modifier,
                     stat = stat
                 )
+                if (index < stats.lastIndex) {
+                    Divider(color = MaterialTheme.colors.listDivider)
+                }
             }
         }
     }
