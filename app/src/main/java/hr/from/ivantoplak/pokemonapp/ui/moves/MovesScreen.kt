@@ -1,6 +1,5 @@
 package hr.from.ivantoplak.pokemonapp.ui.moves
 
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -58,23 +57,20 @@ fun MovesScreenBody(
     modifier: Modifier = Modifier,
     moves: List<MoveViewData> = emptyList()
 ) {
-    BoxWithConstraints(modifier = modifier) {
-        val constraints = getConstraints()
-        ConstraintLayout(
-            constraintSet = constraints,
-            modifier = modifier.fillMaxSize()
+    ConstraintLayout(
+        constraintSet = getConstraints(),
+        modifier = modifier.fillMaxSize()
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .layoutId("moves_list")
+                .fillMaxSize()
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .layoutId("moves_list")
-                    .fillMaxSize()
-            ) {
-                items(moves, key = { move -> move.id }) { move ->
-                    MoveRow(
-                        modifier = Modifier,
-                        move = move
-                    )
-                }
+            items(moves, key = { move -> move.id }) { move ->
+                MoveRow(
+                    modifier = Modifier,
+                    move = move
+                )
             }
         }
     }

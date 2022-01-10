@@ -1,7 +1,6 @@
 package hr.from.ivantoplak.pokemonapp.ui.error
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -61,54 +60,51 @@ fun ErrorScreenContent(
     body: String = "",
     onClickBack: () -> Unit = {},
 ) {
-    BoxWithConstraints(modifier = modifier) {
-        val constraints = getConstraints()
-        ConstraintLayout(
-            constraintSet = constraints,
-            modifier = modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+    ConstraintLayout(
+        constraintSet = getConstraints(),
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+        // error image
+        Image(
+            painter = painterResource(id = R.drawable.ic_error_outline),
+            contentDescription = stringResource(id = R.string.error_image),
+            modifier = Modifier
+                .layoutId("image_error")
+                .size(dimensionResource(id = R.dimen.error_image_size)),
+            colorFilter = ColorFilter.tint(color = MaterialTheme.colors.primaryVariant)
+        )
+
+        // title text
+        Text(
+            text = title,
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.h5,
+            modifier = Modifier
+                .layoutId("text_title")
+                .padding(horizontal = 16.dp)
+        )
+
+        // body text
+        Text(
+            text = body,
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.body1,
+            modifier = Modifier
+                .layoutId("text_body")
+                .padding(horizontal = 16.dp)
+        )
+
+        // go back button
+        Button(
+            onClick = { onClickBack() },
+            modifier = Modifier.layoutId("button_go_back")
         ) {
-            // error image
-            Image(
-                painter = painterResource(id = R.drawable.ic_error_outline),
-                contentDescription = stringResource(id = R.string.error_image),
-                modifier = Modifier
-                    .layoutId("image_error")
-                    .size(dimensionResource(id = R.dimen.error_image_size)),
-                colorFilter = ColorFilter.tint(color = MaterialTheme.colors.primaryVariant)
-            )
-
-            // title text
             Text(
-                text = title,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.h5,
-                modifier = Modifier
-                    .layoutId("text_title")
-                    .padding(horizontal = 16.dp)
+                text = stringResource(id = R.string.go_back).uppercase(Locale.getDefault()),
+                style = MaterialTheme.typography.button
             )
-
-            // body text
-            Text(
-                text = body,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.body1,
-                modifier = Modifier
-                    .layoutId("text_body")
-                    .padding(horizontal = 16.dp)
-            )
-
-            // go back button
-            Button(
-                onClick = { onClickBack() },
-                modifier = Modifier.layoutId("button_go_back")
-            ) {
-                Text(
-                    text = stringResource(id = R.string.go_back).uppercase(Locale.getDefault()),
-                    style = MaterialTheme.typography.button
-                )
-            }
         }
     }
 }

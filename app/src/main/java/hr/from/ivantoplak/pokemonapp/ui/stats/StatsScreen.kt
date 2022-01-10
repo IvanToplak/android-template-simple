@@ -1,6 +1,5 @@
 package hr.from.ivantoplak.pokemonapp.ui.stats
 
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -65,23 +64,20 @@ fun StatsScreenBody(
     modifier: Modifier = Modifier,
     stats: List<StatViewData> = emptyList()
 ) {
-    BoxWithConstraints(modifier = modifier) {
-        val constraints = getConstraints()
-        ConstraintLayout(
-            constraintSet = constraints,
-            modifier = modifier.fillMaxSize()
+    ConstraintLayout(
+        constraintSet = getConstraints(),
+        modifier = modifier.fillMaxSize()
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .layoutId("stats_list")
+                .fillMaxSize()
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .layoutId("stats_list")
-                    .fillMaxSize()
-            ) {
-                items(stats, key = { stat -> stat.id }) { stat ->
-                    StatsRow(
-                        modifier = Modifier,
-                        stat = stat
-                    )
-                }
+            items(stats, key = { stat -> stat.id }) { stat ->
+                StatsRow(
+                    modifier = Modifier,
+                    stat = stat
+                )
             }
         }
     }
