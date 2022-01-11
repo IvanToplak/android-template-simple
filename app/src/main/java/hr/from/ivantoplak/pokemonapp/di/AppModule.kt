@@ -15,6 +15,7 @@ import hr.from.ivantoplak.pokemonapp.service.PokemonService
 import hr.from.ivantoplak.pokemonapp.viewmodel.ConnectivityViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.MovesViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
+import hr.from.ivantoplak.pokemonapp.viewmodel.SplashViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.StatsViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -68,4 +69,6 @@ val appModule = module {
     viewModel { (pokemonId: Int) -> StatsViewModel(pokemonId, get(), get()) }
 
     viewModel { ConnectivityViewModel(get()) }
+
+    viewModel { SplashViewModel() }
 }
