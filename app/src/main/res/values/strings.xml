@@ -16,4 +16,5 @@
     <string name="moves_screen_title">Moves</string>
     <string name="stats_screen_title">Stats</string>
     <string name="error_screen_title">Error</string>
+    <string name="pokedex_screen_title">Pokedex</string>
 </resources>

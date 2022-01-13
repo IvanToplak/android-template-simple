@@ -12,17 +12,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -70,6 +74,7 @@ fun PokemonScreen(
         pokemonState = viewModel.pokemonState.value,
         onClickShowMoves = { navController.navigate("${PokemonAppScreen.Moves.name}/${pokemon?.id}") },
         onClickShowStats = { navController.navigate("${PokemonAppScreen.Stats.name}/${pokemon?.id}") },
+        onClickShowPokedex = { navController.navigate(PokemonAppScreen.Search.name) },
         onClickRefresh = viewModel::onRefresh,
     )
 }
@@ -82,6 +87,7 @@ fun PokemonScreenContent(
     title: String = stringResource(id = R.string.pokemon_screen_title),
     onClickShowMoves: () -> Unit = {},
     onClickShowStats: () -> Unit = {},
+    onClickShowPokedex: () -> Unit = {},
     onClickRefresh: () -> Unit = {},
 ) {
     Scaffold(topBar = {
@@ -97,6 +103,7 @@ fun PokemonScreenContent(
             pokemonState = pokemonState,
             onClickShowMoves = onClickShowMoves,
             onClickShowStats = onClickShowStats,
+            onClickShowPokedex = onClickShowPokedex,
             onClickRefresh = onClickRefresh,
         )
     }
@@ -111,6 +118,7 @@ fun PokemonScreenBody(
     pokemonState: PokemonState = PokemonState.LOADING,
     onClickShowMoves: () -> Unit = {},
     onClickShowStats: () -> Unit = {},
+    onClickShowPokedex: () -> Unit = {},
     onClickRefresh: () -> Unit = {},
 ) {
     BoxWithConstraints(modifier = modifier) {
@@ -121,10 +129,14 @@ fun PokemonScreenBody(
             modifier = modifier.fillMaxSize()
         ) {
             // pokemon name
-            Text(
-                text = pokemon?.name?.titleCaseFirstChar() ?: "",
-                textAlign = TextAlign.Center,
+            val pokemonName by remember(pokemon) {
+                derivedStateOf { pokemon?.name?.titleCaseFirstChar() ?: "" }
+            }
+
+            ClickableText(
+                text = AnnotatedString(pokemonName),
                 style = MaterialTheme.typography.h5,
+                onClick = { onClickShowPokedex() },
                 modifier = Modifier.layoutId("pokemon_name")
             )
 

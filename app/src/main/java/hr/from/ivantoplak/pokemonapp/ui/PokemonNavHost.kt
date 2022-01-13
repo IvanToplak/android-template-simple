@@ -17,6 +17,8 @@ import hr.from.ivantoplak.pokemonapp.ui.PokemonAppScreen.Stats
 import hr.from.ivantoplak.pokemonapp.ui.error.ErrorScreen
 import hr.from.ivantoplak.pokemonapp.ui.error.ErrorScreenParameter
 import hr.from.ivantoplak.pokemonapp.ui.moves.MovesScreen
+import hr.from.ivantoplak.pokemonapp.ui.pokemon.PokedexScreen
+import hr.from.ivantoplak.pokemonapp.ui.pokemon.PokedexScreenParameter
 import hr.from.ivantoplak.pokemonapp.ui.pokemon.PokemonScreen
 import hr.from.ivantoplak.pokemonapp.ui.stats.StatsScreen
 import hr.from.ivantoplak.pokemonapp.viewmodel.MovesViewModel
@@ -26,6 +28,7 @@ import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
 private const val TRANSITION_DURATION = 1000
+private const val POKEDEX_URL = "https://www.pokemon.com/us/pokedex/"
 
 @Composable
 fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -93,6 +96,29 @@ fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifi
             ErrorScreen(
                 title = title,
                 body = body,
+                onClickBack = { navController.navigateUp() }
+            )
+        }
+
+        // pokemon search (pokedex)
+        composable(
+            route = "${PokemonAppScreen.Search.name}?${PokedexScreenParameter.Title.param}={title}&${PokedexScreenParameter.WebUrl.param}={webUrl}",
+            arguments = listOf(
+                navArgument(PokedexScreenParameter.Title.param) { nullable = true },
+                navArgument(PokedexScreenParameter.WebUrl.param) { nullable = true },
+            ),
+            enterTransition = {
+                fadeIn(animationSpec = tween(durationMillis = TRANSITION_DURATION))
+            },
+        ) { backStackEntry ->
+            val title = backStackEntry.arguments?.getString(PokedexScreenParameter.Title.param)
+                ?: stringResource(id = R.string.pokedex_screen_title)
+            val url = backStackEntry.arguments?.getString(PokedexScreenParameter.WebUrl.param)
+                ?: POKEDEX_URL
+
+            PokedexScreen(
+                title = title,
+                webUrl = url,
                 onClickBack = { navController.navigateUp() }
             )
         }
