@@ -21,7 +21,7 @@ data class ApiMoveDetails(val name: String = "")
 @JsonClass(generateAdapter = true)
 data class ApiSprites(
     @Json(name = "back_default")
-    val backDefault: String = "",
+    val backDefault: String? = "",
 
     @Json(name = "front_default")
     val frontDefault: String = ""
