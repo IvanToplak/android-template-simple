@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-private const val ERROR_FETCH_DATA = "Error retrieving initial data from the API."
+private const val ErrorFetchData = "Error retrieving initial data from the API."
 
 /**
  * Splash screen view model retrieves initial configuration for the app.
@@ -29,7 +29,7 @@ class SplashViewModel : ViewModel() {
                 fetch()
                 _isReady.value = true
             } catch (e: Exception) {
-                Timber.e(e, ERROR_FETCH_DATA)
+                Timber.e(e, ErrorFetchData)
                 _isReady.value = false
                 _showErrorMessage.value = true
             }

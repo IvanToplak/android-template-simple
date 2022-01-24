@@ -10,9 +10,7 @@ import kotlinx.coroutines.flow.map
 /**
  * Connectivity view model provides info about connectivity status via observable (starting with API 24).
  */
-class ConnectivityViewModel(
-    manager: InternetManager
-) : ViewModel() {
+class ConnectivityViewModel(manager: InternetManager) : ViewModel() {
 
     @FlowPreview
     val status = manager.observeConnectivityStatus().map { Event(it) }.asLiveData()

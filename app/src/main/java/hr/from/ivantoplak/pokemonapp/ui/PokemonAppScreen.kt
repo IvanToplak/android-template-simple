@@ -8,5 +8,5 @@ enum class PokemonAppScreen {
     Moves,
     Stats,
     Error,
-    Search;
+    Search,
 }

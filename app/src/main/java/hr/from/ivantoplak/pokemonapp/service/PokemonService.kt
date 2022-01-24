@@ -11,7 +11,7 @@ interface PokemonService {
     @GET("pokemon")
     suspend fun getPokemonNames(
         @Query("limit") limit: Int,
-        @Query("offset") offset: Int
+        @Query("offset") offset: Int,
     ): ApiPokemonNames
 
     @GET("pokemon/{name}")

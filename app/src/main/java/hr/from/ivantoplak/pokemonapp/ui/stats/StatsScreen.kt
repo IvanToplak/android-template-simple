@@ -34,29 +34,35 @@ import hr.from.ivantoplak.pokemonapp.viewmodel.StatsViewModel
 @Composable
 fun StatsScreen(
     viewModel: StatsViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
 ) {
     StatsScreenContent(
+        modifier = modifier,
         stats = viewModel.stats.value,
-        onClickBack = { navController.navigateUp() }
+        onClickBack = { navController.navigateUp() },
     )
 }
 
 @Composable
 fun StatsScreenContent(
+    modifier: Modifier = Modifier,
     title: String = stringResource(id = R.string.stats_screen_title),
     stats: List<StatViewData> = emptyList(),
     onClickBack: () -> Unit = {},
 ) {
-    Scaffold(topBar = {
-        PokemonTopAppBar(
-            title = title,
-            onClickBack = onClickBack
-        )
-    }) { innerPadding ->
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            PokemonTopAppBar(
+                title = title,
+                onClickBack = onClickBack
+            )
+        },
+    ) { innerPadding ->
         StatsScreenBody(
             modifier = Modifier.padding(innerPadding),
-            stats = stats
+            stats = stats,
         )
     }
 }
@@ -64,11 +70,11 @@ fun StatsScreenContent(
 @Composable
 fun StatsScreenBody(
     modifier: Modifier = Modifier,
-    stats: List<StatViewData> = emptyList()
+    stats: List<StatViewData> = emptyList(),
 ) {
     ConstraintLayout(
         constraintSet = getConstraints(),
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) {
         LazyColumn(
             modifier = Modifier
@@ -78,7 +84,7 @@ fun StatsScreenBody(
             itemsIndexed(stats, key = { _, stat -> stat.id }) { index, stat ->
                 StatsRow(
                     modifier = Modifier,
-                    stat = stat
+                    stat = stat,
                 )
                 if (index < stats.lastIndex) {
                     Divider(color = MaterialTheme.colors.listDivider)
@@ -91,22 +97,20 @@ fun StatsScreenBody(
 @Composable
 fun StatsRow(
     modifier: Modifier = Modifier,
-    stat: StatViewData
+    stat: StatViewData,
 ) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-    ) {
+    Row(modifier = modifier.fillMaxWidth()) {
         // stat name
         Column(
             horizontalAlignment = Alignment.End,
-            modifier = Modifier.weight(1F)
+            modifier = Modifier.weight(1F),
         ) {
             Text(
                 text = stat.name,
                 textAlign = TextAlign.End,
                 style = MaterialTheme.typography.body1,
                 modifier = modifier
-                    .padding(vertical = 16.dp)
+                    .padding(vertical = 16.dp),
             )
         }
         // stat value
@@ -117,7 +121,7 @@ fun StatsRow(
                 style = MaterialTheme.typography.body1,
                 modifier = modifier
                     .padding(vertical = 16.dp)
-                    .width(dimensionResource(id = R.dimen.stat_value_width))
+                    .width(dimensionResource(id = R.dimen.stat_value_width)),
             )
         }
     }
@@ -146,7 +150,7 @@ fun StatsScreenPreview() {
                 StatViewData(
                     id = it,
                     name = "stat name $it",
-                    value = (it + 1) * 100
+                    value = (it + 1) * 100,
                 )
             }
         )
@@ -163,7 +167,7 @@ fun StatsScreenPreviewLandscape() {
                 StatViewData(
                     id = it,
                     name = "stat name $it",
-                    value = (it + 1) * 100
+                    value = (it + 1) * 100,
                 )
             }
         )

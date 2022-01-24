@@ -14,12 +14,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-private const val ERROR_LOADING_MOVES = "Error loading pokemon moves from local store."
+private const val ErrorLoadingMoves = "Error loading pokemon moves from local store."
 
 class MovesViewModel(
     private val pokemonId: Int,
     private val repository: PokemonRepository,
-    private val dispatcher: DispatcherProvider
+    private val dispatcher: DispatcherProvider,
 ) : ViewModel() {
 
     private val _moves = mutableStateOf<List<MoveViewData>>(emptyList())
@@ -30,7 +30,7 @@ class MovesViewModel(
             repository.getPokemonMoves(pokemonId)
                 .map { it.toMovesViewData() }
                 .flowOn(dispatcher.io())
-                .catch { e -> Timber.e(e, ERROR_LOADING_MOVES) }
+                .catch { e -> Timber.e(e, ErrorLoadingMoves) }
                 .collect { movesList -> _moves.value = movesList }
         }
     }

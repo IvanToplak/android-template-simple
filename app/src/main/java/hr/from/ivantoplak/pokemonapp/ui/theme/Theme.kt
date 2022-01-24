@@ -30,7 +30,7 @@ fun PokemonAppTheme(content: @Composable () -> Unit) {
         colors = colors,
         typography = PokemonTypography,
         shapes = PokemonShapes,
-        content = content
+        content = content,
     )
 }
 

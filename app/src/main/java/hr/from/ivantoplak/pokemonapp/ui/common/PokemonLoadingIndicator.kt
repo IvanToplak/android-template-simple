@@ -16,9 +16,9 @@ import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.ui.theme.loadingIndicatorBackground
 
 @Composable
-fun PokemonLoadingIndicator() {
+fun PokemonLoadingIndicator(modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colors.loadingIndicatorBackground)
             .clickable { }

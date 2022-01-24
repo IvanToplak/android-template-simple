@@ -11,8 +11,8 @@ import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
 import hr.from.ivantoplak.pokemonapp.viewmodel.SplashViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-private const val SPLASH_FADEOUT_DURATION = 300L
-private const val SPLASH_ROTATION = 360F
+private const val SplashFadeoutDuration = 500L
+private const val SplashRotation = 360F
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,14 +21,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // if it's not a screen rotation do the splash screen transition
+        // if it's not a screen rotation, show the splash screen
         if (savedInstanceState == null) {
             val splashScreen = installSplashScreen()
             splashScreen.setOnExitAnimationListener { splashScreenView ->
                 splashScreenView.iconView.animate()
-                    .rotationBy(SPLASH_ROTATION)
+                    .rotationBy(SplashRotation)
+                    .scaleX(4.0F)
+                    .scaleY(4.0F)
                     .alpha(0F)
-                    .setDuration(SPLASH_FADEOUT_DURATION)
+                    .setDuration(SplashFadeoutDuration)
                     .withEndAction { splashScreenView.remove() }
             }
         } else {

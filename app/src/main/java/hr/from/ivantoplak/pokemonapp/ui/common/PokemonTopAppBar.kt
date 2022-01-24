@@ -26,7 +26,7 @@ fun PokemonTopAppBar(
             {
                 PokemonBackButton(onClickBack = onClickBack)
             }
-        } else null
+        } else null,
     )
 }
 

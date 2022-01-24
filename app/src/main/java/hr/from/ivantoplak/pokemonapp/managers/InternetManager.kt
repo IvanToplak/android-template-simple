@@ -16,13 +16,13 @@ class InternetManager(
     private val connectivityManager: ConnectivityManager
 ) {
     enum class ConnectivityStatus {
-        CONNECTED,
-        NOT_CONNECTED
+        Connected,
+        NotConnected,
     }
 
     private val connectivityStatus = MutableSharedFlow<ConnectivityStatus>(
         replay = 0,
-        extraBufferCapacity = 1
+        extraBufferCapacity = 1,
     )
 
     init {
@@ -30,11 +30,11 @@ class InternetManager(
             connectivityManager.registerDefaultNetworkCallback(
                 object : ConnectivityManager.NetworkCallback() {
                     override fun onAvailable(network: Network) {
-                        connectivityStatus.tryEmit(ConnectivityStatus.CONNECTED)
+                        connectivityStatus.tryEmit(ConnectivityStatus.Connected)
                     }
 
                     override fun onLost(network: Network) {
-                        connectivityStatus.tryEmit(ConnectivityStatus.NOT_CONNECTED)
+                        connectivityStatus.tryEmit(ConnectivityStatus.NotConnected)
                     }
                 }
             )

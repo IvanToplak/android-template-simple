@@ -7,5 +7,5 @@ import androidx.compose.ui.unit.dp
 val PokemonShapes = Shapes(
     small = RoundedCornerShape(4.dp),
     medium = RoundedCornerShape(4.dp),
-    large = RoundedCornerShape(8.dp)
+    large = RoundedCornerShape(8.dp),
 )

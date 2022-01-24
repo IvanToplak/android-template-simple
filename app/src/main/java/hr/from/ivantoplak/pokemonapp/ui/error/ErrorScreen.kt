@@ -29,26 +29,30 @@ import java.util.Locale
 
 enum class ErrorScreenParameter(val param: String) {
     Title("title"),
-    Body("body")
+    Body("body"),
 }
 
 @Composable
 fun ErrorScreen(
+    modifier: Modifier = Modifier,
     title: String = stringResource(id = R.string.error_screen_content_title),
     body: String = stringResource(id = R.string.error_screen_content_body),
     onClickBack: () -> Unit = {},
 ) {
-    Scaffold(topBar = {
-        PokemonTopAppBar(
-            title = stringResource(id = R.string.error_screen_title),
-            onClickBack = onClickBack
-        )
-    }) { innerPadding ->
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            PokemonTopAppBar(
+                title = stringResource(id = R.string.error_screen_title),
+                onClickBack = onClickBack,
+            )
+        },
+    ) { innerPadding ->
         ErrorScreenContent(
             modifier = Modifier.padding(innerPadding),
             title = title,
             body = body,
-            onClickBack = onClickBack
+            onClickBack = onClickBack,
         )
     }
 }
@@ -64,7 +68,7 @@ fun ErrorScreenContent(
         constraintSet = getConstraints(),
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
     ) {
         // error image
         Image(
@@ -73,7 +77,7 @@ fun ErrorScreenContent(
             modifier = Modifier
                 .layoutId("image_error")
                 .size(dimensionResource(id = R.dimen.error_image_size)),
-            colorFilter = ColorFilter.tint(color = MaterialTheme.colors.primaryVariant)
+            colorFilter = ColorFilter.tint(color = MaterialTheme.colors.primaryVariant),
         )
 
         // title text
@@ -83,7 +87,7 @@ fun ErrorScreenContent(
             style = MaterialTheme.typography.h5,
             modifier = Modifier
                 .layoutId("text_title")
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
         )
 
         // body text
@@ -93,17 +97,17 @@ fun ErrorScreenContent(
             style = MaterialTheme.typography.body1,
             modifier = Modifier
                 .layoutId("text_body")
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
         )
 
         // go back button
         Button(
             onClick = { onClickBack() },
-            modifier = Modifier.layoutId("button_go_back")
+            modifier = Modifier.layoutId("button_go_back"),
         ) {
             Text(
                 text = stringResource(id = R.string.go_back).uppercase(Locale.getDefault()),
-                style = MaterialTheme.typography.button
+                style = MaterialTheme.typography.button,
             )
         }
     }
@@ -142,7 +146,7 @@ private fun getConstraints(): ConstraintSet {
                 bottom = parent.bottom,
                 topMargin = 16.dp,
                 bottomMargin = 32.dp,
-                bias = 0F
+                bias = 0F,
             )
         }
     }

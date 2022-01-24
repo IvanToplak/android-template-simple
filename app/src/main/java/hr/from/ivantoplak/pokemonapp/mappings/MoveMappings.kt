@@ -6,12 +6,12 @@ import hr.from.ivantoplak.pokemonapp.ui.model.MoveViewData
 
 fun DbMove.toMove() = Move(
     id = id,
-    name = name
+    name = name,
 )
 
 fun Move.toMoveViewData() = MoveViewData(
     id = id,
-    name = name
+    name = name,
 )
 
 fun List<DbMove>.toMoves() = map { it.toMove() }

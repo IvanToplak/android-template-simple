@@ -23,6 +23,6 @@ fun PokemonWebViewer(
         },
         update = { view ->
             view.loadUrl(webUrl)
-        }
+        },
     )
 }

@@ -9,24 +9,28 @@ import hr.from.ivantoplak.pokemonapp.ui.common.PokemonWebViewer
 
 enum class PokedexScreenParameter(val param: String) {
     Title("title"),
-    WebUrl("webUrl")
+    WebUrl("webUrl"),
 }
 
 @Composable
 fun PokedexScreen(
+    modifier: Modifier = Modifier,
     title: String = "",
     webUrl: String = "",
     onClickBack: () -> Unit = {},
 ) {
-    Scaffold(topBar = {
-        PokemonTopAppBar(
-            title = title,
-            onClickBack = onClickBack
-        )
-    }) { innerPadding ->
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            PokemonTopAppBar(
+                title = title,
+                onClickBack = onClickBack,
+            )
+        },
+    ) { innerPadding ->
         PokemonWebViewer(
             modifier = Modifier.padding(innerPadding),
-            webUrl = webUrl
+            webUrl = webUrl,
         )
     }
 }

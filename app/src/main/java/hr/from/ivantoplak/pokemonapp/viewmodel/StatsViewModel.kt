@@ -14,12 +14,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-private const val ERROR_LOADING_STATS = "Error loading pokemon stats from local store."
+private const val ErrorLoadingStats = "Error loading pokemon stats from local store."
 
 class StatsViewModel(
     private val pokemonId: Int,
     private val repository: PokemonRepository,
-    private val dispatcher: DispatcherProvider
+    private val dispatcher: DispatcherProvider,
 ) : ViewModel() {
 
     private val _stats = mutableStateOf<List<StatViewData>>(emptyList())
@@ -30,7 +30,7 @@ class StatsViewModel(
             repository.getPokemonStats(pokemonId)
                 .map { it.toStatsViewData() }
                 .flowOn(dispatcher.io())
-                .catch { e -> Timber.e(e, ERROR_LOADING_STATS) }
+                .catch { e -> Timber.e(e, ErrorLoadingStats) }
                 .collect { statsList -> _stats.value = statsList }
         }
     }

@@ -27,21 +27,21 @@ import hr.from.ivantoplak.pokemonapp.viewmodel.StatsViewModel
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
-private const val TRANSITION_DURATION = 1000
-private const val POKEDEX_URL = "https://www.pokemon.com/us/pokedex/"
+private const val TransitionDuration = 1000
+private const val PokedexUrl = "https://www.pokemon.com/us/pokedex/"
 
 @Composable
 fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
     AnimatedNavHost(
         navController = navController,
         startDestination = Pokemon.name,
-        modifier = modifier
+        modifier = modifier,
     ) {
         // pokemon screen
         composable(
             route = Pokemon.name,
             enterTransition = {
-                fadeIn(animationSpec = tween(TRANSITION_DURATION))
+                fadeIn(animationSpec = tween(TransitionDuration))
             },
         ) {
             val viewModel = getViewModel<PokemonViewModel>()
@@ -54,7 +54,7 @@ fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifi
             route = "${Moves.name}/{pokemonId}",
             arguments = listOf(navArgument("pokemonId") { type = NavType.IntType }),
             enterTransition = {
-                fadeIn(animationSpec = tween(TRANSITION_DURATION))
+                fadeIn(animationSpec = tween(TransitionDuration))
             },
         ) { backStackEntry ->
             val pokemonId = backStackEntry.arguments?.getInt("pokemonId")
@@ -68,7 +68,7 @@ fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifi
             route = "${Stats.name}/{pokemonId}",
             arguments = listOf(navArgument("pokemonId") { type = NavType.IntType }),
             enterTransition = {
-                fadeIn(animationSpec = tween(TRANSITION_DURATION))
+                fadeIn(animationSpec = tween(TransitionDuration))
             },
         ) { backStackEntry ->
             val pokemonId = backStackEntry.arguments?.getInt("pokemonId")
@@ -85,7 +85,7 @@ fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifi
                 navArgument(ErrorScreenParameter.Body.param) { nullable = true },
             ),
             enterTransition = {
-                fadeIn(animationSpec = tween(durationMillis = TRANSITION_DURATION))
+                fadeIn(animationSpec = tween(durationMillis = TransitionDuration))
             },
         ) { backStackEntry ->
             val title = backStackEntry.arguments?.getString(ErrorScreenParameter.Title.param)
@@ -96,7 +96,7 @@ fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifi
             ErrorScreen(
                 title = title,
                 body = body,
-                onClickBack = { navController.navigateUp() }
+                onClickBack = { navController.navigateUp() },
             )
         }
 
@@ -108,18 +108,18 @@ fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifi
                 navArgument(PokedexScreenParameter.WebUrl.param) { nullable = true },
             ),
             enterTransition = {
-                fadeIn(animationSpec = tween(durationMillis = TRANSITION_DURATION))
+                fadeIn(animationSpec = tween(durationMillis = TransitionDuration))
             },
         ) { backStackEntry ->
             val title = backStackEntry.arguments?.getString(PokedexScreenParameter.Title.param)
                 ?: stringResource(id = R.string.pokedex_screen_title)
             val url = backStackEntry.arguments?.getString(PokedexScreenParameter.WebUrl.param)
-                ?: POKEDEX_URL
+                ?: PokedexUrl
 
             PokedexScreen(
                 title = title,
                 webUrl = url,
-                onClickBack = { navController.navigateUp() }
+                onClickBack = { navController.navigateUp() },
             )
         }
     }

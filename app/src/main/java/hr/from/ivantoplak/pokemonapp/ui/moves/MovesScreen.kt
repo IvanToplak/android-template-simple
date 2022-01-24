@@ -27,29 +27,35 @@ import hr.from.ivantoplak.pokemonapp.viewmodel.MovesViewModel
 @Composable
 fun MovesScreen(
     viewModel: MovesViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
 ) {
     MovesScreenContent(
+        modifier = modifier,
         moves = viewModel.moves.value,
-        onClickBack = { navController.navigateUp() }
+        onClickBack = { navController.navigateUp() },
     )
 }
 
 @Composable
 fun MovesScreenContent(
+    modifier: Modifier = Modifier,
     title: String = stringResource(id = R.string.moves_screen_title),
     moves: List<MoveViewData> = emptyList(),
     onClickBack: () -> Unit = {},
 ) {
-    Scaffold(topBar = {
-        PokemonTopAppBar(
-            title = title,
-            onClickBack = onClickBack
-        )
-    }) { innerPadding ->
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            PokemonTopAppBar(
+                title = title,
+                onClickBack = onClickBack,
+            )
+        },
+    ) { innerPadding ->
         MovesScreenBody(
             modifier = Modifier.padding(innerPadding),
-            moves = moves
+            moves = moves,
         )
     }
 }
@@ -57,11 +63,11 @@ fun MovesScreenContent(
 @Composable
 fun MovesScreenBody(
     modifier: Modifier = Modifier,
-    moves: List<MoveViewData> = emptyList()
+    moves: List<MoveViewData> = emptyList(),
 ) {
     ConstraintLayout(
         constraintSet = getConstraints(),
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) {
         LazyColumn(
             modifier = Modifier
@@ -84,12 +90,12 @@ fun MovesScreenBody(
 @Composable
 fun MoveRow(
     modifier: Modifier = Modifier,
-    move: MoveViewData
+    move: MoveViewData,
 ) {
     Text(
         text = move.name,
         modifier = modifier.padding(horizontal = 32.dp, vertical = 16.dp),
-        style = MaterialTheme.typography.body1
+        style = MaterialTheme.typography.body1,
     )
 }
 
@@ -112,7 +118,7 @@ fun MovesScreenPreview() {
     PokemonAppTheme {
         MovesScreenContent(
             title = "Moves",
-            moves = List(15) { MoveViewData(id = it, name = "roundhouse kick") }
+            moves = List(15) { MoveViewData(id = it, name = "roundhouse kick") },
         )
     }
 }
@@ -123,7 +129,7 @@ fun MovesScreenPreviewLandscape() {
     PokemonAppTheme {
         MovesScreenContent(
             title = "Moves",
-            moves = List(15) { MoveViewData(id = it, name = "roundhouse kick") }
+            moves = List(15) { MoveViewData(id = it, name = "roundhouse kick") },
         )
     }
 }
