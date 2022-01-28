@@ -29,6 +29,7 @@ import org.koin.core.parameter.parametersOf
 
 private const val TransitionDuration = 1000
 private const val PokedexUrl = "https://www.pokemon.com/us/pokedex/"
+private const val NavArgPokemonId = "pokemonId"
 
 @Composable
 fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -37,7 +38,7 @@ fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifi
         startDestination = Pokemon.name,
         modifier = modifier,
     ) {
-        // pokemon screen
+        // pokemon screen: /Pokemon
         composable(
             route = Pokemon.name,
             enterTransition = {
@@ -49,37 +50,39 @@ fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifi
             PokemonScreen(viewModel, navController)
         }
 
-        // pokemon moves screen
+        // pokemon moves screen: /Moves/{pokemonId}
         composable(
-            route = "${Moves.name}/{pokemonId}",
-            arguments = listOf(navArgument("pokemonId") { type = NavType.IntType }),
+            route = "${Moves.name}/{$NavArgPokemonId}",
+            arguments = listOf(navArgument(NavArgPokemonId) { type = NavType.IntType }),
             enterTransition = {
                 fadeIn(animationSpec = tween(TransitionDuration))
             },
         ) { backStackEntry ->
-            val pokemonId = backStackEntry.arguments?.getInt("pokemonId")
+            val pokemonId = backStackEntry.arguments?.getInt(NavArgPokemonId)
             val viewModel = getViewModel<MovesViewModel> { parametersOf(pokemonId) }
 
             MovesScreen(viewModel, navController)
         }
 
-        // pokemon stats screen
+        // pokemon stats screen: /Stats/{pokemonId}
         composable(
-            route = "${Stats.name}/{pokemonId}",
-            arguments = listOf(navArgument("pokemonId") { type = NavType.IntType }),
+            route = "${Stats.name}/{$NavArgPokemonId}",
+            arguments = listOf(navArgument(NavArgPokemonId) { type = NavType.IntType }),
             enterTransition = {
                 fadeIn(animationSpec = tween(TransitionDuration))
             },
         ) { backStackEntry ->
-            val pokemonId = backStackEntry.arguments?.getInt("pokemonId")
+            val pokemonId = backStackEntry.arguments?.getInt(NavArgPokemonId)
             val viewModel = getViewModel<StatsViewModel> { parametersOf(pokemonId) }
 
             StatsScreen(viewModel, navController)
         }
 
-        // error screen
+        // error screen: /Error?title={title}&body={body}
         composable(
-            route = "${PokemonAppScreen.Error.name}?${ErrorScreenParameter.Title.param}={title}&${ErrorScreenParameter.Body.param}={body}",
+            route = PokemonAppScreen.Error.name +
+                "?${ErrorScreenParameter.Title.param}={${ErrorScreenParameter.Title.param}}" +
+                "&${ErrorScreenParameter.Body.param}={${ErrorScreenParameter.Body.param}}",
             arguments = listOf(
                 navArgument(ErrorScreenParameter.Title.param) { nullable = true },
                 navArgument(ErrorScreenParameter.Body.param) { nullable = true },
@@ -100,9 +103,11 @@ fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifi
             )
         }
 
-        // pokemon search (pokedex)
+        // pokemon search (pokedex): /Search?title={title}&webUrl={webUrl}
         composable(
-            route = "${PokemonAppScreen.Search.name}?${PokedexScreenParameter.Title.param}={title}&${PokedexScreenParameter.WebUrl.param}={webUrl}",
+            route = PokemonAppScreen.Search.name +
+                "?${PokedexScreenParameter.Title.param}={${PokedexScreenParameter.Title.param}}" +
+                "&${PokedexScreenParameter.WebUrl.param}={${PokedexScreenParameter.WebUrl.param}}",
             arguments = listOf(
                 navArgument(PokedexScreenParameter.Title.param) { nullable = true },
                 navArgument(PokedexScreenParameter.WebUrl.param) { nullable = true },
