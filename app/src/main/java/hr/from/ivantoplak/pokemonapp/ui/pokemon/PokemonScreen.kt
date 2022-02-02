@@ -1,27 +1,30 @@
 package hr.from.ivantoplak.pokemonapp.ui.pokemon
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.dimensionResource
@@ -44,7 +47,6 @@ import coil.compose.rememberImagePainter
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.extensions.titleCaseFirstChar
 import hr.from.ivantoplak.pokemonapp.ui.PokemonAppScreen
-import hr.from.ivantoplak.pokemonapp.ui.common.PokemonLoadingIndicator
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.ui.model.PokemonViewData
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
@@ -138,11 +140,14 @@ fun PokemonScreenBody(
             val pokemonName by remember(pokemon) {
                 derivedStateOf { pokemon?.name?.titleCaseFirstChar() ?: "" }
             }
+            val isError = pokemonState == PokemonState.ErrorNoData
+            val screenTitle =
+                if (isError) stringResource(id = R.string.pokemon_info) else pokemonName
 
             ClickableText(
-                text = AnnotatedString(pokemonName),
-                style = MaterialTheme.typography.h5,
-                onClick = { onClickShowPokedex() },
+                text = AnnotatedString(screenTitle),
+                style = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center),
+                onClick = { if (!isError) onClickShowPokedex() },
                 modifier = Modifier.layoutId("pokemon_name"),
             )
 
@@ -176,50 +181,46 @@ fun PokemonScreenBody(
                     .size(dimensionResource(id = R.dimen.sprite_image_size)),
             )
 
-            // moves button
-            AnimatedVisibility(
-                visible = pokemonState in arrayOf(
-                    PokemonState.ErrorHasData,
-                    PokemonState.Success,
-                ),
-                enter = fadeIn(),
-                exit = fadeOut(),
-                modifier = Modifier.layoutId("pokemon_moves_button"),
-            ) {
-                Button(
-                    onClick = { onClickShowMoves() },
-                    modifier = Modifier
-                        .wrapContentHeight()
-                        .width(dimensionResource(id = R.dimen.button_width)),
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.moves).uppercase(Locale.getDefault()),
-                        style = MaterialTheme.typography.button,
-                    )
+            val buttonsEnabled by remember(pokemonState) {
+                derivedStateOf {
+                    pokemonState in arrayOf(PokemonState.ErrorHasData, PokemonState.Success)
                 }
             }
 
-            // stats button
-            AnimatedVisibility(
-                visible = pokemonState in arrayOf(
-                    PokemonState.ErrorHasData,
-                    PokemonState.Success,
-                ),
-                enter = fadeIn(),
-                exit = fadeOut(),
-                modifier = Modifier.layoutId("pokemon_stats_button"),
+            // moves button
+            val minButtonHeight = dimensionResource(id = R.dimen.min_button_height)
+            val buttonWidth = dimensionResource(id = R.dimen.button_width)
+            Button(
+                onClick = { onClickShowMoves() },
+                enabled = buttonsEnabled,
+                modifier = Modifier
+                    .width(buttonWidth)
+                    .layoutId("pokemon_moves_button"),
             ) {
-                Button(
-                    onClick = { onClickShowStats() },
+                Text(
+                    text = stringResource(id = R.string.moves).uppercase(Locale.getDefault()),
                     modifier = Modifier
-                        .wrapContentHeight()
-                        .width(dimensionResource(id = R.dimen.button_width)),
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.stats).uppercase(Locale.getDefault()),
-                        style = MaterialTheme.typography.button,
-                    )
-                }
+                        .heightIn(min = minButtonHeight)
+                        .wrapContentHeight(align = Alignment.CenterVertically),
+                    style = MaterialTheme.typography.button,
+                )
+            }
+
+            // stats button
+            Button(
+                onClick = { onClickShowStats() },
+                enabled = buttonsEnabled,
+                modifier = Modifier
+                    .width(buttonWidth)
+                    .layoutId("pokemon_stats_button"),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.stats).uppercase(Locale.getDefault()),
+                    modifier = Modifier
+                        .heightIn(min = minButtonHeight)
+                        .wrapContentHeight(align = Alignment.CenterVertically),
+                    style = MaterialTheme.typography.button,
+                )
             }
 
             // refresh button
@@ -227,37 +228,33 @@ fun PokemonScreenBody(
                 onClick = { onClickRefresh() },
                 modifier = Modifier
                     .layoutId("pokemon_refresh_button")
-                    .width(dimensionResource(id = R.dimen.button_width)),
-            ) {
-                Text(
-                    text = stringResource(id = R.string.refresh).uppercase(Locale.getDefault()),
-                    style = MaterialTheme.typography.button,
+                    .width(buttonWidth),
+                enabled = pokemonState != PokemonState.Loading,
+                colors = ButtonDefaults.buttonColors(
+                    disabledBackgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.8F),
+                    disabledContentColor = contentColorFor(MaterialTheme.colors.primary),
                 )
-            }
-
-            // info message
-            AnimatedVisibility(
-                visible = pokemonState == PokemonState.ErrorNoData,
-                enter = fadeIn(),
-                exit = fadeOut(),
-                modifier = Modifier.layoutId("text_info"),
             ) {
-                Text(
-                    text = stringResource(id = R.string.pokemon_info),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.h5,
-                    modifier = Modifier.padding(horizontal = 32.dp),
-                )
-            }
-
-            // loading indicator
-            AnimatedVisibility(
-                visible = pokemonState == PokemonState.Loading,
-                enter = fadeIn(),
-                exit = fadeOut(),
-                modifier = Modifier.layoutId("loading_progress_indicator"),
-            ) {
-                PokemonLoadingIndicator()
+                AnimatedContent(
+                    targetState = pokemonState,
+                    modifier = Modifier
+                        .heightIn(min = minButtonHeight)
+                        .wrapContentHeight(align = Alignment.CenterVertically),
+                    contentAlignment = Alignment.Center,
+                ) { state ->
+                    if (state == PokemonState.Loading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(minButtonHeight),
+                            color = MaterialTheme.colors.background,
+                            strokeWidth = 2.dp,
+                        )
+                    } else {
+                        Text(
+                            text = stringResource(id = R.string.refresh).uppercase(Locale.getDefault()),
+                            style = MaterialTheme.typography.button,
+                        )
+                    }
+                }
             }
         }
     }
@@ -274,8 +271,6 @@ private fun getConstraints(isLandscape: Boolean): ConstraintSet {
             buttonMoves = createRefFor("pokemon_moves_button"),
             buttonStats = createRefFor("pokemon_stats_button"),
             buttonRefresh = createRefFor("pokemon_refresh_button"),
-            progressIndicator = createRefFor("loading_progress_indicator"),
-            textInfo = createRefFor("text_info"),
         )
 
         if (isLandscape) {
@@ -326,27 +321,7 @@ private fun ConstraintSetScope.portraitConstraints(refs: ComponentRefs) {
         height = Dimension.wrapContent
         end.linkTo(parent.end, margin = 16.dp)
         start.linkTo(parent.start, margin = 16.dp)
-        linkTo(
-            top = refs.buttonStats.bottom,
-            bottom = parent.bottom,
-            topMargin = 16.dp,
-            bottomMargin = 32.dp,
-            bias = 1F,
-        )
-    }
-
-    constrain(refs.progressIndicator) {
-        end.linkTo(parent.end)
-        start.linkTo(parent.start)
-        top.linkTo(parent.top)
-        bottom.linkTo(parent.bottom)
-    }
-
-    constrain(refs.textInfo) {
-        end.linkTo(parent.end, margin = 16.dp)
-        start.linkTo(parent.start, margin = 16.dp)
-        top.linkTo(parent.top, margin = 16.dp)
-        bottom.linkTo(refs.buttonRefresh.top, margin = 16.dp)
+        top.linkTo(refs.buttonStats.bottom, margin = 16.dp)
     }
 }
 
@@ -373,29 +348,14 @@ private fun ConstraintSetScope.landscapeConstraints(refs: ComponentRefs) {
     }
 
     constrain(refs.buttonStats) {
-        bottom.linkTo(refs.imagePokemonSpriteBackground.bottom)
+        top.linkTo(refs.buttonMoves.bottom, margin = 16.dp)
         start.linkTo(refs.imagePokemonSpriteBackground.end, margin = 32.dp)
     }
 
     constrain(refs.buttonRefresh) {
-        height = Dimension.fillToConstraints
-        top.linkTo(refs.imagePokemonSpriteForeground.top)
-        bottom.linkTo(refs.imagePokemonSpriteForeground.bottom)
-        end.linkTo(parent.end, margin = 32.dp)
-    }
-
-    constrain(refs.progressIndicator) {
-        top.linkTo(parent.top)
-        bottom.linkTo(parent.bottom)
-        start.linkTo(parent.start)
-        end.linkTo(parent.end)
-    }
-
-    constrain(refs.textInfo) {
-        end.linkTo(refs.buttonRefresh.start, margin = 16.dp)
-        start.linkTo(parent.start, margin = 16.dp)
-        top.linkTo(parent.top, margin = 16.dp)
-        bottom.linkTo(parent.bottom, margin = 16.dp)
+        top.linkTo(refs.buttonMoves.top)
+        bottom.linkTo(refs.buttonStats.bottom)
+        start.linkTo(refs.buttonMoves.end, margin = 32.dp)
     }
 }
 
@@ -407,19 +367,10 @@ private class ComponentRefs(
     val buttonMoves: ConstrainedLayoutReference,
     val buttonStats: ConstrainedLayoutReference,
     val buttonRefresh: ConstrainedLayoutReference,
-    val progressIndicator: ConstrainedLayoutReference,
-    val textInfo: ConstrainedLayoutReference,
 )
 
-@Preview(showBackground = true)
-@Composable
-fun PokemonScreenPreview() {
-    PokemonAppTheme {
-        GetPokemonScreen()
-    }
-}
-
-@Preview(showBackground = true, widthDp = 720, heightDp = 360)
+@Preview(name = "PokemonScreenPortrait", showBackground = true)
+@Preview(name = "PokemonScreenLandscape", showBackground = true, widthDp = 720, heightDp = 360)
 @Composable
 fun PokemonScreenPreviewLandscape() {
     PokemonAppTheme {

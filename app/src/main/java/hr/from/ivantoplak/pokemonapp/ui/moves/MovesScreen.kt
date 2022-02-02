@@ -112,20 +112,10 @@ private fun getConstraints(): ConstraintSet {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "MovesScreenPortrait", showBackground = true)
+@Preview(name = "MovesScreenLandscape", showBackground = true, widthDp = 720, heightDp = 360)
 @Composable
 fun MovesScreenPreview() {
-    PokemonAppTheme {
-        MovesScreenContent(
-            title = "Moves",
-            moves = List(15) { MoveViewData(id = it, name = "roundhouse kick") },
-        )
-    }
-}
-
-@Preview(showBackground = true, widthDp = 720, heightDp = 360)
-@Composable
-fun MovesScreenPreviewLandscape() {
     PokemonAppTheme {
         MovesScreenContent(
             title = "Moves",

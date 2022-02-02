@@ -152,17 +152,10 @@ private fun getConstraints(): ConstraintSet {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "ErrorScreenPortrait", showBackground = true)
+@Preview(name = "ErrorScreenLandscape", showBackground = true, widthDp = 720, heightDp = 360)
 @Composable
 fun ErrorScreenPreview() {
-    PokemonAppTheme {
-        GetErrorScreen()
-    }
-}
-
-@Preview(showBackground = true, widthDp = 720, heightDp = 360)
-@Composable
-fun ErrorScreenPreviewLandscape() {
     PokemonAppTheme {
         GetErrorScreen()
     }

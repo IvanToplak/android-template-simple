@@ -56,7 +56,7 @@ val appModule = module {
     single {
         ImageLoader.Builder(androidContext())
             .crossfade(true)
-            .placeholder(R.drawable.loading_animation)
+            .fallback(R.drawable.image_placeholder)
             .error(R.drawable.image_placeholder)
             .build()
     }

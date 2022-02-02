@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="button_width">150dp</dimen>
+    <dimen name="min_button_height">24dp</dimen>
     <dimen name="sprite_image_size">96dp</dimen>
     <dimen name="error_image_size">100dp</dimen>
     <dimen name="progress_bar_size">40dp</dimen>

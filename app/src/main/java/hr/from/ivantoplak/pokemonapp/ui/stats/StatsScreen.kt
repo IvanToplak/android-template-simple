@@ -140,26 +140,10 @@ private fun getConstraints(): ConstraintSet {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "StatsScreenPortrait", showBackground = true)
+@Preview(name = "StatsScreenLandscape", showBackground = true, widthDp = 720, heightDp = 360)
 @Composable
 fun StatsScreenPreview() {
-    PokemonAppTheme {
-        StatsScreenContent(
-            title = "Stats",
-            stats = List(15) {
-                StatViewData(
-                    id = it,
-                    name = "stat name $it",
-                    value = (it + 1) * 100,
-                )
-            }
-        )
-    }
-}
-
-@Preview(showBackground = true, widthDp = 720, heightDp = 360)
-@Composable
-fun StatsScreenPreviewLandscape() {
     PokemonAppTheme {
         StatsScreenContent(
             title = "Stats",

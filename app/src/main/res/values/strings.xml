@@ -9,7 +9,7 @@
     <string name="error_screen_content_body">Something went wrong, please check your internet connection and try again.</string>
     <string name="error_image">Error image</string>
     <string name="go_back">Go back</string>
-    <string name="pokemon_info">Click the refresh button\nto load a pokemon.</string>
+    <string name="pokemon_info">Click the refresh button\nto load a pokemon</string>
 
     <!-- Screen titles -->
     <string name="pokemon_screen_title">Pokemon</string>
