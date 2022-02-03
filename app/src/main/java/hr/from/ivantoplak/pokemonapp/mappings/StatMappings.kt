@@ -7,13 +7,13 @@ import hr.from.ivantoplak.pokemonapp.ui.model.StatViewData
 fun DbStatNameValue.toStat(): Stat = Stat(
     id = id,
     value = value,
-    name = name
+    name = name,
 )
 
 fun Stat.toStatViewData(): StatViewData = StatViewData(
     id = id,
     value = value,
-    name = name
+    name = name,
 )
 
 fun List<DbStatNameValue>.toStats(): List<Stat> = map { it.toStat() }

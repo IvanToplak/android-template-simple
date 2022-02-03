@@ -45,13 +45,13 @@ class MovesViewModelTest {
         val pokemonName = "facepalm"
         val moves = listOf(Move(pokemonId, pokemonName))
         whenever(repo.getPokemonMoves(pokemonId)).thenReturn(flow { emit(moves) })
-        whenever(dispatcher.default()).thenReturn(testDispatcher)
+        whenever(dispatcher.io()).thenReturn(testDispatcher)
 
         // act
         val viewModel = MovesViewModel(pokemonId, repo, dispatcher)
 
         // assert
-        verify(dispatcher).default()
+        verify(dispatcher).io()
         verify(repo).getPokemonMoves(pokemonId)
         val expected = moves.map { it.toMoveViewData() }
         assertEquals(expected, viewModel.moves.value)
@@ -62,13 +62,13 @@ class MovesViewModelTest {
         // arrange
         val pokemonId = 0
         whenever(repo.getPokemonMoves(pokemonId)).thenReturn(flow { throw (Throwable()) })
-        whenever(dispatcher.default()).thenReturn(testDispatcher)
+        whenever(dispatcher.io()).thenReturn(testDispatcher)
 
         // act
         val viewModel = MovesViewModel(pokemonId, repo, dispatcher)
 
         // assert
-        verify(dispatcher).default()
+        verify(dispatcher).io()
         verify(repo).getPokemonMoves(pokemonId)
         assertTrue(viewModel.moves.value.isNullOrEmpty())
     }

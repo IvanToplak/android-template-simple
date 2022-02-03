@@ -21,17 +21,17 @@ data class ApiMoveDetails(val name: String = "")
 @JsonClass(generateAdapter = true)
 data class ApiSprites(
     @Json(name = "back_default")
-    val backDefault: String = "",
+    val backDefault: String? = "",
 
     @Json(name = "front_default")
-    val frontDefault: String = ""
+    val frontDefault: String = "",
 )
 
 @JsonClass(generateAdapter = true)
 data class ApiStat(
     @Json(name = "base_stat")
     val baseStat: Int = 0,
-    val stat: ApiStatDetails? = null
+    val stat: ApiStatDetails? = null,
 )
 
 @JsonClass(generateAdapter = true)

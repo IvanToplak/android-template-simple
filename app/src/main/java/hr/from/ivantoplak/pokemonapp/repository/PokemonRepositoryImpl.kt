@@ -17,13 +17,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-private const val ERROR_GET_POKEMON_NAMES = "Error while retrieving and saving pokemon names."
-private const val ERROR_GET_POKEMON = "Error while retrieving and saving pokemon."
+private const val ErrorGetPokemonNames = "Error while retrieving and saving pokemon names."
+private const val ErrorGetPokemon = "Error while retrieving and saving pokemon."
 
 class PokemonRepositoryImpl(
     private val pokemonService: PokemonService,
     private val pokemonDao: PokemonDao,
-    private val dispatcher: DispatcherProvider
+    private val dispatcher: DispatcherProvider,
 ) : PokemonRepository {
 
     /**
@@ -39,7 +39,7 @@ class PokemonRepositoryImpl(
             ).results.map { DbPokemonName(name = it.name) }
             pokemonDao.insertPokemonNames(dbPokemonNames)
         } catch (ex: Exception) {
-            Timber.e(ex, ERROR_GET_POKEMON_NAMES)
+            Timber.e(ex, ErrorGetPokemonNames)
         } finally {
             pokemonNames.addAll(pokemonDao.getPokemonNames().map { it.name })
         }
@@ -56,7 +56,7 @@ class PokemonRepositoryImpl(
             pokemon = if (name.isNotBlank()) refreshPokemon(name) else getRandomPokemon()
         } catch (ex: Exception) {
             pokemon = getRandomPokemon()
-            Timber.e(ex, ERROR_GET_POKEMON)
+            Timber.e(ex, ErrorGetPokemon)
         }
         pokemon
     }

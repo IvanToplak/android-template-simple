@@ -19,12 +19,12 @@ fun Pokemon.toPokemonViewData(): PokemonViewData = PokemonViewData(
     id = id,
     name = name,
     frontSpriteUrl = frontSpriteUrl,
-    backSpriteUrl = backSpriteUrl
+    backSpriteUrl = backSpriteUrl,
 )
 
 fun DbPokemon.toPokemon(): Pokemon = Pokemon(
     id = id,
     name = name,
     frontSpriteUrl = frontSpriteUrl,
-    backSpriteUrl = backSpriteUrl
+    backSpriteUrl = backSpriteUrl,
 )

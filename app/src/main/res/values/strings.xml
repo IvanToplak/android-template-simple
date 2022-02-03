@@ -1,25 +1,20 @@
 <resources>
     <string name="app_name">Android template for simple app</string>
-    <string name="default_pokemon_name">Pikachu</string>
     <string name="moves">Moves</string>
     <string name="stats">Stats</string>
     <string name="pokemon_image_front">Pokemon image front</string>
     <string name="pokemon_image_back">Pokemon image back</string>
     <string name="refresh">Refresh</string>
-    <string name="no_internet_connection">There is no internet connection available</string>
-    <string name="error_dialog_title">Error occurred!</string>
-    <string name="error_dialog_body">Something went wrong, please check your internet connection and try again.</string>
-    <string name="logo">Logo</string>
-    <string name="error_dialog_button_retry">Retry</string>
-    <string name="error_dialog_button_cancel">Cancel</string>
+    <string name="error_screen_content_title">Error occurred!</string>
+    <string name="error_screen_content_body">Something went wrong, please check your internet connection and try again.</string>
+    <string name="error_image">Error image</string>
+    <string name="go_back">Go back</string>
+    <string name="pokemon_info">Click the refresh button\nto load a pokemon</string>
 
     <!-- Screen titles -->
     <string name="pokemon_screen_title">Pokemon</string>
     <string name="moves_screen_title">Moves</string>
     <string name="stats_screen_title">Stats</string>
-
-    <!-- Transitions-->
-    <string name="pokemon_to_pokemon_moves_transition">pokemon_to_pokemon_moves</string>
-    <string name="pokemon_to_pokemon_stats_transition">pokemon_to_pokemon_stats</string>
-
+    <string name="error_screen_title">Error</string>
+    <string name="pokedex_screen_title">Pokedex</string>
 </resources>
