@@ -7,6 +7,6 @@
         <bitmap
             android:gravity="center"
             android:src="@drawable/ic_pokeball_48"
-            android:tint="@color/primaryDarkColor" />
+            android:tint="@color/pokemon_dark_red" />
     </item>
 </layer-list>

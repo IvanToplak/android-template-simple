@@ -13,12 +13,12 @@
     <!-- Base application theme. -->
     <style name="Theme.PokemonApp" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
+        <item name="colorPrimary">@color/pokemon_red</item>
+        <item name="colorPrimaryVariant">@color/pokemon_dark_red</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/secondaryColor</item>
-        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
+        <item name="colorSecondary">@color/pokemon_blue</item>
+        <item name="colorSecondaryVariant">@color/pokemon_dark_blue</item>
         <item name="colorOnSecondary">@color/white</item>
 
         <item name="android:colorBackground">@color/white</item>
