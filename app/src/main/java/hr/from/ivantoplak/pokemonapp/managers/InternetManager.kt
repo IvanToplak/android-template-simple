@@ -5,7 +5,7 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 
 /**
@@ -13,17 +13,14 @@ import kotlinx.coroutines.flow.debounce
  * or [connectivityStatus] observable (starting with API 24).
  */
 class InternetManager(
-    private val connectivityManager: ConnectivityManager
+    private val connectivityManager: ConnectivityManager,
 ) {
     enum class ConnectivityStatus {
         Connected,
         NotConnected,
     }
 
-    private val connectivityStatus = MutableSharedFlow<ConnectivityStatus>(
-        replay = 0,
-        extraBufferCapacity = 1,
-    )
+    private val connectivityStatus = MutableStateFlow(ConnectivityStatus.Connected)
 
     init {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
@@ -52,7 +49,5 @@ class InternetManager(
         }
 
     @OptIn(FlowPreview::class)
-    fun observeConnectivityStatus(): Flow<ConnectivityStatus> =
-        connectivityStatus
-            .debounce(500)
+    fun observeConnectivityStatus(): Flow<ConnectivityStatus> = connectivityStatus.debounce(500)
 }

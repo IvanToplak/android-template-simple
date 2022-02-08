@@ -129,12 +129,12 @@ fun PokemonScreenBody(
     onClickShowPokedex: () -> Unit = {},
     onClickRefresh: () -> Unit = {},
 ) {
-    BoxWithConstraints(modifier = modifier) {
+    BoxWithConstraints(modifier = modifier.fillMaxSize()) {
         val isLandscape = maxWidth > maxHeight
         val constraints = getConstraints(isLandscape)
         ConstraintLayout(
             constraintSet = constraints,
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.align(alignment = if (isLandscape) Alignment.Center else Alignment.TopCenter),
         ) {
             // pokemon name
             val pokemonName by remember(pokemon) {
@@ -283,7 +283,7 @@ private fun getConstraints(isLandscape: Boolean): ConstraintSet {
 
 private fun ConstraintSetScope.portraitConstraints(refs: ComponentRefs) {
     constrain(refs.textPokemonName) {
-        top.linkTo(parent.top, margin = 32.dp)
+        top.linkTo(parent.top, margin = 48.dp)
         start.linkTo(parent.start, margin = 16.dp)
         end.linkTo(parent.end, margin = 16.dp)
     }
@@ -327,7 +327,7 @@ private fun ConstraintSetScope.portraitConstraints(refs: ComponentRefs) {
 
 private fun ConstraintSetScope.landscapeConstraints(refs: ComponentRefs) {
     constrain(refs.textPokemonName) {
-        top.linkTo(parent.top, margin = 32.dp)
+        top.linkTo(parent.top, margin = 0.dp)
         start.linkTo(parent.start, margin = 16.dp)
         end.linkTo(parent.end, margin = 16.dp)
     }
@@ -354,7 +354,6 @@ private fun ConstraintSetScope.landscapeConstraints(refs: ComponentRefs) {
 
     constrain(refs.buttonRefresh) {
         top.linkTo(refs.buttonMoves.top)
-        bottom.linkTo(refs.buttonStats.bottom)
         start.linkTo(refs.buttonMoves.end, margin = 32.dp)
     }
 }
