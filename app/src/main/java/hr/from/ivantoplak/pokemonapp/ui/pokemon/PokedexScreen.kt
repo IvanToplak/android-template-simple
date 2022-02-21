@@ -1,7 +1,8 @@
 package hr.from.ivantoplak.pokemonapp.ui.pokemon
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
@@ -12,6 +13,7 @@ enum class PokedexScreenParameter(val param: String) {
     WebUrl("webUrl"),
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PokedexScreen(
     modifier: Modifier = Modifier,

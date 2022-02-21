@@ -8,10 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.TabRowDefaults.Divider
-import androidx.compose.material.Text
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +45,7 @@ fun StatsScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatsScreenContent(
     modifier: Modifier = Modifier,
@@ -87,7 +89,7 @@ fun StatsScreenBody(
                     stat = stat,
                 )
                 if (index < stats.lastIndex) {
-                    Divider(color = MaterialTheme.colors.listDivider)
+                    Divider(color = MaterialTheme.colorScheme.listDivider)
                 }
             }
         }
@@ -108,7 +110,7 @@ fun StatsRow(
             Text(
                 text = stat.name,
                 textAlign = TextAlign.End,
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodyLarge,
                 modifier = modifier
                     .padding(vertical = 16.dp),
             )
@@ -118,7 +120,7 @@ fun StatsRow(
             Text(
                 text = stat.value.toString(),
                 textAlign = TextAlign.End,
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodyLarge,
                 modifier = modifier
                     .padding(vertical = 16.dp)
                     .width(dimensionResource(id = R.dimen.stat_value_width)),

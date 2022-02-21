@@ -3,6 +3,7 @@ package hr.from.ivantoplak.pokemonapp.ui.pokemon
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,13 +13,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.contentColorFor
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -83,6 +85,7 @@ fun PokemonScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PokemonScreenContent(
     modifier: Modifier = Modifier,
@@ -146,7 +149,7 @@ fun PokemonScreenBody(
 
             ClickableText(
                 text = AnnotatedString(screenTitle),
-                style = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center),
+                style = MaterialTheme.typography.titleLarge.copy(textAlign = TextAlign.Center),
                 onClick = { if (!isError) onClickShowPokedex() },
                 modifier = Modifier.layoutId("pokemon_name"),
             )
@@ -160,7 +163,8 @@ fun PokemonScreenBody(
                 contentDescription = stringResource(id = R.string.pokemon_image_front),
                 modifier = Modifier
                     .layoutId("pokemon_sprite_foreground")
-                    .size(dimensionResource(id = R.dimen.sprite_image_size)),
+                    .size(dimensionResource(id = R.dimen.sprite_image_size))
+                    .clickable { if (!isError) onClickShowPokedex() },
             )
 
             Spacer(
@@ -178,7 +182,8 @@ fun PokemonScreenBody(
                 contentDescription = stringResource(id = R.string.pokemon_image_back),
                 modifier = Modifier
                     .layoutId("pokemon_sprite_background")
-                    .size(dimensionResource(id = R.dimen.sprite_image_size)),
+                    .size(dimensionResource(id = R.dimen.sprite_image_size))
+                    .clickable { if (!isError) onClickShowPokedex() },
             )
 
             val buttonsEnabled by remember(pokemonState) {
@@ -202,7 +207,7 @@ fun PokemonScreenBody(
                     modifier = Modifier
                         .heightIn(min = minButtonHeight)
                         .wrapContentHeight(align = Alignment.CenterVertically),
-                    style = MaterialTheme.typography.button,
+                    style = MaterialTheme.typography.labelLarge,
                 )
             }
 
@@ -219,7 +224,7 @@ fun PokemonScreenBody(
                     modifier = Modifier
                         .heightIn(min = minButtonHeight)
                         .wrapContentHeight(align = Alignment.CenterVertically),
-                    style = MaterialTheme.typography.button,
+                    style = MaterialTheme.typography.labelLarge,
                 )
             }
 
@@ -231,8 +236,8 @@ fun PokemonScreenBody(
                     .width(buttonWidth),
                 enabled = pokemonState != PokemonState.Loading,
                 colors = ButtonDefaults.buttonColors(
-                    disabledBackgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.8F),
-                    disabledContentColor = contentColorFor(MaterialTheme.colors.primary),
+                    disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8F),
+                    disabledContentColor = contentColorFor(MaterialTheme.colorScheme.primary),
                 )
             ) {
                 AnimatedContent(
@@ -245,13 +250,13 @@ fun PokemonScreenBody(
                     if (state == PokemonState.Loading) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(minButtonHeight),
-                            color = MaterialTheme.colors.background,
+                            color = MaterialTheme.colorScheme.background,
                             strokeWidth = 2.dp,
                         )
                     } else {
                         Text(
                             text = stringResource(id = R.string.refresh).uppercase(Locale.getDefault()),
-                            style = MaterialTheme.typography.button,
+                            style = MaterialTheme.typography.labelLarge,
                         )
                     }
                 }

@@ -11,7 +11,7 @@
     </style>
 
     <!-- Base application theme. -->
-    <style name="Theme.PokemonApp" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.PokemonApp" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/pokemon_red</item>
         <item name="colorPrimaryVariant">@color/pokemon_dark_red</item>

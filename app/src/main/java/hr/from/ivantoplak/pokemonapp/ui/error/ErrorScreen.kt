@@ -6,10 +6,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -32,6 +33,7 @@ enum class ErrorScreenParameter(val param: String) {
     Body("body"),
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ErrorScreen(
     modifier: Modifier = Modifier,
@@ -77,14 +79,14 @@ fun ErrorScreenContent(
             modifier = Modifier
                 .layoutId("image_error")
                 .size(dimensionResource(id = R.dimen.error_image_size)),
-            colorFilter = ColorFilter.tint(color = MaterialTheme.colors.primaryVariant),
+            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.error),
         )
 
         // title text
         Text(
             text = title,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier
                 .layoutId("text_title")
                 .padding(horizontal = 16.dp),
@@ -94,7 +96,7 @@ fun ErrorScreenContent(
         Text(
             text = body,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier
                 .layoutId("text_body")
                 .padding(horizontal = 16.dp),
@@ -107,7 +109,7 @@ fun ErrorScreenContent(
         ) {
             Text(
                 text = stringResource(id = R.string.go_back).uppercase(Locale.getDefault()),
-                style = MaterialTheme.typography.button,
+                style = MaterialTheme.typography.labelLarge,
             )
         }
     }

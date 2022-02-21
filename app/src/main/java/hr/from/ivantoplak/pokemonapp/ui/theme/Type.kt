@@ -1,6 +1,6 @@
 package hr.from.ivantoplak.pokemonapp.ui.theme
 
-import androidx.compose.material.Typography
+import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -15,53 +15,56 @@ private val Roboto = FontFamily(
 )
 
 val PokemonTypography = Typography(
-    defaultFontFamily = Roboto,
-    h4 = TextStyle(
+    headlineSmall = TextStyle(
+        fontFamily = Roboto,
         fontWeight = FontWeight.Bold,
         fontSize = 30.sp,
         letterSpacing = 0.sp,
     ),
-    h5 = TextStyle(
+    titleLarge = TextStyle(
+        fontFamily = Roboto,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
         letterSpacing = 0.sp,
     ),
-    h6 = TextStyle(
+    titleMedium = TextStyle(
+        fontFamily = Roboto,
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
-        letterSpacing = 0.sp,
-    ),
-    subtitle1 = TextStyle(
-        fontWeight = FontWeight.Bold,
-        fontSize = 16.sp,
         letterSpacing = 0.15.sp,
     ),
-    subtitle2 = TextStyle(
+    titleSmall = TextStyle(
+        fontFamily = Roboto,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
         letterSpacing = 0.1.sp,
     ),
-    body1 = TextStyle(
+    bodyLarge = TextStyle(
+        fontFamily = Roboto,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         letterSpacing = 0.5.sp,
     ),
-    body2 = TextStyle(
+    bodyMedium = TextStyle(
+        fontFamily = Roboto,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
         letterSpacing = 0.25.sp,
     ),
-    button = TextStyle(
+    labelLarge = TextStyle(
+        fontFamily = Roboto,
         fontWeight = FontWeight.Bold,
         fontSize = 14.sp,
         letterSpacing = 1.25.sp,
     ),
-    caption = TextStyle(
+    bodySmall = TextStyle(
+        fontFamily = Roboto,
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
         letterSpacing = 0.4.sp,
     ),
-    overline = TextStyle(
+    labelMedium = TextStyle(
+        fontFamily = Roboto,
         fontWeight = FontWeight.Bold,
         fontSize = 12.sp,
         letterSpacing = 1.sp,

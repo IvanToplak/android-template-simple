@@ -1,19 +1,17 @@
 package hr.from.ivantoplak.pokemonapp.ui.theme
 
-import androidx.compose.material.Colors
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.lightColors
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val LightColorPalette = lightColors(
+private val LightColorPalette = lightColorScheme(
     // primary brand color
     primary = PokemonRed,
-    primaryVariant = PokemonDarkRed,
     onPrimary = White,
     // secondary brand color
     secondary = PokemonBlue,
-    secondaryVariant = PokemonDarkBlue,
     onSecondary = White,
     // other colors
     background = Color.White,
@@ -27,15 +25,21 @@ fun PokemonAppTheme(content: @Composable () -> Unit) {
     val colors = LightColorPalette
 
     MaterialTheme(
-        colors = colors,
+        colorScheme = colors,
         typography = PokemonTypography,
-        shapes = PokemonShapes,
+        // shapes = PokemonShapes,
         content = content,
     )
 }
 
-val Colors.loadingIndicatorBackground: Color
+val ColorScheme.loadingIndicatorBackground: Color
     @Composable get() = BlackTransparent
 
-val Colors.listDivider: Color
+val ColorScheme.listDivider: Color
     @Composable get() = PokemonGray
+
+val ColorScheme.topAppBarContainerColor: Color
+    @Composable get() = PokemonRed
+
+val ColorScheme.topAppBarTextColor: Color
+    @Composable get() = Color.White
