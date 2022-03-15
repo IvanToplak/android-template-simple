@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import hr.from.ivantoplak.pokemonapp.R
+import hr.from.ivantoplak.pokemonapp.extensions.WindowSize
 import hr.from.ivantoplak.pokemonapp.ui.PokemonAppScreen.Moves
 import hr.from.ivantoplak.pokemonapp.ui.PokemonAppScreen.Pokemon
 import hr.from.ivantoplak.pokemonapp.ui.PokemonAppScreen.Stats
@@ -32,7 +33,11 @@ private const val PokedexUrl = "https://www.pokemon.com/us/pokedex/"
 private const val NavArgPokemonId = "pokemonId"
 
 @Composable
-fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
+fun PokemonNavHost(
+    navController: NavHostController,
+    windowSize: WindowSize,
+    modifier: Modifier = Modifier
+) {
     AnimatedNavHost(
         navController = navController,
         startDestination = Pokemon.name,
@@ -46,8 +51,9 @@ fun PokemonNavHost(navController: NavHostController, modifier: Modifier = Modifi
             },
         ) {
             val viewModel = getViewModel<PokemonViewModel>()
+            val isExpandedScreen = windowSize == WindowSize.Expanded
 
-            PokemonScreen(viewModel, navController)
+            PokemonScreen(viewModel, navController, isExpandedScreen)
         }
 
         // pokemon moves screen: /Moves/{pokemonId}

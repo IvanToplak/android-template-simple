@@ -10,12 +10,12 @@ plugins {
 apply from: 'lint.gradle'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     defaultConfig {
         applicationId "hr.from.ivantoplak.pokemonapp"
         minSdkVersion 23
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
 
@@ -62,6 +62,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "androidx.core:core-splashscreen:$splashscreen_version"
+    implementation "androidx.window:window:$window_version"
 
     // Compose
     implementation "androidx.compose.runtime:runtime:$compose_version"

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import hr.from.ivantoplak.pokemonapp.R
+import hr.from.ivantoplak.pokemonapp.extensions.rememberWindowSizeClass
 import hr.from.ivantoplak.pokemonapp.ui.error.ErrorScreen
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
 import hr.from.ivantoplak.pokemonapp.viewmodel.SplashViewModel
@@ -40,9 +41,10 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val isReady: Boolean by splashViewModel.isReady
             val showErrorMessage: Boolean by splashViewModel.showErrorMessage
+            val windowSizeClass = rememberWindowSizeClass()
 
             if (isReady) {
-                PokemonApp()
+                PokemonApp(windowSizeClass)
             } else if (showErrorMessage) {
                 PokemonAppTheme {
                     ErrorScreen(onClickBack = { onBackPressed() })

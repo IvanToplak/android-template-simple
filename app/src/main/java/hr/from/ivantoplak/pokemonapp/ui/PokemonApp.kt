@@ -6,16 +6,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import hr.from.ivantoplak.pokemonapp.extensions.WindowSize
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PokemonApp() {
+fun PokemonApp(windowSize: WindowSize) {
     PokemonAppTheme {
         val navController = rememberAnimatedNavController()
         Scaffold { innerPadding ->
             PokemonNavHost(
                 navController = navController,
+                windowSize = windowSize,
                 modifier = Modifier.padding(innerPadding),
             )
         }
