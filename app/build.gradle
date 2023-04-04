@@ -1,60 +1,76 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'androidx.navigation.safeargs.kotlin'
-    id 'kotlin-parcelize'
-    id "com.github.ben-manes.versions"
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.devtools.ksp'
 }
 
 apply from: 'lint.gradle'
 
 android {
-    compileSdkVersion 32
+    namespace 'hr.from.ivantoplak.pokemonapp'
+    compileSdk 33
 
     defaultConfig {
         applicationId "hr.from.ivantoplak.pokemonapp"
-        minSdkVersion 23
-        targetSdkVersion 32
+        minSdk 26
+        targetSdk 33
         versionCode 1
-        versionName "1.0"
-
+        versionName "0.0.1"
+        archivesBaseName = "android-template-v${versionName}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
+            shrinkResources false
+        }
+        release {
+            // debug signing config is set for easier testing - CI should set the production one
+            signingConfig signingConfigs.debug
+
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
+    compileOptions {
+        sourceCompatibility = "11"
+        targetCompatibility = "11"
+    }
+    kotlin {
+        jvmToolchain {
+            languageVersion.set(JavaLanguageVersion.of("11"))
+        }
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+        freeCompilerArgs += [
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
+                "-opt-in=kotlin.RequiresOptIn"]
+    }
     buildFeatures {
         viewBinding true
         compose true
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
-        freeCompilerArgs += [
-                "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-Xuse-experimental=androidx.compose.animation.ExperimentalAnimationApi",
-                "-Xuse-experimental=kotlin.RequiresOptIn"]
-    }
-
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion compose_compiler_version
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            logger.quiet("\t${variant.name} version:\t${archivesBaseName}")
+        }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable:$collections_immutable_version"
 
     // Android
     implementation "androidx.activity:activity-ktx:$activity_ktx_version"
@@ -62,32 +78,35 @@ dependencies {
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "androidx.core:core-splashscreen:$splashscreen_version"
-    implementation "androidx.window:window:$window_version"
 
     // Compose
-    implementation "androidx.compose.runtime:runtime:$compose_version"
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.foundation:foundation-layout:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.compose.material:material-icons-extended:$compose_version"
-    implementation "androidx.compose.material3:material3:$material3_version"
-    implementation "androidx.compose.foundation:foundation:$compose_version"
-    implementation "androidx.compose.animation:animation:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling:$compose_version"
+    def composeBom = platform("androidx.compose:compose-bom:$compose_bom_version")
+    implementation composeBom
+    androidTestImplementation composeBom
+
+    implementation "androidx.compose.material3:material3"
+    implementation "androidx.compose.material3:material3-window-size-class"
+    implementation "androidx.compose.material:material-icons-core"
+    implementation "androidx.compose.material:material-icons-extended"
     implementation "androidx.activity:activity-compose:$activity_compose_version"
     implementation "androidx.constraintlayout:constraintlayout-compose:$constraintlayout_compose_version"
 
+    // Android Studio Preview support
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+
     // Accompanist
-    implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
-    
+    implementation "com.google.accompanist:accompanist-permissions:$accompanist_version"
+
     // Lifecycle dependencies
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$viewmodel_compose_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
 
     // Koin
-    implementation "io.insert-koin:koin-android:$koin_version"
-    implementation "io.insert-koin:koin-androidx-compose:$koin_version"
+    implementation "io.insert-koin:koin-android:$koin_android_version"
+    implementation "io.insert-koin:koin-androidx-compose:$koin_android_compose_version"
     testImplementation "io.insert-koin:koin-test:$koin_version"
 
     // Coroutines
@@ -102,7 +121,7 @@ dependencies {
 
     // Room
     implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
+    ksp "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
 
     // Retrofit
@@ -111,7 +130,7 @@ dependencies {
 
     // Moshi
     implementation "com.squareup.moshi:moshi:$moshi_version"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+    ksp "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 
     // Logging
     implementation "com.jakewharton.timber:timber:$timber_version"
@@ -121,11 +140,10 @@ dependencies {
 
     // Test
     // Unit testing framework
-    androidTestImplementation "androidx.test:rules:$android_test_version"
+    androidTestImplementation "androidx.test:rules:$android_test_rules_version"
     androidTestImplementation "androidx.test:runner:$android_test_version"
-    androidTestImplementation "androidx.compose.ui:ui-test:$compose_version"
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4"
+    debugImplementation "androidx.compose.ui:ui-test-manifest"
 
     testImplementation "androidx.test.ext:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$junit_version"

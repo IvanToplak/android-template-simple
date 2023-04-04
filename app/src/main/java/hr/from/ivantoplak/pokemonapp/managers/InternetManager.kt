@@ -23,19 +23,17 @@ class InternetManager(
     private val connectivityStatus = MutableStateFlow(ConnectivityStatus.Connected)
 
     init {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            connectivityManager.registerDefaultNetworkCallback(
-                object : ConnectivityManager.NetworkCallback() {
-                    override fun onAvailable(network: Network) {
-                        connectivityStatus.tryEmit(ConnectivityStatus.Connected)
-                    }
-
-                    override fun onLost(network: Network) {
-                        connectivityStatus.tryEmit(ConnectivityStatus.NotConnected)
-                    }
+        connectivityManager.registerDefaultNetworkCallback(
+            object : ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(network: Network) {
+                    connectivityStatus.tryEmit(ConnectivityStatus.Connected)
                 }
-            )
-        }
+
+                override fun onLost(network: Network) {
+                    connectivityStatus.tryEmit(ConnectivityStatus.NotConnected)
+                }
+            },
+        )
     }
 
     val isOnline: Boolean
@@ -49,5 +47,6 @@ class InternetManager(
         }
 
     @OptIn(FlowPreview::class)
-    fun observeConnectivityStatus(): Flow<ConnectivityStatus> = connectivityStatus.debounce(500)
+    fun observeConnectivityStatus(): Flow<ConnectivityStatus> =
+        connectivityStatus.debounce(500)
 }

@@ -245,7 +245,7 @@ fun PokemonScreenBody(
             colors = ButtonDefaults.buttonColors(
                 disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8F),
                 disabledContentColor = contentColorFor(MaterialTheme.colorScheme.primary),
-            )
+            ),
         ) {
             AnimatedContent(
                 targetState = pokemonState,
@@ -273,7 +273,6 @@ fun PokemonScreenBody(
 
 private fun getConstraints(isExpandedScreen: Boolean): ConstraintSet {
     return ConstraintSet {
-
         val refs = ComponentRefs(
             textPokemonName = createRefFor("pokemon_name"),
             imagePokemonSpriteForeground = createRefFor("pokemon_sprite_foreground"),

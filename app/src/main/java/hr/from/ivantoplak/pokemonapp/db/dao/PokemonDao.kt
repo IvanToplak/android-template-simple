@@ -106,8 +106,8 @@ abstract class PokemonDao {
                     DbPokemonStat(
                         pokemonId = pokemonId,
                         statId = dbStat.id,
-                        value = statMap[dbStat.name] ?: 0
-                    )
+                        value = statMap[dbStat.name] ?: 0,
+                    ),
                 )
             }
         }

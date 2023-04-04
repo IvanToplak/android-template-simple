@@ -13,18 +13,18 @@ import androidx.room.Index
             entity = DbPokemon::class,
             parentColumns = ["id"],
             childColumns = ["pokemon_id"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.CASCADE,
         ),
         ForeignKey(
             entity = DbMove::class,
             parentColumns = ["id"],
             childColumns = ["move_id"],
-            onDelete = ForeignKey.CASCADE
-        )
+            onDelete = ForeignKey.CASCADE,
+        ),
     ],
-    indices = [Index("move_id")]
+    indices = [Index("move_id")],
 )
 data class DbPokemonMove(
     @ColumnInfo(name = "pokemon_id") val pokemonId: Int = 0,
-    @ColumnInfo(name = "move_id") val moveId: Int = 0
+    @ColumnInfo(name = "move_id") val moveId: Int = 0,
 )

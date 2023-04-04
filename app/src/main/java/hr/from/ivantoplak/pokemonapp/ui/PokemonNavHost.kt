@@ -2,6 +2,7 @@ package hr.from.ivantoplak.pokemonapp.ui
 
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -11,7 +12,6 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import hr.from.ivantoplak.pokemonapp.R
-import hr.from.ivantoplak.pokemonapp.extensions.WindowSize
 import hr.from.ivantoplak.pokemonapp.ui.PokemonAppScreen.Moves
 import hr.from.ivantoplak.pokemonapp.ui.PokemonAppScreen.Pokemon
 import hr.from.ivantoplak.pokemonapp.ui.PokemonAppScreen.Stats
@@ -23,9 +23,8 @@ import hr.from.ivantoplak.pokemonapp.ui.pokemon.PokedexScreenParameter
 import hr.from.ivantoplak.pokemonapp.ui.pokemon.PokemonScreen
 import hr.from.ivantoplak.pokemonapp.ui.stats.StatsScreen
 import hr.from.ivantoplak.pokemonapp.viewmodel.MovesViewModel
-import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.StatsViewModel
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 private const val TransitionDuration = 1000
@@ -35,8 +34,8 @@ private const val NavArgPokemonId = "pokemonId"
 @Composable
 fun PokemonNavHost(
     navController: NavHostController,
-    windowSize: WindowSize,
-    modifier: Modifier = Modifier
+    widthSizeClass: WindowWidthSizeClass,
+    modifier: Modifier = Modifier,
 ) {
     AnimatedNavHost(
         navController = navController,
@@ -50,10 +49,13 @@ fun PokemonNavHost(
                 fadeIn(animationSpec = tween(TransitionDuration))
             },
         ) {
-            val viewModel = getViewModel<PokemonViewModel>()
-            val isExpandedScreen = windowSize == WindowSize.Expanded
+            val isExpandedScreen = widthSizeClass == WindowWidthSizeClass.Expanded
 
-            PokemonScreen(viewModel, navController, isExpandedScreen)
+            PokemonScreen(
+                viewModel = koinViewModel(),
+                navController = navController,
+                isExpandedScreen = isExpandedScreen,
+            )
         }
 
         // pokemon moves screen: /Moves/{pokemonId}
@@ -65,9 +67,12 @@ fun PokemonNavHost(
             },
         ) { backStackEntry ->
             val pokemonId = backStackEntry.arguments?.getInt(NavArgPokemonId)
-            val viewModel = getViewModel<MovesViewModel> { parametersOf(pokemonId) }
+            val viewModel = koinViewModel<MovesViewModel> { parametersOf(pokemonId) }
 
-            MovesScreen(viewModel, navController)
+            MovesScreen(
+                viewModel = viewModel,
+                navController = navController,
+            )
         }
 
         // pokemon stats screen: /Stats/{pokemonId}
@@ -79,9 +84,12 @@ fun PokemonNavHost(
             },
         ) { backStackEntry ->
             val pokemonId = backStackEntry.arguments?.getInt(NavArgPokemonId)
-            val viewModel = getViewModel<StatsViewModel> { parametersOf(pokemonId) }
+            val viewModel = koinViewModel<StatsViewModel> { parametersOf(pokemonId) }
 
-            StatsScreen(viewModel, navController)
+            StatsScreen(
+                viewModel = viewModel,
+                navController = navController,
+            )
         }
 
         // error screen: /Error?title={title}&body={body}

@@ -21,13 +21,13 @@ fun ScreenLoadingIndicator(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.loadingIndicatorBackground)
-            .clickable { }
+            .clickable { },
     ) {
         CircularProgressIndicator(
             modifier = Modifier
                 .width(dimensionResource(id = R.dimen.progress_bar_size))
                 .height(dimensionResource(id = R.dimen.progress_bar_size))
-                .align(Alignment.Center)
+                .align(Alignment.Center),
         )
     }
 }

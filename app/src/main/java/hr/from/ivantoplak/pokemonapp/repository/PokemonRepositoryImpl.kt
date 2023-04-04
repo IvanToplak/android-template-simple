@@ -35,7 +35,7 @@ class PokemonRepositoryImpl(
         try {
             val dbPokemonNames = pokemonService.getPokemonNames(
                 Int.MAX_VALUE,
-                0
+                0,
             ).results.map { DbPokemonName(name = it.name) }
             pokemonDao.insertPokemonNames(dbPokemonNames)
         } catch (ex: Exception) {

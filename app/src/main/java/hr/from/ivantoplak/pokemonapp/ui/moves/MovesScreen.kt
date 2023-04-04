@@ -74,12 +74,12 @@ fun MovesScreenBody(
         LazyColumn(
             modifier = Modifier
                 .layoutId("moves_list")
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             itemsIndexed(moves, key = { _, move -> move.id }) { index, move ->
                 MoveRow(
                     modifier = Modifier,
-                    move = move
+                    move = move,
                 )
                 if (index < moves.lastIndex) {
                     Divider(color = MaterialTheme.colorScheme.listDivider)

@@ -24,6 +24,10 @@ class SplashViewModel : ViewModel() {
     val showErrorMessage: State<Boolean> get() = _showErrorMessage
 
     init {
+        loadConfig()
+    }
+
+    fun loadConfig() {
         viewModelScope.launch {
             try {
                 fetch()

@@ -58,7 +58,7 @@ fun StatsScreenContent(
         topBar = {
             PokemonTopAppBar(
                 title = title,
-                onClickBack = onClickBack
+                onClickBack = onClickBack,
             )
         },
     ) { innerPadding ->
@@ -81,7 +81,7 @@ fun StatsScreenBody(
         LazyColumn(
             modifier = Modifier
                 .layoutId("stats_list")
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             itemsIndexed(stats, key = { _, stat -> stat.id }) { index, stat ->
                 StatsRow(
@@ -155,7 +155,7 @@ fun StatsScreenPreview() {
                     name = "stat name $it",
                     value = (it + 1) * 100,
                 )
-            }
+            },
         )
     }
 }
