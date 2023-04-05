@@ -17,24 +17,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
-import androidx.navigation.NavHostController
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
-import hr.from.ivantoplak.pokemonapp.ui.model.MoveViewData
+import hr.from.ivantoplak.pokemonapp.ui.model.UIMove
+import hr.from.ivantoplak.pokemonapp.ui.navigation.NavActions
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
 import hr.from.ivantoplak.pokemonapp.ui.theme.listDivider
 import hr.from.ivantoplak.pokemonapp.viewmodel.MovesViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun MovesScreen(
     viewModel: MovesViewModel,
-    navController: NavHostController,
+    navActions: NavActions,
     modifier: Modifier = Modifier,
 ) {
     MovesScreenContent(
         modifier = modifier,
         moves = viewModel.moves.value,
-        onClickBack = { navController.navigateUp() },
+        onClickBack = navActions.navigateUp,
     )
 }
 
@@ -43,7 +46,7 @@ fun MovesScreen(
 fun MovesScreenContent(
     modifier: Modifier = Modifier,
     title: String = stringResource(id = R.string.moves_screen_title),
-    moves: List<MoveViewData> = emptyList(),
+    moves: ImmutableList<UIMove> = persistentListOf(),
     onClickBack: () -> Unit = {},
 ) {
     Scaffold(
@@ -65,7 +68,7 @@ fun MovesScreenContent(
 @Composable
 fun MovesScreenBody(
     modifier: Modifier = Modifier,
-    moves: List<MoveViewData> = emptyList(),
+    moves: ImmutableList<UIMove> = persistentListOf(),
 ) {
     ConstraintLayout(
         constraintSet = getConstraints(),
@@ -92,7 +95,7 @@ fun MovesScreenBody(
 @Composable
 fun MoveRow(
     modifier: Modifier = Modifier,
-    move: MoveViewData,
+    move: UIMove,
 ) {
     Text(
         text = move.name,
@@ -121,7 +124,7 @@ fun MovesScreenPreview() {
     PokemonAppTheme {
         MovesScreenContent(
             title = "Moves",
-            moves = List(15) { MoveViewData(id = it, name = "roundhouse kick") },
+            moves = List(15) { UIMove(id = it, name = "roundhouse kick") }.toImmutableList(),
         )
     }
 }

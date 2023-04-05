@@ -24,24 +24,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
-import androidx.navigation.NavHostController
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
-import hr.from.ivantoplak.pokemonapp.ui.model.StatViewData
+import hr.from.ivantoplak.pokemonapp.ui.model.UIStat
+import hr.from.ivantoplak.pokemonapp.ui.navigation.NavActions
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
 import hr.from.ivantoplak.pokemonapp.ui.theme.listDivider
 import hr.from.ivantoplak.pokemonapp.viewmodel.StatsViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun StatsScreen(
     viewModel: StatsViewModel,
-    navController: NavHostController,
+    navActions: NavActions,
     modifier: Modifier = Modifier,
 ) {
     StatsScreenContent(
         modifier = modifier,
         stats = viewModel.stats.value,
-        onClickBack = { navController.navigateUp() },
+        onClickBack = navActions.navigateUp,
     )
 }
 
@@ -50,7 +53,7 @@ fun StatsScreen(
 fun StatsScreenContent(
     modifier: Modifier = Modifier,
     title: String = stringResource(id = R.string.stats_screen_title),
-    stats: List<StatViewData> = emptyList(),
+    stats: ImmutableList<UIStat> = persistentListOf(),
     onClickBack: () -> Unit = {},
 ) {
     Scaffold(
@@ -72,7 +75,7 @@ fun StatsScreenContent(
 @Composable
 fun StatsScreenBody(
     modifier: Modifier = Modifier,
-    stats: List<StatViewData> = emptyList(),
+    stats: ImmutableList<UIStat> = persistentListOf(),
 ) {
     ConstraintLayout(
         constraintSet = getConstraints(),
@@ -99,7 +102,7 @@ fun StatsScreenBody(
 @Composable
 fun StatsRow(
     modifier: Modifier = Modifier,
-    stat: StatViewData,
+    stat: UIStat,
 ) {
     Row(modifier = modifier.fillMaxWidth()) {
         // stat name
@@ -150,12 +153,12 @@ fun StatsScreenPreview() {
         StatsScreenContent(
             title = "Stats",
             stats = List(15) {
-                StatViewData(
+                UIStat(
                     id = it,
                     name = "stat name $it",
                     value = (it + 1) * 100,
                 )
-            },
+            }.toImmutableList(),
         )
     }
 }

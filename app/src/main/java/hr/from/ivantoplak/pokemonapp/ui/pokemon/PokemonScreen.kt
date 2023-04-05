@@ -43,16 +43,14 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.ConstraintSetScope
 import androidx.constraintlayout.compose.Dimension
-import androidx.navigation.NavHostController
 import coil.ImageLoader
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.LocalImageLoader
 import coil.compose.rememberImagePainter
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.extensions.titleCaseFirstChar
-import hr.from.ivantoplak.pokemonapp.ui.PokemonAppScreen
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
-import hr.from.ivantoplak.pokemonapp.ui.model.PokemonViewData
+import hr.from.ivantoplak.pokemonapp.ui.model.UIPokemon
+import hr.from.ivantoplak.pokemonapp.ui.navigation.NavActions
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonState
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
@@ -61,17 +59,17 @@ import org.koin.androidx.compose.get
 @Composable
 fun PokemonScreen(
     viewModel: PokemonViewModel,
-    navController: NavHostController,
+    navActions: NavActions,
     isExpandedScreen: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val pokemon: PokemonViewData? by viewModel.pokemon
+    val pokemon: UIPokemon? by viewModel.pokemon
     val showErrorMessage: Boolean by viewModel.showErrorMessage
 
     // show error screen
     if (showErrorMessage) {
-        LaunchedEffect(key1 = showErrorMessage) {
-            navController.navigate(PokemonAppScreen.Error.name)
+        LaunchedEffect(Unit) {
+            navActions.navigateToErrorScreen()
             viewModel.onShowErrorMessage()
         }
     }
@@ -81,9 +79,21 @@ fun PokemonScreen(
         pokemon = viewModel.pokemon.value,
         pokemonState = viewModel.pokemonState.value,
         isExpandedScreen = isExpandedScreen,
-        onClickShowMoves = { navController.navigate("${PokemonAppScreen.Moves.name}/${pokemon?.id}") },
-        onClickShowStats = { navController.navigate("${PokemonAppScreen.Stats.name}/${pokemon?.id}") },
-        onClickShowPokedex = { navController.navigate(PokemonAppScreen.Search.name) },
+        onClickShowMoves = {
+            pokemon?.let {
+                navActions.navigateToMovesScreen(it)
+            }
+        },
+        onClickShowStats = {
+            pokemon?.let {
+                navActions.navigateToStatsScreen(it)
+            }
+        },
+        onClickShowPokedex = {
+            pokemon?.let {
+                navActions.navigateToPokedexScreen()
+            }
+        },
         onClickRefresh = viewModel::onRefresh,
     )
 }
@@ -93,7 +103,7 @@ fun PokemonScreen(
 fun PokemonScreenContent(
     modifier: Modifier = Modifier,
     imageLoader: ImageLoader = get(),
-    pokemon: PokemonViewData? = null,
+    pokemon: UIPokemon? = null,
     pokemonState: PokemonState = PokemonState.Loading,
     title: String = stringResource(id = R.string.pokemon_screen_title),
     isExpandedScreen: Boolean = false,
@@ -125,12 +135,12 @@ fun PokemonScreenContent(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalCoilApi::class)
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PokemonScreenBody(
     modifier: Modifier = Modifier,
     imageLoader: ImageLoader,
-    pokemon: PokemonViewData? = null,
+    pokemon: UIPokemon? = null,
     pokemonState: PokemonState = PokemonState.Loading,
     isExpandedScreen: Boolean = false,
     onClickShowMoves: () -> Unit = {},
@@ -399,7 +409,7 @@ fun PokemonScreenPreviewExpandedScreen() {
 private fun GetPokemonScreen(isExpandedScreen: Boolean = false) {
     PokemonScreenContent(
         imageLoader = LocalImageLoader.current,
-        pokemon = PokemonViewData(id = 1, "Pikachu"),
+        pokemon = UIPokemon(id = 1, "Pikachu"),
         pokemonState = PokemonState.Success,
         title = "Pokemon",
         isExpandedScreen = isExpandedScreen,

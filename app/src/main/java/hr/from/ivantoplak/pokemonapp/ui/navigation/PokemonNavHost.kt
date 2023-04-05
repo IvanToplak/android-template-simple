@@ -1,7 +1,8 @@
-package hr.from.ivantoplak.pokemonapp.ui
+package hr.from.ivantoplak.pokemonapp.ui.navigation
 
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,9 +13,6 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import hr.from.ivantoplak.pokemonapp.R
-import hr.from.ivantoplak.pokemonapp.ui.PokemonAppScreen.Moves
-import hr.from.ivantoplak.pokemonapp.ui.PokemonAppScreen.Pokemon
-import hr.from.ivantoplak.pokemonapp.ui.PokemonAppScreen.Stats
 import hr.from.ivantoplak.pokemonapp.ui.error.ErrorScreen
 import hr.from.ivantoplak.pokemonapp.ui.error.ErrorScreenParameter
 import hr.from.ivantoplak.pokemonapp.ui.moves.MovesScreen
@@ -34,76 +32,71 @@ private const val NavArgPokemonId = "pokemonId"
 @Composable
 fun PokemonNavHost(
     navController: NavHostController,
+    navActions: NavActions,
     widthSizeClass: WindowWidthSizeClass,
     modifier: Modifier = Modifier,
 ) {
     AnimatedNavHost(
         navController = navController,
-        startDestination = Pokemon.name,
+        startDestination = AppScreen.Pokemon.name,
         modifier = modifier,
+        enterTransition = {
+            fadeIn(animationSpec = tween(TransitionDuration))
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(TransitionDuration))
+        },
     ) {
-        // pokemon screen: /Pokemon
+        // Pokemon screen: /Pokemon
         composable(
-            route = Pokemon.name,
-            enterTransition = {
-                fadeIn(animationSpec = tween(TransitionDuration))
-            },
+            route = AppScreen.Pokemon.name,
         ) {
             val isExpandedScreen = widthSizeClass == WindowWidthSizeClass.Expanded
 
             PokemonScreen(
                 viewModel = koinViewModel(),
-                navController = navController,
+                navActions = navActions,
                 isExpandedScreen = isExpandedScreen,
             )
         }
 
-        // pokemon moves screen: /Moves/{pokemonId}
+        // Pokemon moves screen: /Moves/{pokemonId}
         composable(
-            route = "${Moves.name}/{$NavArgPokemonId}",
+            route = "${AppScreen.Moves.name}/{$NavArgPokemonId}",
             arguments = listOf(navArgument(NavArgPokemonId) { type = NavType.IntType }),
-            enterTransition = {
-                fadeIn(animationSpec = tween(TransitionDuration))
-            },
         ) { backStackEntry ->
             val pokemonId = backStackEntry.arguments?.getInt(NavArgPokemonId)
             val viewModel = koinViewModel<MovesViewModel> { parametersOf(pokemonId) }
 
             MovesScreen(
                 viewModel = viewModel,
-                navController = navController,
+                navActions = navActions,
             )
         }
 
-        // pokemon stats screen: /Stats/{pokemonId}
+        // Pokemon stats screen: /Stats/{pokemonId}
         composable(
-            route = "${Stats.name}/{$NavArgPokemonId}",
+            route = "${AppScreen.Stats.name}/{$NavArgPokemonId}",
             arguments = listOf(navArgument(NavArgPokemonId) { type = NavType.IntType }),
-            enterTransition = {
-                fadeIn(animationSpec = tween(TransitionDuration))
-            },
         ) { backStackEntry ->
             val pokemonId = backStackEntry.arguments?.getInt(NavArgPokemonId)
             val viewModel = koinViewModel<StatsViewModel> { parametersOf(pokemonId) }
 
             StatsScreen(
                 viewModel = viewModel,
-                navController = navController,
+                navActions = navActions,
             )
         }
 
-        // error screen: /Error?title={title}&body={body}
+        // Error screen: /Error?title={title}&body={body}
         composable(
-            route = PokemonAppScreen.Error.name +
+            route = AppScreen.Error.name +
                 "?${ErrorScreenParameter.Title.param}={${ErrorScreenParameter.Title.param}}" +
                 "&${ErrorScreenParameter.Body.param}={${ErrorScreenParameter.Body.param}}",
             arguments = listOf(
                 navArgument(ErrorScreenParameter.Title.param) { nullable = true },
                 navArgument(ErrorScreenParameter.Body.param) { nullable = true },
             ),
-            enterTransition = {
-                fadeIn(animationSpec = tween(durationMillis = TransitionDuration))
-            },
         ) { backStackEntry ->
             val title = backStackEntry.arguments?.getString(ErrorScreenParameter.Title.param)
                 ?: stringResource(id = R.string.error_screen_content_title)
@@ -113,22 +106,19 @@ fun PokemonNavHost(
             ErrorScreen(
                 title = title,
                 body = body,
-                onClickBack = { navController.navigateUp() },
+                onClickBack = navActions.navigateUp,
             )
         }
 
-        // pokemon search (pokedex): /Search?title={title}&webUrl={webUrl}
+        // Pokemon search (pokedex): /Search?title={title}&webUrl={webUrl}
         composable(
-            route = PokemonAppScreen.Search.name +
+            route = AppScreen.Search.name +
                 "?${PokedexScreenParameter.Title.param}={${PokedexScreenParameter.Title.param}}" +
                 "&${PokedexScreenParameter.WebUrl.param}={${PokedexScreenParameter.WebUrl.param}}",
             arguments = listOf(
                 navArgument(PokedexScreenParameter.Title.param) { nullable = true },
                 navArgument(PokedexScreenParameter.WebUrl.param) { nullable = true },
             ),
-            enterTransition = {
-                fadeIn(animationSpec = tween(durationMillis = TransitionDuration))
-            },
         ) { backStackEntry ->
             val title = backStackEntry.arguments?.getString(PokedexScreenParameter.Title.param)
                 ?: stringResource(id = R.string.pokedex_screen_title)
@@ -138,7 +128,7 @@ fun PokemonNavHost(
             PokedexScreen(
                 title = title,
                 webUrl = url,
-                onClickBack = { navController.navigateUp() },
+                onClickBack = navActions.navigateUp,
             )
         }
     }

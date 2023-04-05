@@ -4,7 +4,7 @@ import hr.from.ivantoplak.pokemonapp.db.model.DbMove
 import hr.from.ivantoplak.pokemonapp.db.model.DbPokemon
 import hr.from.ivantoplak.pokemonapp.model.Pokemon
 import hr.from.ivantoplak.pokemonapp.service.model.ApiPokemon
-import hr.from.ivantoplak.pokemonapp.ui.model.PokemonViewData
+import hr.from.ivantoplak.pokemonapp.ui.model.UIPokemon
 
 fun ApiPokemon.toDbMoves(): List<DbMove> =
     this.moves.mapNotNull { it.move?.name }.map { name -> DbMove(name = name) }
@@ -15,7 +15,7 @@ fun ApiPokemon.toDbPokemon(): DbPokemon = DbPokemon(
     backSpriteUrl = sprites?.backDefault ?: "",
 )
 
-fun Pokemon.toPokemonViewData(): PokemonViewData = PokemonViewData(
+fun Pokemon.toUIPokemon(): UIPokemon = UIPokemon(
     id = id,
     name = name,
     frontSpriteUrl = frontSpriteUrl,

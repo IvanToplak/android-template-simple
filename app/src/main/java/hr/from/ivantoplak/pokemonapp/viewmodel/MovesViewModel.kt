@@ -5,33 +5,35 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProvider
-import hr.from.ivantoplak.pokemonapp.mappings.toMovesViewData
+import hr.from.ivantoplak.pokemonapp.mappings.toUIMoves
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepository
-import hr.from.ivantoplak.pokemonapp.ui.model.MoveViewData
+import hr.from.ivantoplak.pokemonapp.ui.model.UIMove
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 private const val ErrorLoadingMoves = "Error loading pokemon moves from local store."
 
 class MovesViewModel(
-    private val pokemonId: Int,
-    private val repository: PokemonRepository,
-    private val dispatcher: DispatcherProvider,
+    pokemonId: Int,
+    repository: PokemonRepository,
+    dispatcher: DispatcherProvider,
 ) : ViewModel() {
 
-    private val _moves = mutableStateOf<List<MoveViewData>>(emptyList())
-    val moves: State<List<MoveViewData>> get() = _moves
+    private val _moves = mutableStateOf<ImmutableList<UIMove>>(persistentListOf())
+    val moves: State<ImmutableList<UIMove>> get() = _moves
 
     init {
-        viewModelScope.launch {
-            repository.getPokemonMoves(pokemonId)
-                .map { it.toMovesViewData() }
-                .flowOn(dispatcher.io())
-                .catch { e -> Timber.e(e, ErrorLoadingMoves) }
-                .collect { movesList -> _moves.value = movesList }
-        }
+        repository.getPokemonMoves(pokemonId)
+            .map { it.toUIMoves() }
+            .flowOn(dispatcher.io())
+            .onEach { movesList -> _moves.value = movesList }
+            .catch { e -> Timber.e(e, ErrorLoadingMoves) }
+            .launchIn(viewModelScope)
     }
 }

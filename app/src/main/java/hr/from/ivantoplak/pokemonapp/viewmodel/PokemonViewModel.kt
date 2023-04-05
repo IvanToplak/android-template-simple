@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProvider
-import hr.from.ivantoplak.pokemonapp.mappings.toPokemonViewData
+import hr.from.ivantoplak.pokemonapp.mappings.toUIPokemon
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepository
-import hr.from.ivantoplak.pokemonapp.ui.model.PokemonViewData
+import hr.from.ivantoplak.pokemonapp.ui.model.UIPokemon
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -31,8 +31,8 @@ class PokemonViewModel(
 
     private val pokemonNames = mutableListOf<String>()
 
-    private val _pokemon = mutableStateOf<PokemonViewData?>(null)
-    val pokemon: State<PokemonViewData?> get() = _pokemon
+    private val _pokemon = mutableStateOf<UIPokemon?>(null)
+    val pokemon: State<UIPokemon?> get() = _pokemon
 
     private val _showErrorMessage = mutableStateOf(false)
     val showErrorMessage: State<Boolean> get() = _showErrorMessage
@@ -59,7 +59,7 @@ class PokemonViewModel(
         runCatching {
             withContext(dispatcher.io()) {
                 if (pokemonNames.isEmpty()) pokemonNames.addAll(repository.getPokemonNames())
-                repository.getPokemon(pokemonNames.random())?.toPokemonViewData()
+                repository.getPokemon(pokemonNames.random())?.toUIPokemon()
             }
         }.apply {
             onSuccess { pokemon ->
