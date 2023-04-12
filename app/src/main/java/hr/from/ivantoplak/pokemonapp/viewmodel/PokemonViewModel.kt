@@ -56,36 +56,32 @@ class PokemonViewModel(
     private suspend fun getRandomPokemon() {
         _pokemonState.value = PokemonState.Loading
         _showErrorMessage.value = false
-        runCatching {
-            withContext(dispatcher.io()) {
+        try {
+            val pokemon = withContext(dispatcher.io()) {
                 if (pokemonNames.isEmpty()) pokemonNames.addAll(repository.getPokemonNames())
                 repository.getPokemon(pokemonNames.random())?.toUIPokemon()
             }
-        }.apply {
-            onSuccess { pokemon ->
-                when {
-                    pokemon != null -> {
-                        _pokemon.value = pokemon
-                        _pokemonState.value = PokemonState.Success
-                        _showErrorMessage.value = false
-                    }
-                    _pokemon.value != null -> {
-                        _pokemonState.value = PokemonState.Success
-                        _showErrorMessage.value = false
-                    }
-                    // show error message only when there is no API data and no local data
-                    else -> {
-                        _pokemonState.value = PokemonState.ErrorNoData
-                        _showErrorMessage.value = true
-                    }
+            when {
+                pokemon != null -> {
+                    _pokemon.value = pokemon
+                    _pokemonState.value = PokemonState.Success
+                    _showErrorMessage.value = false
+                }
+                _pokemon.value != null -> {
+                    _pokemonState.value = PokemonState.Success
+                    _showErrorMessage.value = false
+                }
+                // show error message only when there is no API data and no local data
+                else -> {
+                    _pokemonState.value = PokemonState.ErrorNoData
+                    _showErrorMessage.value = true
                 }
             }
-            onFailure { ex ->
-                _pokemonState.value =
-                    if (_pokemon.value != null) PokemonState.ErrorHasData else PokemonState.ErrorNoData
-                _showErrorMessage.value = true
-                Timber.e(ex, ErrorLoadingPokemons)
-            }
+        } catch (e: Exception) {
+            _pokemonState.value =
+                if (_pokemon.value != null) PokemonState.ErrorHasData else PokemonState.ErrorNoData
+            _showErrorMessage.value = true
+            Timber.e(e, ErrorLoadingPokemons)
         }
     }
 }

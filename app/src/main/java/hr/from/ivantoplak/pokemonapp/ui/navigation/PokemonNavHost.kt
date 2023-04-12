@@ -51,12 +51,10 @@ fun PokemonNavHost(
         composable(
             route = AppScreen.Pokemon.name,
         ) {
-            val isExpandedScreen = widthSizeClass == WindowWidthSizeClass.Expanded
-
             PokemonScreen(
                 viewModel = koinViewModel(),
                 navActions = navActions,
-                isExpandedScreen = isExpandedScreen,
+                isExpandedScreen = widthSizeClass == WindowWidthSizeClass.Expanded,
             )
         }
 
