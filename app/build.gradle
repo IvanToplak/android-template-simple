@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.devtools.ksp'
+//    id 'com.google.gms.google-services'
+//    id 'com.google.firebase.crashlytics'
 }
 
 apply from: 'lint.gradle'
@@ -18,7 +20,10 @@ android {
         versionName "0.0.1"
         archivesBaseName = "android-template-v${versionName}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "Boolean", 'ENABLE_ANALYTICS', "false"
+        buildConfigField "Boolean", 'ENABLE_CRASHLYTICS', "false"
     }
+
     buildTypes {
         debug {
             minifyEnabled false
@@ -33,15 +38,39 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "default"
+    productFlavors {
+        dev {
+            dimension "default"
+            manifestPlaceholders = [appName: "@string/app_name_dev"]
+            applicationIdSuffix ".dev"
+        }
+        qa {
+            dimension "default"
+            manifestPlaceholders = [appName: "@string/app_name_qa"]
+            applicationIdSuffix ".qa"
+            buildConfigField "Boolean", 'ENABLE_CRASHLYTICS', "true"
+        }
+        prod {
+            dimension "default"
+            manifestPlaceholders = [appName: "@string/app_name"]
+            buildConfigField "Boolean", 'ENABLE_ANALYTICS', "true"
+            buildConfigField "Boolean", 'ENABLE_CRASHLYTICS', "true"
+        }
+    }
+
     compileOptions {
         sourceCompatibility = "11"
         targetCompatibility = "11"
     }
+
     kotlin {
         jvmToolchain {
             languageVersion.set(JavaLanguageVersion.of("11"))
         }
     }
+
     kotlinOptions {
         jvmTarget = "11"
         freeCompilerArgs += [
@@ -49,18 +78,22 @@ android {
                 "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
                 "-opt-in=kotlin.RequiresOptIn"]
     }
+
     buildFeatures {
         viewBinding true
         compose true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion compose_compiler_version
     }
+
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+
     applicationVariants.all { variant ->
         variant.outputs.all {
             logger.quiet("\t${variant.name} version:\t${archivesBaseName}")
@@ -124,6 +157,9 @@ dependencies {
     ksp "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
 
+    // DataStore
+    implementation "androidx.datastore:datastore-preferences:$datastore_version"
+
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
@@ -137,6 +173,11 @@ dependencies {
 
     // Code style
     ktlint "com.pinterest:ktlint:$ktlint_version"
+
+    // Google services
+//    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
+//    implementation 'com.google.firebase:firebase-analytics-ktx'
+//    implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
     // Test
     // Unit testing framework

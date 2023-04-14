@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">Android template for simple app</string>
+    <string name="app_name">Android template</string>
+    <string name="app_name_dev">[DEV] Android template</string>
+    <string name="app_name_qa">[QA] Android template</string>
+
     <string name="moves">Moves</string>
     <string name="stats">Stats</string>
     <string name="pokemon_image_front">Pokemon image front</string>
