@@ -68,5 +68,5 @@ val PokemonTypography = Typography(
         fontWeight = FontWeight.Bold,
         fontSize = 12.sp,
         letterSpacing = 1.sp,
-    )
+    ),
 )

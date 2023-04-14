@@ -2,7 +2,9 @@ package hr.from.ivantoplak.pokemonapp.mappings
 
 import hr.from.ivantoplak.pokemonapp.db.model.DbStatNameValue
 import hr.from.ivantoplak.pokemonapp.model.Stat
-import hr.from.ivantoplak.pokemonapp.ui.model.StatViewData
+import hr.from.ivantoplak.pokemonapp.ui.model.UIStat
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 fun DbStatNameValue.toStat(): Stat = Stat(
     id = id,
@@ -10,7 +12,7 @@ fun DbStatNameValue.toStat(): Stat = Stat(
     name = name,
 )
 
-fun Stat.toStatViewData(): StatViewData = StatViewData(
+fun Stat.toUIStat(): UIStat = UIStat(
     id = id,
     value = value,
     name = name,
@@ -18,4 +20,4 @@ fun Stat.toStatViewData(): StatViewData = StatViewData(
 
 fun List<DbStatNameValue>.toStats(): List<Stat> = map { it.toStat() }
 
-fun List<Stat>.toStatsViewData(): List<StatViewData> = map { it.toStatViewData() }
+fun List<Stat>.toUIStats(): ImmutableList<UIStat> = map { it.toUIStat() }.toImmutableList()

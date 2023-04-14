@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "stat",
-    indices = [Index("name", unique = true)]
+    indices = [Index("name", unique = true)],
 )
 data class DbStat(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,

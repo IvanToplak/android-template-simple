@@ -1,0 +1,2 @@
+Copyright (c) $today.year. [company_name]
+All rights reserved.

@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProvider
-import hr.from.ivantoplak.pokemonapp.mappings.toPokemonViewData
+import hr.from.ivantoplak.pokemonapp.mappings.toUIPokemon
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepository
-import hr.from.ivantoplak.pokemonapp.ui.model.PokemonViewData
+import hr.from.ivantoplak.pokemonapp.ui.model.UIPokemon
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -31,8 +31,8 @@ class PokemonViewModel(
 
     private val pokemonNames = mutableListOf<String>()
 
-    private val _pokemon = mutableStateOf<PokemonViewData?>(null)
-    val pokemon: State<PokemonViewData?> get() = _pokemon
+    private val _pokemon = mutableStateOf<UIPokemon?>(null)
+    val pokemon: State<UIPokemon?> get() = _pokemon
 
     private val _showErrorMessage = mutableStateOf(false)
     val showErrorMessage: State<Boolean> get() = _showErrorMessage
@@ -56,36 +56,32 @@ class PokemonViewModel(
     private suspend fun getRandomPokemon() {
         _pokemonState.value = PokemonState.Loading
         _showErrorMessage.value = false
-        runCatching {
-            withContext(dispatcher.io()) {
+        try {
+            val pokemon = withContext(dispatcher.io()) {
                 if (pokemonNames.isEmpty()) pokemonNames.addAll(repository.getPokemonNames())
-                repository.getPokemon(pokemonNames.random())?.toPokemonViewData()
+                repository.getPokemon(pokemonNames.random())?.toUIPokemon()
             }
-        }.apply {
-            onSuccess { pokemon ->
-                when {
-                    pokemon != null -> {
-                        _pokemon.value = pokemon
-                        _pokemonState.value = PokemonState.Success
-                        _showErrorMessage.value = false
-                    }
-                    _pokemon.value != null -> {
-                        _pokemonState.value = PokemonState.Success
-                        _showErrorMessage.value = false
-                    }
-                    // show error message only when there is no API data and no local data
-                    else -> {
-                        _pokemonState.value = PokemonState.ErrorNoData
-                        _showErrorMessage.value = true
-                    }
+            when {
+                pokemon != null -> {
+                    _pokemon.value = pokemon
+                    _pokemonState.value = PokemonState.Success
+                    _showErrorMessage.value = false
+                }
+                _pokemon.value != null -> {
+                    _pokemonState.value = PokemonState.Success
+                    _showErrorMessage.value = false
+                }
+                // show error message only when there is no API data and no local data
+                else -> {
+                    _pokemonState.value = PokemonState.ErrorNoData
+                    _showErrorMessage.value = true
                 }
             }
-            onFailure { ex ->
-                _pokemonState.value =
-                    if (_pokemon.value != null) PokemonState.ErrorHasData else PokemonState.ErrorNoData
-                _showErrorMessage.value = true
-                Timber.e(ex, ErrorLoadingPokemons)
-            }
+        } catch (e: Exception) {
+            _pokemonState.value =
+                if (_pokemon.value != null) PokemonState.ErrorHasData else PokemonState.ErrorNoData
+            _showErrorMessage.value = true
+            Timber.e(e, ErrorLoadingPokemons)
         }
     }
 }

@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package hr.from.ivantoplak.pokemonapp.ui.theme
 
 import androidx.compose.material3.ColorScheme
@@ -26,8 +28,8 @@ fun PokemonAppTheme(content: @Composable () -> Unit) {
 
     MaterialTheme(
         colorScheme = colors,
+        shapes = PokemonShapes,
         typography = PokemonTypography,
-        // shapes = PokemonShapes,
         content = content,
     )
 }

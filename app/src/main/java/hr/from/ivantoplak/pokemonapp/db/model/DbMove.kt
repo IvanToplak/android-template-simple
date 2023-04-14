@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "move",
-    indices = [Index("name", unique = true)]
+    indices = [Index("name", unique = true)],
 )
 data class DbMove(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,

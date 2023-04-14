@@ -3,10 +3,11 @@ package hr.from.ivantoplak.pokemonapp.ui
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import hr.from.ivantoplak.pokemonapp.R
-import hr.from.ivantoplak.pokemonapp.extensions.rememberWindowSizeClass
 import hr.from.ivantoplak.pokemonapp.ui.error.ErrorScreen
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
 import hr.from.ivantoplak.pokemonapp.viewmodel.SplashViewModel
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     private val splashViewModel: SplashViewModel by viewModel()
 
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,13 +43,13 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val isReady: Boolean by splashViewModel.isReady
             val showErrorMessage: Boolean by splashViewModel.showErrorMessage
-            val windowSizeClass = rememberWindowSizeClass()
+            val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
 
             if (isReady) {
-                PokemonApp(windowSizeClass)
+                PokemonApp(widthSizeClass = widthSizeClass)
             } else if (showErrorMessage) {
                 PokemonAppTheme {
-                    ErrorScreen(onClickBack = { onBackPressed() })
+                    ErrorScreen(onClickBack = splashViewModel::loadConfig)
                 }
             }
         }

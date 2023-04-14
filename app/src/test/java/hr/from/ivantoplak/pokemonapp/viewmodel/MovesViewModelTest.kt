@@ -2,15 +2,15 @@ package hr.from.ivantoplak.pokemonapp.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProvider
-import hr.from.ivantoplak.pokemonapp.mappings.toMoveViewData
+import hr.from.ivantoplak.pokemonapp.mappings.toUIMove
 import hr.from.ivantoplak.pokemonapp.model.Move
 import hr.from.ivantoplak.pokemonapp.repository.PokemonRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -28,8 +28,8 @@ class MovesViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val testDispatcher = TestCoroutineDispatcher()
-    private val testCoroutineScope = TestCoroutineScope(testDispatcher)
+    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testCoroutineScope = TestScope(testDispatcher)
     private val dispatcher = mock<DispatcherProvider>()
     private val repo = mock<PokemonRepository>()
 
@@ -39,7 +39,7 @@ class MovesViewModelTest {
     }
 
     @Test
-    fun shouldGetListOfMoves() = testCoroutineScope.runBlockingTest {
+    fun shouldGetListOfMoves() = testCoroutineScope.runTest {
         // arrange
         val pokemonId = 1
         val pokemonName = "facepalm"
@@ -53,12 +53,12 @@ class MovesViewModelTest {
         // assert
         verify(dispatcher).io()
         verify(repo).getPokemonMoves(pokemonId)
-        val expected = moves.map { it.toMoveViewData() }
+        val expected = moves.map { it.toUIMove() }
         assertEquals(expected, viewModel.moves.value)
     }
 
     @Test
-    fun shouldGetEmptyListWhenExceptionThrown() = testCoroutineScope.runBlockingTest {
+    fun shouldGetEmptyListWhenExceptionThrown() = testCoroutineScope.runTest {
         // arrange
         val pokemonId = 0
         whenever(repo.getPokemonMoves(pokemonId)).thenReturn(flow { throw (Throwable()) })
@@ -70,6 +70,6 @@ class MovesViewModelTest {
         // assert
         verify(dispatcher).io()
         verify(repo).getPokemonMoves(pokemonId)
-        assertTrue(viewModel.moves.value.isNullOrEmpty())
+        assertTrue(viewModel.moves.value.isEmpty())
     }
 }

@@ -1,7 +1,6 @@
 package hr.from.ivantoplak.pokemonapp.ui.common
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -21,13 +20,13 @@ fun ScreenLoadingIndicator(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.loadingIndicatorBackground)
-            .clickable { }
+            .noRippleClickable { },
     ) {
         CircularProgressIndicator(
             modifier = Modifier
                 .width(dimensionResource(id = R.dimen.progress_bar_size))
                 .height(dimensionResource(id = R.dimen.progress_bar_size))
-                .align(Alignment.Center)
+                .align(Alignment.Center),
         )
     }
 }
