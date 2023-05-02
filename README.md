@@ -1,6 +1,7 @@
 ![badge][badge-android]
-[![Bitrise Build Status](https://app.bitrise.io/app/XYZ/status.svg?token=XYZ&branch=main)](https://app.bitrise.io/app/XYZ)
 ![GitHub Actions Build Status](https://github.com/IvanToplak/android-template-simple/actions/workflows/push_pr.yml/badge.svg?branch=main)
+
+[//]: # ([![Bitrise Build Status]&#40;https://app.bitrise.io/app/XYZ/status.svg?token=XYZ&branch=main&#41;]&#40;https://app.bitrise.io/app/XYZ&#41;)
 
 # Android Template
 
@@ -88,6 +89,11 @@ Other dependencies:
 - [Koin](https://insert-koin.io/) for dependency injection,
 - [Timber](https://github.com/JakeWharton/timber) for logging,
 - [Preferences DataStore](https://developer.android.com/topic/libraries/architecture/datastore) stores and accesses data using keys, useful for storing user preferences.
+
+
+[Gradle versions plugin](https://github.com/ben-manes/gradle-versions-plugin) is a main maintenance tool for checking if there are any dependency updates.
+
+Run `dependencyUpdates` task (Tasks -> help -> dependencyUpdates) to check if there are any new versions of dependencies.
 
 ## CI/CD
 

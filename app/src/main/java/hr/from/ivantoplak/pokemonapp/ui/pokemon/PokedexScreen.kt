@@ -8,14 +8,9 @@ import androidx.compose.ui.Modifier
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonWebViewer
 
-enum class PokedexScreenParameter(val param: String) {
-    Title("title"),
-    WebUrl("webUrl"),
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PokedexScreen(
+internal fun PokedexScreen(
     modifier: Modifier = Modifier,
     title: String = "",
     webUrl: String = "",

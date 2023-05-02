@@ -28,14 +28,9 @@ import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
 import java.util.Locale
 
-enum class ErrorScreenParameter(val param: String) {
-    Title("title"),
-    Body("body"),
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ErrorScreen(
+internal fun ErrorScreen(
     modifier: Modifier = Modifier,
     title: String = stringResource(id = R.string.error_screen_content_title),
     body: String = stringResource(id = R.string.error_screen_content_body),
@@ -60,7 +55,7 @@ fun ErrorScreen(
 }
 
 @Composable
-fun ErrorScreenContent(
+private fun ErrorScreenContent(
     modifier: Modifier = Modifier,
     title: String = "",
     body: String = "",

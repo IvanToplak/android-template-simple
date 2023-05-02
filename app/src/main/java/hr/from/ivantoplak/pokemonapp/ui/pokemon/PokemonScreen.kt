@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -44,8 +45,8 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.ConstraintSetScope
 import androidx.constraintlayout.compose.Dimension
 import coil.ImageLoader
-import coil.compose.LocalImageLoader
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.imageLoader
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.extensions.titleCaseFirstChar
 import hr.from.ivantoplak.pokemonapp.ui.common.PokemonTopAppBar
@@ -54,10 +55,10 @@ import hr.from.ivantoplak.pokemonapp.ui.navigation.NavActions
 import hr.from.ivantoplak.pokemonapp.ui.theme.PokemonAppTheme
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonState
 import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
-import org.koin.androidx.compose.get
+import org.koin.compose.koinInject
 
 @Composable
-fun PokemonScreen(
+internal fun PokemonScreen(
     viewModel: PokemonViewModel,
     navActions: NavActions,
     isExpandedScreen: Boolean,
@@ -102,7 +103,7 @@ fun PokemonScreen(
 @Composable
 fun PokemonScreenContent(
     modifier: Modifier = Modifier,
-    imageLoader: ImageLoader = get(),
+    imageLoader: ImageLoader = koinInject(),
     pokemon: UIPokemon? = null,
     pokemonState: PokemonState = PokemonState.Loading,
     title: String = stringResource(id = R.string.pokemon_screen_title),
@@ -173,8 +174,8 @@ fun PokemonScreenBody(
 
         // foreground image
         Image(
-            painter = rememberImagePainter(
-                data = pokemon?.frontSpriteUrl,
+            painter = rememberAsyncImagePainter(
+                model = pokemon?.frontSpriteUrl,
                 imageLoader = imageLoader,
             ),
             contentDescription = stringResource(id = R.string.pokemon_image_front),
@@ -192,8 +193,8 @@ fun PokemonScreenBody(
 
         // background image
         Image(
-            painter = rememberImagePainter(
-                data = pokemon?.backSpriteUrl,
+            painter = rememberAsyncImagePainter(
+                model = pokemon?.backSpriteUrl,
                 imageLoader = imageLoader,
             ),
             contentDescription = stringResource(id = R.string.pokemon_image_back),
@@ -408,7 +409,7 @@ fun PokemonScreenPreviewExpandedScreen() {
 @Composable
 private fun GetPokemonScreen(isExpandedScreen: Boolean = false) {
     PokemonScreenContent(
-        imageLoader = LocalImageLoader.current,
+        imageLoader = LocalContext.current.imageLoader,
         pokemon = UIPokemon(id = 1, "Pikachu"),
         pokemonState = PokemonState.Success,
         title = "Pokemon",

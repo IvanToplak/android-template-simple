@@ -29,7 +29,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
-fun MovesScreen(
+internal fun MovesScreen(
     viewModel: MovesViewModel,
     navActions: NavActions,
     modifier: Modifier = Modifier,
@@ -43,7 +43,7 @@ fun MovesScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovesScreenContent(
+private fun MovesScreenContent(
     modifier: Modifier = Modifier,
     title: String = stringResource(id = R.string.moves_screen_title),
     moves: ImmutableList<UIMove> = persistentListOf(),
@@ -66,7 +66,7 @@ fun MovesScreenContent(
 }
 
 @Composable
-fun MovesScreenBody(
+private fun MovesScreenBody(
     modifier: Modifier = Modifier,
     moves: ImmutableList<UIMove> = persistentListOf(),
 ) {
@@ -93,7 +93,7 @@ fun MovesScreenBody(
 }
 
 @Composable
-fun MoveRow(
+private fun MoveRow(
     modifier: Modifier = Modifier,
     move: UIMove,
 ) {

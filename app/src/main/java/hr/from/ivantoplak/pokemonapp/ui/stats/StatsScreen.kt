@@ -36,7 +36,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
-fun StatsScreen(
+internal fun StatsScreen(
     viewModel: StatsViewModel,
     navActions: NavActions,
     modifier: Modifier = Modifier,
@@ -50,7 +50,7 @@ fun StatsScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StatsScreenContent(
+private fun StatsScreenContent(
     modifier: Modifier = Modifier,
     title: String = stringResource(id = R.string.stats_screen_title),
     stats: ImmutableList<UIStat> = persistentListOf(),
@@ -73,7 +73,7 @@ fun StatsScreenContent(
 }
 
 @Composable
-fun StatsScreenBody(
+private fun StatsScreenBody(
     modifier: Modifier = Modifier,
     stats: ImmutableList<UIStat> = persistentListOf(),
 ) {
@@ -100,7 +100,7 @@ fun StatsScreenBody(
 }
 
 @Composable
-fun StatsRow(
+private fun StatsRow(
     modifier: Modifier = Modifier,
     stat: UIStat,
 ) {
