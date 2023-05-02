@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Android template</string>
+    <string name="app_name_dev">[DEV] Android template</string>
+    <string name="app_name_qa">[QA] Android template</string>
+
+    <string name="moves">Moves</string>
+    <string name="stats">Stats</string>
+    <string name="pokemon_image_front">Pokemon image front</string>
+    <string name="pokemon_image_back">Pokemon image back</string>
+    <string name="refresh">Refresh</string>
+    <string name="error_screen_content_title">Error occurred!</string>
+    <string name="error_screen_content_body">Something went wrong, please check your internet connection and try again.</string>
+    <string name="error_image">Error image</string>
+    <string name="go_back">Go back</string>
+    <string name="pokemon_info">Click the refresh button\nto load a pokemon</string>
+
+    <!-- Screen titles -->
+    <string name="pokemon_screen_title">Pokemon</string>
+    <string name="moves_screen_title">Moves</string>
+    <string name="stats_screen_title">Stats</string>
+    <string name="error_screen_title">Error</string>
+    <string name="pokedex_screen_title">Pokedex</string>
+</resources>
