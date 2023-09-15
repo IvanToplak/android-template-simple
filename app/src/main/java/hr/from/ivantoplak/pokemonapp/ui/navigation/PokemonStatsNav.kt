@@ -2,8 +2,8 @@ package hr.from.ivantoplak.pokemonapp.ui.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
+import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.google.accompanist.navigation.animation.composable
 import hr.from.ivantoplak.pokemonapp.ui.stats.StatsScreen
 import hr.from.ivantoplak.pokemonapp.viewmodel.StatsViewModel
 import org.koin.androidx.compose.koinViewModel

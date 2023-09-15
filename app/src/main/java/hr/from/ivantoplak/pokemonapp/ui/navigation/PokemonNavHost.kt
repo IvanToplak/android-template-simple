@@ -7,7 +7,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.google.accompanist.navigation.animation.AnimatedNavHost
+import androidx.navigation.compose.NavHost
 
 private const val TransitionDuration = 1000
 
@@ -18,7 +18,7 @@ fun PokemonNavHost(
     widthSizeClass: WindowWidthSizeClass,
     modifier: Modifier = Modifier,
 ) {
-    AnimatedNavHost(
+    NavHost(
         navController = navController,
         startDestination = AppScreen.Pokemon.name,
         modifier = modifier,

@@ -11,12 +11,12 @@ apply from: 'lint.gradle'
 
 android {
     namespace 'hr.from.ivantoplak.pokemonapp'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "hr.from.ivantoplak.pokemonapp"
-        minSdk 26
-        targetSdk 33
+        minSdk 28
+        targetSdk 34
         versionCode 1
         versionName "0.0.1"
         archivesBaseName = "android-template-v${versionName}"
@@ -36,7 +36,7 @@ android {
 
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'retrofit.pro'
         }
     }
 
@@ -131,7 +131,6 @@ dependencies {
 
     // Accompanist
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
     implementation "com.google.accompanist:accompanist-permissions:$accompanist_version"
 
     // Lifecycle dependencies
