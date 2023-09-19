@@ -1,11 +1,9 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp")
-    id("com.github.ben-manes.versions")
-    id("org.jlleitschuh.gradle.ktlint")
-//    id("com.google.gms.google-services")
-//    id("com.google.firebase.crashlytics")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.dependency.update)
+    alias(libs.plugins.ktlint)
 }
 
 android {
@@ -93,8 +91,8 @@ android {
     }
 
     composeOptions {
-        val compose_compiler_version: String by project
-        kotlinCompilerExtensionVersion = compose_compiler_version
+        val composeCompilerVersion = libs.versions.androidxComposeCompiler.get().toString()
+        kotlinCompilerExtensionVersion = composeCompilerVersion
     }
 
     packaging {
@@ -112,127 +110,92 @@ android {
 }
 
 dependencies {
-    val accompanist_version: String by project
-    val activity_compose_version: String by project
-    val activity_ktx_version: String by project
-    val android_test_rules_version: String by project
-    val android_test_version: String by project
-    val appcompat_version: String by project
-    val coil_version: String by project
-    val collections_immutable_version: String by project
-    val compose_bom_version: String by project
-    val constraintlayout_compose_version: String by project
-    val core_ktx_version: String by project
-    val core_testing_version: String by project
-    val coroutine_version: String by project
-    val datastore_version: String by project
-    val junit_version: String by project
-    val kotlin_version: String by project
-    val koin_version: String by project
-    val koin_android_version: String by project
-    val koin_android_compose_version: String by project
-    val lifecycle_version: String by project
-    val material_version: String by project
-    val mockito_version: String by project
-    val mockito_inline_version: String by project
-    val navigation_compose_version: String by project
-    val splashscreen_version: String by project
-    val timber_version: String by project
-    val moshi_version: String by project
-    val retrofit_version: String by project
-    val room_version: String by project
-
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:$collections_immutable_version")
+    // Kotlin
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlinx.collections.immutable)
 
     // Android
-    implementation("androidx.activity:activity-ktx:$activity_ktx_version")
-    implementation("androidx.appcompat:appcompat:$appcompat_version")
-    implementation("androidx.core:core-ktx:$core_ktx_version")
-    implementation("com.google.android.material:material:$material_version")
-    implementation("androidx.core:core-splashscreen:$splashscreen_version")
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.android.material)
+    implementation(libs.androidx.core.splashscreen)
 
     // Compose
-    val composeBom = platform("androidx.compose:compose-bom:$compose_bom_version")
+    val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
     androidTestImplementation(composeBom)
 
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material3:material3-window-size-class")
-    implementation("androidx.compose.material:material-icons-core")
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.activity:activity-compose:$activity_compose_version")
-    implementation("androidx.constraintlayout:constraintlayout-compose:$constraintlayout_compose_version")
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.windowSizeClass)
+    implementation(libs.androidx.compose.material.iconsCore)
+    implementation(libs.androidx.compose.material.iconsExtended)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.constraintlayout.compose)
 
     // Android Studio Preview support
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    debugImplementation("androidx.compose.ui:ui-tooling")
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 
     // Accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanist_version")
-    implementation("com.google.accompanist:accompanist-permissions:$accompanist_version")
+    implementation(libs.accompanist.permissions)
 
     // Lifecycle dependencies
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version")
+    implementation(libs.androidx.lifecycle.viewModelCompose)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
 
     // Koin
-    implementation("io.insert-koin:koin-android:$koin_android_version")
-    implementation("io.insert-koin:koin-androidx-compose:$koin_android_compose_version")
-    testImplementation("io.insert-koin:koin-test:$koin_version")
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
+    testImplementation(libs.koin.test)
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version")
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 
     // Coil
-    implementation("io.coil-kt:coil-compose:$coil_version")
+    implementation(libs.coil.kt.compose)
 
     // Navigation
-    implementation("androidx.navigation:navigation-compose:$navigation_compose_version")
+    implementation(libs.androidx.navigation.compose)
 
     // Room
-    implementation("androidx.room:room-runtime:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
+    implementation(libs.room.ktx)
 
     // DataStore
-    implementation("androidx.datastore:datastore-preferences:$datastore_version")
+    implementation(libs.androidx.dataStore.preferences)
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
-    implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.moshi)
 
     // Moshi
-    implementation("com.squareup.moshi:moshi:$moshi_version")
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
+    implementation(libs.moshi)
+    ksp(libs.moshi.kotlin.codegen)
 
     // Logging
-    implementation("com.jakewharton.timber:timber:$timber_version")
-
-    // Google services
-//    implementation(platform("com.google.firebase:firebase-bom:$firebase_bom_version"))
-//    implementation("com.google.firebase:firebase-analytics-ktx")
-//    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation(libs.timber)
 
     // Test
     // Unit testing framework
-    androidTestImplementation("androidx.test:rules:$android_test_rules_version")
-    androidTestImplementation("androidx.test:runner:$android_test_version")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.compose.ui.test)
+    debugImplementation(libs.androidx.compose.ui.testManifest)
 
-    testImplementation("androidx.test.ext:junit:$junit_version")
-    androidTestImplementation("androidx.test.ext:junit:$junit_version")
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.ext)
 
     // Mockito
-    testImplementation("org.mockito.kotlin:mockito-kotlin:$mockito_version")
-    testImplementation("org.mockito:mockito-inline:$mockito_inline_version")
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.mockito.inline)
 
     // Test Coroutines
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_version")
+    testImplementation(libs.kotlinx.coroutines.test)
 
-    testImplementation("org.jetbrains.kotlin:kotlin-reflect:$kotlin_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
-    testImplementation("androidx.arch.core:core-testing:$core_testing_version")
+    testImplementation(libs.kotlin.stdlib)
+    testImplementation(libs.kotlin.reflect)
+    testImplementation(libs.androidx.core.testing)
 }
