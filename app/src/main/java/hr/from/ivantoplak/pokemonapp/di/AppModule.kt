@@ -18,7 +18,9 @@ import hr.from.ivantoplak.pokemonapp.viewmodel.PokemonViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.SplashViewModel
 import hr.from.ivantoplak.pokemonapp.viewmodel.StatsViewModel
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -43,11 +45,11 @@ val appModule = module {
         ).build()
     }
 
-    single<DispatcherProvider> { DispatcherProviderImpl() }
+    singleOf(::DispatcherProviderImpl) bind DispatcherProvider::class
 
     single { get<PokemonDatabase>().pokemonDao() }
 
-    single<PokemonRepository> { PokemonRepositoryImpl(get(), get(), get()) }
+    singleOf(::PokemonRepositoryImpl) bind PokemonRepository::class
 
     single {
         InternetManager(androidContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
@@ -62,13 +64,13 @@ val appModule = module {
     }
 
     // ViewModels
-    viewModel { PokemonViewModel(get(), get()) }
+    viewModelOf(::PokemonViewModel)
 
-    viewModel { (pokemonId: Int) -> MovesViewModel(pokemonId, get(), get()) }
+    viewModelOf(::MovesViewModel)
 
-    viewModel { (pokemonId: Int) -> StatsViewModel(pokemonId, get(), get()) }
+    viewModelOf(::StatsViewModel)
 
-    viewModel { ConnectivityViewModel(get()) }
+    viewModelOf(::ConnectivityViewModel)
 
-    viewModel { SplashViewModel() }
+    viewModelOf(::SplashViewModel)
 }
