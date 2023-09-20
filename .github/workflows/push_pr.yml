@@ -24,7 +24,7 @@ jobs:
           java-version: '17'
 
       - name: Run Linter
-        run: ./gradlew --parallel ktlint lint
+        run: ./gradlew --parallel ktlintCheck lint
 
   unit_tests:
     name: Run Unit Tests
