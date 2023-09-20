@@ -34,7 +34,7 @@ fun PokemonTopAppBar(
         } else {
             {}
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.topAppBarContainerColor,
             navigationIconContentColor = MaterialTheme.colorScheme.topAppBarTextColor,
             titleContentColor = MaterialTheme.colorScheme.topAppBarTextColor,

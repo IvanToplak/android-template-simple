@@ -75,7 +75,7 @@ There are 2 apps in the Play Store Console:
 
 Code style is defined in the `$HOME/.editorconfig` based on the official Kotlin code style.
 
-Run `ktlint` task to run [Kotlin linter](https://github.com/pinterest/ktlint).
+Run `ktlintCheck` task to run [Kotlin linter](https://github.com/pinterest/ktlint).
 
 ## Dependencies
 

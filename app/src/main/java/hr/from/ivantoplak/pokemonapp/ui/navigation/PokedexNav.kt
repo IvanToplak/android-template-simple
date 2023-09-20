@@ -2,8 +2,8 @@ package hr.from.ivantoplak.pokemonapp.ui.navigation
 
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.google.accompanist.navigation.animation.composable
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.ui.pokemon.PokedexScreen
 
