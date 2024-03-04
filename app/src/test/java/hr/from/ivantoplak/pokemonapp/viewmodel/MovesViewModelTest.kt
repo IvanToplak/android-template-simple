@@ -1,10 +1,11 @@
 package hr.from.ivantoplak.pokemonapp.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import hr.from.ivantoplak.pokemonapp.coroutines.DispatcherProvider
-import hr.from.ivantoplak.pokemonapp.mappings.toUIMove
-import hr.from.ivantoplak.pokemonapp.model.Move
-import hr.from.ivantoplak.pokemonapp.repository.PokemonRepository
+import hr.from.ivantoplak.pokemonapp.common.coroutines.DispatcherProvider
+import hr.from.ivantoplak.pokemonapp.pokemon.mappings.toUIMove
+import hr.from.ivantoplak.pokemonapp.pokemon.model.Move
+import hr.from.ivantoplak.pokemonapp.pokemon.model.PokemonRepository
+import hr.from.ivantoplak.pokemonapp.pokemon.vm.MovesViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow

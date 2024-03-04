@@ -17,7 +17,7 @@
         android:theme="@style/Theme.PokemonApp.SplashScreen"
         tools:targetApi="s">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".app.ui.PokemonActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
