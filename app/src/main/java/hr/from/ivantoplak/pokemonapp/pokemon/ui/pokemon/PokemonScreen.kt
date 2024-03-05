@@ -45,19 +45,20 @@ import androidx.constraintlayout.compose.Dimension
 import coil.compose.rememberAsyncImagePainter
 import coil.imageLoader
 import hr.from.ivantoplak.pokemonapp.R
-import hr.from.ivantoplak.pokemonapp.app.nav.AppNavActions
+import hr.from.ivantoplak.pokemonapp.app.nav.AppNavActionProvider
 import hr.from.ivantoplak.pokemonapp.common.ui.appbar.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.common.ui.theme.PokemonAppTheme
 import hr.from.ivantoplak.pokemonapp.common.utils.titleCaseFirstChar
 import hr.from.ivantoplak.pokemonapp.pokemon.vm.PokemonState
 import hr.from.ivantoplak.pokemonapp.pokemon.vm.PokemonViewModel
+import org.koin.compose.koinInject
 
 @Composable
 internal fun PokemonScreen(
     viewModel: PokemonViewModel,
-    navActions: AppNavActions,
     isExpandedScreen: Boolean,
     modifier: Modifier = Modifier,
+    appNavActionProvider: AppNavActionProvider = koinInject(),
 ) {
     val pokemon: UIPokemon? by viewModel.pokemon
     val showErrorMessage: Boolean by viewModel.showErrorMessage
@@ -65,7 +66,7 @@ internal fun PokemonScreen(
     // show error screen
     if (showErrorMessage) {
         LaunchedEffect(Unit) {
-            navActions.navigateToErrorScreen()
+            // TODO update error handling
             viewModel.onShowErrorMessage()
         }
     }
@@ -77,17 +78,17 @@ internal fun PokemonScreen(
         isExpandedScreen = isExpandedScreen,
         onClickShowMoves = {
             pokemon?.let {
-                navActions.navigateToMovesScreen(it)
+                appNavActionProvider.appNavActions?.navigateToMovesScreen(it)
             }
         },
         onClickShowStats = {
             pokemon?.let {
-                navActions.navigateToStatsScreen(it)
+                appNavActionProvider.appNavActions?.navigateToStatsScreen(it)
             }
         },
         onClickShowPokedex = {
             pokemon?.let {
-                navActions.navigateToPokedexScreen()
+                appNavActionProvider.appNavActions?.navigateToPokedexScreen()
             }
         },
         onClickRefresh = viewModel::onRefresh,

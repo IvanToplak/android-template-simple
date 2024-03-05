@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import hr.from.ivantoplak.pokemonapp.R
-import hr.from.ivantoplak.pokemonapp.app.nav.AppNavActions
+import hr.from.ivantoplak.pokemonapp.app.nav.AppNavActionProvider
 import hr.from.ivantoplak.pokemonapp.common.ui.appbar.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.common.ui.theme.PokemonAppTheme
 import hr.from.ivantoplak.pokemonapp.common.ui.theme.listDivider
@@ -25,17 +25,18 @@ import hr.from.ivantoplak.pokemonapp.pokemon.vm.MovesViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import org.koin.compose.koinInject
 
 @Composable
 internal fun MovesScreen(
     viewModel: MovesViewModel,
-    navActions: AppNavActions,
     modifier: Modifier = Modifier,
+    appNavActionProvider: AppNavActionProvider = koinInject(),
 ) {
     MovesScreenContent(
         modifier = modifier,
         moves = viewModel.moves.value,
-        onClickBack = navActions.navigateUp,
+        onClickBack = { appNavActionProvider.appNavActions?.navigateUp() },
     )
 }
 

@@ -5,9 +5,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import hr.from.ivantoplak.pokemonapp.R
-import hr.from.ivantoplak.pokemonapp.app.nav.AppNavActions
-import hr.from.ivantoplak.pokemonapp.app.nav.AppScreen
+import hr.from.ivantoplak.pokemonapp.app.nav.AppNavActionProvider
+import hr.from.ivantoplak.pokemonapp.app.nav.AppNavScreen
 import hr.from.ivantoplak.pokemonapp.pokemon.ui.pokemon.PokedexScreen
+import org.koin.compose.koinInject
 
 private const val PokedexUrl = "https://www.pokemon.com/us/pokedex/"
 
@@ -16,11 +17,9 @@ enum class PokedexScreenParameter(val param: String) {
     WebUrl("webUrl"),
 }
 
-fun NavGraphBuilder.pokedexScreen(
-    navActions: AppNavActions,
-) {
+fun NavGraphBuilder.pokedexScreen() {
     composable(
-        route = AppScreen.Search.name +
+        route = AppNavScreen.Search.name +
             "?${PokedexScreenParameter.Title.param}={${PokedexScreenParameter.Title.param}}" +
             "&${PokedexScreenParameter.WebUrl.param}={${PokedexScreenParameter.WebUrl.param}}",
         arguments = listOf(
@@ -32,11 +31,12 @@ fun NavGraphBuilder.pokedexScreen(
             ?: stringResource(id = R.string.pokedex_screen_title)
         val url = backStackEntry.arguments?.getString(PokedexScreenParameter.WebUrl.param)
             ?: PokedexUrl
+        val appNavActionProvider: AppNavActionProvider = koinInject()
 
         PokedexScreen(
             title = title,
             webUrl = url,
-            onClickBack = navActions.navigateUp,
+            onClickBack = { appNavActionProvider.appNavActions?.navigateUp() },
         )
     }
 }

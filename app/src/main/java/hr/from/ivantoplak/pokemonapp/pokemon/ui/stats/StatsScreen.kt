@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import hr.from.ivantoplak.pokemonapp.R
-import hr.from.ivantoplak.pokemonapp.app.nav.AppNavActions
+import hr.from.ivantoplak.pokemonapp.app.nav.AppNavActionProvider
 import hr.from.ivantoplak.pokemonapp.common.ui.appbar.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.common.ui.theme.PokemonAppTheme
 import hr.from.ivantoplak.pokemonapp.common.ui.theme.listDivider
@@ -32,17 +32,18 @@ import hr.from.ivantoplak.pokemonapp.pokemon.vm.StatsViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import org.koin.compose.koinInject
 
 @Composable
 internal fun StatsScreen(
     viewModel: StatsViewModel,
-    navActions: AppNavActions,
     modifier: Modifier = Modifier,
+    appNavActionProvider: AppNavActionProvider = koinInject(),
 ) {
     StatsScreenContent(
         modifier = modifier,
         stats = viewModel.stats.value,
-        onClickBack = navActions.navigateUp,
+        onClickBack = { appNavActionProvider.appNavActions?.navigateUp() },
     )
 }
 
