@@ -3,38 +3,31 @@ package hr.from.ivantoplak.pokemonapp.app.nav
 import androidx.navigation.NavHostController
 import hr.from.ivantoplak.pokemonapp.pokemon.ui.pokemon.UIPokemon
 
-enum class AppScreen {
+enum class AppNavScreen {
     Pokemon,
     Moves,
     Stats,
-    Error,
     Search,
 }
 
 /**
  * Models the navigation actions in the app.
  */
-class AppNavActions(navController: NavHostController) {
+class AppNavActions(private val navController: NavHostController) {
 
-    val navigateUp: () -> Unit = {
+    fun navigateUp() {
         navController.navigateUp()
     }
 
-    val navigateToMovesScreen: (UIPokemon) -> Unit = { pokemon ->
-        navController.navigate("${AppScreen.Moves.name}/${pokemon.id}")
+    fun navigateToMovesScreen(pokemon: UIPokemon) {
+        navController.navigate("${AppNavScreen.Moves.name}/${pokemon.id}")
     }
 
-    val navigateToStatsScreen: (UIPokemon) -> Unit = { pokemon ->
-        navController.navigate("${AppScreen.Stats.name}/${pokemon.id}")
+    fun navigateToStatsScreen(pokemon: UIPokemon) {
+        navController.navigate("${AppNavScreen.Stats.name}/${pokemon.id}")
     }
 
-    val navigateToPokedexScreen: () -> Unit = {
-        navController.navigate(AppScreen.Search.name)
-    }
-
-    val navigateToErrorScreen: () -> Unit = {
-        navController.navigate(AppScreen.Error.name) {
-            launchSingleTop = true
-        }
+    fun navigateToPokedexScreen() {
+        navController.navigate(AppNavScreen.Search.name)
     }
 }
