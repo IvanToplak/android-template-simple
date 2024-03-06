@@ -24,7 +24,7 @@ jobs:
           java-version: '17'
 
       - name: Run Linter
-        run: ./gradlew --parallel ktlintCheck lint
+        run: ./gradlew --parallel ktlintCheck lintDevDebug
 
   unit_tests:
     name: Run Unit Tests
@@ -40,4 +40,4 @@ jobs:
           java-version: '17'
 
       - name: Unit Tests
-        run: ./gradlew --parallel test
+        run: ./gradlew --parallel testDevDebugUnitTest

@@ -5,6 +5,7 @@ import hr.from.ivantoplak.pokemonapp.common.coroutines.DispatcherProvider
 import hr.from.ivantoplak.pokemonapp.pokemon.mappings.toUIMove
 import hr.from.ivantoplak.pokemonapp.pokemon.model.Move
 import hr.from.ivantoplak.pokemonapp.pokemon.model.PokemonRepository
+import hr.from.ivantoplak.pokemonapp.pokemon.vm.MovesState
 import hr.from.ivantoplak.pokemonapp.pokemon.vm.MovesViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -55,7 +56,8 @@ class MovesViewModelTest {
         verify(dispatcher).io()
         verify(repo).getPokemonMoves(pokemonId)
         val expected = moves.map { it.toUIMove() }
-        assertEquals(expected, viewModel.moves.value)
+        assertTrue(viewModel.state.value is MovesState.Ready)
+        assertEquals(expected, (viewModel.state.value as MovesState.Ready).moves)
     }
 
     @Test
@@ -71,6 +73,6 @@ class MovesViewModelTest {
         // assert
         verify(dispatcher).io()
         verify(repo).getPokemonMoves(pokemonId)
-        assertTrue(viewModel.moves.value.isEmpty())
+        assertTrue(viewModel.state.value is MovesState.Error)
     }
 }

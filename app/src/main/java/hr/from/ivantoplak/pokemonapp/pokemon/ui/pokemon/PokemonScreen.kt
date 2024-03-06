@@ -23,9 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
@@ -42,13 +40,17 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.ConstraintSetScope
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import coil.imageLoader
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.app.nav.AppNavActionProvider
 import hr.from.ivantoplak.pokemonapp.common.ui.appbar.PokemonTopAppBar
+import hr.from.ivantoplak.pokemonapp.common.ui.error.ErrorScreen
 import hr.from.ivantoplak.pokemonapp.common.ui.theme.PokemonAppTheme
 import hr.from.ivantoplak.pokemonapp.common.utils.titleCaseFirstChar
+import hr.from.ivantoplak.pokemonapp.pokemon.vm.PokemonAction
+import hr.from.ivantoplak.pokemonapp.pokemon.vm.PokemonEvent
 import hr.from.ivantoplak.pokemonapp.pokemon.vm.PokemonState
 import hr.from.ivantoplak.pokemonapp.pokemon.vm.PokemonViewModel
 import org.koin.compose.koinInject
@@ -60,71 +62,71 @@ internal fun PokemonScreen(
     modifier: Modifier = Modifier,
     appNavActionProvider: AppNavActionProvider = koinInject(),
 ) {
-    val pokemon: UIPokemon? by viewModel.pokemon
-    val showErrorMessage: Boolean by viewModel.showErrorMessage
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val event by viewModel.event.collectAsStateWithLifecycle()
 
-    // show error screen
-    if (showErrorMessage) {
-        LaunchedEffect(Unit) {
-            // TODO update error handling
-            viewModel.onShowErrorMessage()
+    LaunchedEffect(event) {
+        when (val e = event) {
+            PokemonEvent.NavigateUp -> {
+                appNavActionProvider.appNavActions?.navigateUp()
+                viewModel.reduce(PokemonAction.OnEventConsumed)
+            }
+
+            is PokemonEvent.NavigateToMoves -> {
+                appNavActionProvider.appNavActions?.navigateToMovesScreen(e.pokemon)
+                viewModel.reduce(PokemonAction.OnEventConsumed)
+            }
+
+            is PokemonEvent.NavigateToStats -> {
+                appNavActionProvider.appNavActions?.navigateToStatsScreen(e.pokemon)
+                viewModel.reduce(PokemonAction.OnEventConsumed)
+            }
+
+            PokemonEvent.NavigateToPokedex -> {
+                appNavActionProvider.appNavActions?.navigateToPokedexScreen()
+                viewModel.reduce(PokemonAction.OnEventConsumed)
+            }
+
+            PokemonEvent.NoEvent -> {}
         }
     }
 
-    PokemonScreenContent(
-        modifier = modifier,
-        pokemon = viewModel.pokemon.value,
-        pokemonState = viewModel.pokemonState.value,
-        isExpandedScreen = isExpandedScreen,
-        onClickShowMoves = {
-            pokemon?.let {
-                appNavActionProvider.appNavActions?.navigateToMovesScreen(it)
-            }
-        },
-        onClickShowStats = {
-            pokemon?.let {
-                appNavActionProvider.appNavActions?.navigateToStatsScreen(it)
-            }
-        },
-        onClickShowPokedex = {
-            pokemon?.let {
-                appNavActionProvider.appNavActions?.navigateToPokedexScreen()
-            }
-        },
-        onClickRefresh = viewModel::onRefresh,
-    )
+    if (state.showError) {
+        ErrorScreen(
+            modifier = modifier,
+            onClickBack = { viewModel.reduce(PokemonAction.OnNavigateUp) },
+        )
+    } else {
+        PokemonScreenContent(
+            modifier = modifier,
+            isExpandedScreen = isExpandedScreen,
+            state = state,
+            reduce = viewModel::reduce,
+        )
+    }
 }
 
 @Composable
 fun PokemonScreenContent(
     modifier: Modifier = Modifier,
-    pokemon: UIPokemon? = null,
-    pokemonState: PokemonState = PokemonState.Loading,
-    title: String = stringResource(id = R.string.pokemon_screen_title),
     isExpandedScreen: Boolean = false,
-    onClickShowMoves: () -> Unit = {},
-    onClickShowStats: () -> Unit = {},
-    onClickShowPokedex: () -> Unit = {},
-    onClickRefresh: () -> Unit = {},
+    state: PokemonState = PokemonState(),
+    reduce: (PokemonAction) -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
             PokemonTopAppBar(
-                title = title,
+                title = stringResource(id = R.string.pokemon_screen_title),
                 showBackButton = false,
             )
         },
     ) { innerPadding ->
         PokemonScreenBody(
             modifier = Modifier.padding(innerPadding),
-            pokemon = pokemon,
-            pokemonState = pokemonState,
             isExpandedScreen = isExpandedScreen,
-            onClickShowMoves = onClickShowMoves,
-            onClickShowStats = onClickShowStats,
-            onClickShowPokedex = onClickShowPokedex,
-            onClickRefresh = onClickRefresh,
+            state = state,
+            reduce = reduce,
         )
     }
 }
@@ -132,13 +134,9 @@ fun PokemonScreenContent(
 @Composable
 fun PokemonScreenBody(
     modifier: Modifier = Modifier,
-    pokemon: UIPokemon? = null,
-    pokemonState: PokemonState = PokemonState.Loading,
     isExpandedScreen: Boolean = false,
-    onClickShowMoves: () -> Unit = {},
-    onClickShowStats: () -> Unit = {},
-    onClickShowPokedex: () -> Unit = {},
-    onClickRefresh: () -> Unit = {},
+    state: PokemonState = PokemonState(),
+    reduce: (PokemonAction) -> Unit = {},
 ) {
     val alignment = if (isExpandedScreen) Alignment.Center else Alignment.TopCenter
     ConstraintLayout(
@@ -149,31 +147,26 @@ fun PokemonScreenBody(
             .wrapContentSize(align = alignment),
     ) {
         // pokemon name
-        val pokemonName by remember(pokemon) {
-            derivedStateOf { pokemon?.name?.titleCaseFirstChar() ?: "" }
-        }
-        val isError = pokemonState == PokemonState.ErrorNoData
-        val screenTitle =
-            if (isError) stringResource(id = R.string.pokemon_info) else pokemonName
+        val pokemonName = state.pokemon.name.titleCaseFirstChar()
 
         ClickableText(
-            text = AnnotatedString(screenTitle),
+            text = AnnotatedString(pokemonName),
             style = MaterialTheme.typography.titleLarge.copy(textAlign = TextAlign.Center),
-            onClick = { if (!isError) onClickShowPokedex() },
+            onClick = { reduce(PokemonAction.OnPokedex) },
             modifier = Modifier.layoutId("pokemon_name"),
         )
 
         // foreground image
         Image(
             painter = rememberAsyncImagePainter(
-                model = pokemon?.frontSpriteUrl,
+                model = state.pokemon.frontSpriteUrl,
                 imageLoader = LocalContext.current.imageLoader,
             ),
             contentDescription = stringResource(id = R.string.pokemon_image_front),
             modifier = Modifier
                 .layoutId("pokemon_sprite_foreground")
                 .size(dimensionResource(id = R.dimen.sprite_image_size))
-                .clickable { if (!isError) onClickShowPokedex() },
+                .clickable { reduce(PokemonAction.OnPokedex) },
         )
 
         Spacer(
@@ -185,27 +178,23 @@ fun PokemonScreenBody(
         // background image
         Image(
             painter = rememberAsyncImagePainter(
-                model = pokemon?.backSpriteUrl,
+                model = state.pokemon.backSpriteUrl,
                 imageLoader = LocalContext.current.imageLoader,
             ),
             contentDescription = stringResource(id = R.string.pokemon_image_back),
             modifier = Modifier
                 .layoutId("pokemon_sprite_background")
                 .size(dimensionResource(id = R.dimen.sprite_image_size))
-                .clickable { if (!isError) onClickShowPokedex() },
+                .clickable { reduce(PokemonAction.OnPokedex) },
         )
 
-        val buttonsEnabled by remember(pokemonState) {
-            derivedStateOf {
-                pokemonState in arrayOf(PokemonState.ErrorHasData, PokemonState.Success)
-            }
-        }
+        val buttonsEnabled = !state.isLoading
 
         // moves button
         val minButtonHeight = dimensionResource(id = R.dimen.min_button_height)
         val buttonWidth = dimensionResource(id = R.dimen.button_width)
         Button(
-            onClick = { onClickShowMoves() },
+            onClick = { reduce(PokemonAction.OnMoves) },
             enabled = buttonsEnabled,
             modifier = Modifier
                 .width(buttonWidth)
@@ -222,7 +211,7 @@ fun PokemonScreenBody(
 
         // stats button
         Button(
-            onClick = { onClickShowStats() },
+            onClick = { reduce(PokemonAction.OnStats) },
             enabled = buttonsEnabled,
             modifier = Modifier
                 .width(buttonWidth)
@@ -239,25 +228,25 @@ fun PokemonScreenBody(
 
         // refresh button
         Button(
-            onClick = { onClickRefresh() },
+            onClick = { reduce(PokemonAction.OnRefresh) },
             modifier = Modifier
                 .layoutId("pokemon_refresh_button")
                 .width(buttonWidth),
-            enabled = pokemonState != PokemonState.Loading,
+            enabled = buttonsEnabled,
             colors = ButtonDefaults.buttonColors(
                 disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8F),
                 disabledContentColor = contentColorFor(MaterialTheme.colorScheme.primary),
             ),
         ) {
             AnimatedContent(
-                targetState = pokemonState,
+                targetState = state.isLoading,
                 modifier = Modifier
                     .heightIn(min = minButtonHeight)
                     .wrapContentHeight(align = Alignment.CenterVertically),
                 contentAlignment = Alignment.Center,
                 label = "Refresh Button",
-            ) { state ->
-                if (state == PokemonState.Loading) {
+            ) { isLoading ->
+                if (isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(minButtonHeight),
                         color = MaterialTheme.colorScheme.background,
@@ -401,12 +390,7 @@ fun PokemonScreenPreviewExpandedScreen() {
 @Composable
 private fun GetPokemonScreen(isExpandedScreen: Boolean = false) {
     PokemonScreenContent(
-        pokemon = UIPokemon(id = 1, "Pikachu"),
-        pokemonState = PokemonState.Success,
-        title = "Pokemon",
+        state = PokemonState(pokemon = UIPokemon(id = 1, "Pikachu")),
         isExpandedScreen = isExpandedScreen,
-        onClickShowStats = {},
-        onClickShowMoves = {},
-        onClickRefresh = {},
     )
 }
