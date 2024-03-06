@@ -13,6 +13,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
@@ -23,11 +25,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.app.nav.AppNavActionProvider
 import hr.from.ivantoplak.pokemonapp.common.ui.appbar.PokemonTopAppBar
+import hr.from.ivantoplak.pokemonapp.common.ui.error.ErrorScreen
 import hr.from.ivantoplak.pokemonapp.common.ui.theme.PokemonAppTheme
 import hr.from.ivantoplak.pokemonapp.common.ui.theme.listDivider
+import hr.from.ivantoplak.pokemonapp.pokemon.vm.StatsAction
+import hr.from.ivantoplak.pokemonapp.pokemon.vm.StatsEvent
+import hr.from.ivantoplak.pokemonapp.pokemon.vm.StatsState
 import hr.from.ivantoplak.pokemonapp.pokemon.vm.StatsViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -40,32 +47,56 @@ internal fun StatsScreen(
     modifier: Modifier = Modifier,
     appNavActionProvider: AppNavActionProvider = koinInject(),
 ) {
-    StatsScreenContent(
-        modifier = modifier,
-        stats = viewModel.stats.value,
-        onClickBack = { appNavActionProvider.appNavActions?.navigateUp() },
-    )
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val event by viewModel.event.collectAsStateWithLifecycle()
+
+    LaunchedEffect(event) {
+        when (event) {
+            StatsEvent.NavigateUp -> {
+                appNavActionProvider.appNavActions?.navigateUp()
+                viewModel.reduce(StatsAction.OnEventConsumed)
+            }
+
+            StatsEvent.NoEvent -> {}
+        }
+    }
+
+    when (val st = state) {
+        is StatsState.Ready -> {
+            StatsScreenContent(
+                modifier = modifier,
+                state = st,
+                reduce = viewModel::reduce,
+            )
+        }
+
+        StatsState.Error -> {
+            ErrorScreen(
+                modifier = modifier,
+                onClickBack = { viewModel.reduce(StatsAction.OnNavigateUp) },
+            )
+        }
+    }
 }
 
 @Composable
 private fun StatsScreenContent(
     modifier: Modifier = Modifier,
-    title: String = stringResource(id = R.string.stats_screen_title),
-    stats: ImmutableList<UIStat> = persistentListOf(),
-    onClickBack: () -> Unit = {},
+    state: StatsState.Ready = StatsState.Ready(persistentListOf()),
+    reduce: (StatsAction) -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
             PokemonTopAppBar(
-                title = title,
-                onClickBack = onClickBack,
+                title = stringResource(id = R.string.stats_screen_title),
+                onClickBack = { reduce(StatsAction.OnNavigateUp) },
             )
         },
     ) { innerPadding ->
         StatsScreenBody(
             modifier = Modifier.padding(innerPadding),
-            stats = stats,
+            stats = state.stats,
         )
     }
 }
@@ -149,14 +180,15 @@ private fun getConstraints(): ConstraintSet {
 fun StatsScreenPreview() {
     PokemonAppTheme {
         StatsScreenContent(
-            title = "Stats",
-            stats = List(15) {
-                UIStat(
-                    id = it,
-                    name = "stat name $it",
-                    value = (it + 1) * 100,
-                )
-            }.toImmutableList(),
+            state = StatsState.Ready(
+                stats = List(15) {
+                    UIStat(
+                        id = it,
+                        name = "stat name $it",
+                        value = (it + 1) * 100,
+                    )
+                }.toImmutableList(),
+            ),
         )
     }
 }
