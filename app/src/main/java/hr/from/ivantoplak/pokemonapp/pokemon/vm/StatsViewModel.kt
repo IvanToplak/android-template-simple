@@ -54,8 +54,8 @@ class StatsViewModel(
 
     override fun reduce(action: StatsAction) {
         when (action) {
-            is StatsAction.OnNavigateUp -> StatsEvent.NavigateUp.sendToEvent()
-            is StatsAction.OnEventConsumed -> StatsEvent.NoEvent.sendToEvent()
+            StatsAction.OnNavigateUp -> StatsEvent.NavigateUp.sendToEvent()
+            StatsAction.OnEventConsumed -> StatsEvent.NoEvent.sendToEvent()
         }
     }
 }

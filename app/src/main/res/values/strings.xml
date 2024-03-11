@@ -13,11 +13,12 @@
     <string name="error_image">Error image</string>
     <string name="go_back">Go back</string>
     <string name="pokemon_info">Click the refresh button\nto load a pokemon</string>
+    <string name="dialog_ok">OK</string>
+    <string name="try_again">Try Again</string>
 
     <!-- Screen titles -->
     <string name="pokemon_screen_title">Pokemon</string>
     <string name="moves_screen_title">Moves</string>
     <string name="stats_screen_title">Stats</string>
-    <string name="error_screen_title">Error</string>
     <string name="pokedex_screen_title">Pokedex</string>
 </resources>

@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import hr.from.ivantoplak.pokemonapp.R
-import hr.from.ivantoplak.pokemonapp.common.ui.appbar.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.common.ui.theme.PokemonAppTheme
 import java.util.Locale
 
@@ -32,22 +31,18 @@ internal fun ErrorScreen(
     modifier: Modifier = Modifier,
     title: String = stringResource(id = R.string.error_screen_content_title),
     body: String = stringResource(id = R.string.error_screen_content_body),
-    onClickBack: () -> Unit = {},
+    actionButtonText: String = stringResource(id = R.string.try_again),
+    onActionButtonClick: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
-        topBar = {
-            PokemonTopAppBar(
-                title = stringResource(id = R.string.error_screen_title),
-                onClickBack = onClickBack,
-            )
-        },
     ) { innerPadding ->
         ErrorScreenContent(
             modifier = Modifier.padding(innerPadding),
             title = title,
             body = body,
-            onClickBack = onClickBack,
+            actionButtonText = actionButtonText,
+            onActionButtonClick = onActionButtonClick,
         )
     }
 }
@@ -57,7 +52,8 @@ private fun ErrorScreenContent(
     modifier: Modifier = Modifier,
     title: String = "",
     body: String = "",
-    onClickBack: () -> Unit = {},
+    actionButtonText: String = "",
+    onActionButtonClick: () -> Unit = {},
 ) {
     ConstraintLayout(
         constraintSet = getConstraints(),
@@ -95,13 +91,13 @@ private fun ErrorScreenContent(
                 .padding(horizontal = 16.dp),
         )
 
-        // go back button
+        // action button
         Button(
-            onClick = { onClickBack() },
+            onClick = { onActionButtonClick() },
             modifier = Modifier.layoutId("button_go_back"),
         ) {
             Text(
-                text = stringResource(id = R.string.go_back).uppercase(Locale.getDefault()),
+                text = actionButtonText.uppercase(Locale.getDefault()),
                 style = MaterialTheme.typography.labelLarge,
             )
         }
@@ -158,8 +154,5 @@ fun ErrorScreenPreview() {
 
 @Composable
 private fun GetErrorScreen() {
-    ErrorScreen(
-        title = stringResource(id = R.string.error_screen_content_title),
-        body = stringResource(id = R.string.error_screen_content_body),
-    )
+    ErrorScreen()
 }

@@ -54,8 +54,8 @@ class MovesViewModel(
 
     override fun reduce(action: MovesAction) {
         when (action) {
-            is MovesAction.OnNavigateUp -> MovesEvent.NavigateUp.sendToEvent()
-            is MovesAction.OnEventConsumed -> MovesEvent.NoEvent.sendToEvent()
+            MovesAction.OnNavigateUp -> MovesEvent.NavigateUp.sendToEvent()
+            MovesAction.OnEventConsumed -> MovesEvent.NoEvent.sendToEvent()
         }
     }
 }

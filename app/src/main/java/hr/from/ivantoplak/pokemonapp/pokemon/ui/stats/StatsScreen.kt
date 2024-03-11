@@ -73,7 +73,8 @@ internal fun StatsScreen(
         StatsState.Error -> {
             ErrorScreen(
                 modifier = modifier,
-                onClickBack = { viewModel.reduce(StatsAction.OnNavigateUp) },
+                actionButtonText = stringResource(id = R.string.go_back),
+                onActionButtonClick = { viewModel.reduce(StatsAction.OnNavigateUp) },
             )
         }
     }
