@@ -46,7 +46,7 @@ import coil.imageLoader
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.app.nav.AppNavActionProvider
 import hr.from.ivantoplak.pokemonapp.common.ui.appbar.PokemonTopAppBar
-import hr.from.ivantoplak.pokemonapp.common.ui.error.ErrorScreen
+import hr.from.ivantoplak.pokemonapp.common.ui.dialog.PokemonMessageDialog
 import hr.from.ivantoplak.pokemonapp.common.ui.theme.PokemonAppTheme
 import hr.from.ivantoplak.pokemonapp.common.utils.titleCaseFirstChar
 import hr.from.ivantoplak.pokemonapp.pokemon.vm.PokemonAction
@@ -91,17 +91,17 @@ internal fun PokemonScreen(
         }
     }
 
+    PokemonScreenContent(
+        modifier = modifier,
+        isExpandedScreen = isExpandedScreen,
+        state = state,
+        reduce = viewModel::reduce,
+    )
+
     if (state.showError) {
-        ErrorScreen(
+        PokemonMessageDialog(
             modifier = modifier,
-            onClickBack = { viewModel.reduce(PokemonAction.OnNavigateUp) },
-        )
-    } else {
-        PokemonScreenContent(
-            modifier = modifier,
-            isExpandedScreen = isExpandedScreen,
-            state = state,
-            reduce = viewModel::reduce,
+            onConfirmClicked = { viewModel.reduce(PokemonAction.OnCloseMessageDialog) },
         )
     }
 }

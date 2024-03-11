@@ -49,7 +49,7 @@ class PokemonActivity : AppCompatActivity() {
                 PokemonContent(widthSizeClass = widthSizeClass)
             } else if (showErrorMessage) {
                 PokemonAppTheme {
-                    ErrorScreen(onClickBack = splashViewModel::loadConfig)
+                    ErrorScreen(onActionButtonClick = splashViewModel::loadConfig)
                 }
             }
         }

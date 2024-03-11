@@ -66,7 +66,8 @@ internal fun MovesScreen(
         MovesState.Error -> {
             ErrorScreen(
                 modifier = modifier,
-                onClickBack = { viewModel.reduce(MovesAction.OnNavigateUp) },
+                actionButtonText = stringResource(id = R.string.go_back),
+                onActionButtonClick = { viewModel.reduce(MovesAction.OnNavigateUp) },
             )
         }
     }

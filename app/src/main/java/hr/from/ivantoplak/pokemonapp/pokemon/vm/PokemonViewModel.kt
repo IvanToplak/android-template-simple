@@ -31,6 +31,7 @@ sealed interface PokemonAction {
     data object OnStats : PokemonAction
     data object OnMoves : PokemonAction
     data object OnPokedex : PokemonAction
+    data object OnCloseMessageDialog : PokemonAction
     data object OnNavigateUp : PokemonAction
     data object OnEventConsumed : PokemonAction
 }
@@ -56,6 +57,7 @@ class PokemonViewModel(
             PokemonAction.OnMoves -> PokemonEvent.NavigateToMoves(state.value.pokemon).sendToEvent()
             PokemonAction.OnStats -> PokemonEvent.NavigateToStats(state.value.pokemon).sendToEvent()
             PokemonAction.OnPokedex -> PokemonEvent.NavigateToPokedex.sendToEvent()
+            PokemonAction.OnCloseMessageDialog -> state.value.copy(showError = false).sendToState()
             PokemonAction.OnNavigateUp -> PokemonEvent.NavigateUp.sendToEvent()
             PokemonAction.OnEventConsumed -> PokemonEvent.NoEvent.sendToEvent()
         }
