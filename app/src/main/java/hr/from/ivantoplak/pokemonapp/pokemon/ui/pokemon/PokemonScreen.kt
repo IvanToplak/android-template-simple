@@ -1,7 +1,6 @@
 package hr.from.ivantoplak.pokemonapp.pokemon.ui.pokemon
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -41,12 +39,11 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.ConstraintSetScope
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.rememberAsyncImagePainter
-import coil.imageLoader
 import hr.from.ivantoplak.pokemonapp.R
 import hr.from.ivantoplak.pokemonapp.app.nav.AppNavActionProvider
 import hr.from.ivantoplak.pokemonapp.common.ui.appbar.PokemonTopAppBar
 import hr.from.ivantoplak.pokemonapp.common.ui.dialog.PokemonMessageDialog
+import hr.from.ivantoplak.pokemonapp.common.ui.image.PokemonRemoteImage
 import hr.from.ivantoplak.pokemonapp.common.ui.theme.PokemonAppTheme
 import hr.from.ivantoplak.pokemonapp.common.utils.titleCaseFirstChar
 import hr.from.ivantoplak.pokemonapp.pokemon.vm.PokemonAction
@@ -157,11 +154,8 @@ fun PokemonScreenBody(
         )
 
         // foreground image
-        Image(
-            painter = rememberAsyncImagePainter(
-                model = state.pokemon.frontSpriteUrl,
-                imageLoader = LocalContext.current.imageLoader,
-            ),
+        PokemonRemoteImage(
+            imageUrl = state.pokemon.frontSpriteUrl,
             contentDescription = stringResource(id = R.string.pokemon_image_front),
             modifier = Modifier
                 .layoutId("pokemon_sprite_foreground")
@@ -176,11 +170,8 @@ fun PokemonScreenBody(
         )
 
         // background image
-        Image(
-            painter = rememberAsyncImagePainter(
-                model = state.pokemon.backSpriteUrl,
-                imageLoader = LocalContext.current.imageLoader,
-            ),
+        PokemonRemoteImage(
+            imageUrl = state.pokemon.backSpriteUrl,
             contentDescription = stringResource(id = R.string.pokemon_image_back),
             modifier = Modifier
                 .layoutId("pokemon_sprite_background")
