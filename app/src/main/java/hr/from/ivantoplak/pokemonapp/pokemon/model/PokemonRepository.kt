@@ -19,8 +19,16 @@ private const val ErrorGetPokemon = "Error while retrieving and saving pokemon."
 
 interface PokemonRepository {
 
+    /**
+     * Get pokemon names from the remote API and save them to the local db.
+     * Return the list of names from local db.
+     */
     suspend fun getPokemonNames(): List<String>
 
+    /**
+     * Get pokemon by [name] from the remote API and save it to the local db.
+     * If it was successful, return it, otherwise get random pokemon from the local db.
+     */
     suspend fun getPokemon(name: String): Pokemon?
 
     fun getPokemonMoves(pokemonId: Int): Flow<List<Move>>
@@ -33,10 +41,6 @@ class PokemonRepositoryImpl(
     private val dispatcher: DispatcherProvider,
 ) : PokemonRepository {
 
-    /**
-     * Get pokemon names from the remote API and save them to the local db.
-     * Return the list of names from local db.
-     */
     override suspend fun getPokemonNames(): List<String> = withContext(dispatcher.io()) {
         val pokemonNames = mutableListOf<String>()
         try {
@@ -53,10 +57,6 @@ class PokemonRepositoryImpl(
         pokemonNames
     }
 
-    /**
-     * Get pokemon by [name] from the remote API and save it to the local db.
-     * If it was successful, return it, otherwise get random pokemon from the local db.
-     */
     override suspend fun getPokemon(name: String): Pokemon? = withContext(dispatcher.io()) {
         var pokemon: Pokemon?
         try {

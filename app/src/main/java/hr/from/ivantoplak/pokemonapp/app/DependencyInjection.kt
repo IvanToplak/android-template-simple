@@ -2,6 +2,7 @@ package hr.from.ivantoplak.pokemonapp.app
 
 import android.content.Context
 import hr.from.ivantoplak.pokemonapp.BuildConfig
+import hr.from.ivantoplak.pokemonapp.authentication.authenticationModule
 import hr.from.ivantoplak.pokemonapp.common.commonModule
 import hr.from.ivantoplak.pokemonapp.pokemon.pokemonModule
 import org.koin.android.ext.koin.androidContext
@@ -17,6 +18,7 @@ fun Context.initDependencyInjection() {
             listOf(
                 appModule,
                 commonModule,
+                authenticationModule,
                 pokemonModule,
             ),
         )

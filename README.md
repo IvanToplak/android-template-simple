@@ -34,7 +34,7 @@ Main packages:
 There are 3 environments defined as build flavours:
 
 - **dev** - development environment,
-- **qa** - for pre-release testing,
+- **staging** - for pre-release testing,
 - **prod** - production environment (released app).
 
 All environments have unique application ID (package name) and app name.
@@ -45,30 +45,30 @@ There are 2 build types:
 - **debug**: The code is not obfuscated and it also does not remove unused resources. Used during development as the building process is faster.
 - **release**: APK/AAB is signed using the debug keystore, since the final signing will be in the CI (Bitrise). The code is obfuscated and the resources optimized to obtain a lighter APK/AAB.
 
-Therefore, there are 6 possible variants: **devDebug**, **devRelease**, **qaDebug**, **qaRelease** ,**prodDebug**, **prodRelease**.
+Therefore, there are 6 possible variants: **devDebug**, **devRelease**, **stagingDebug**, **stagingRelease** ,**prodDebug**, **prodRelease**.
 
 After testing our environments in **debug** mode, it is important to test in **release** mode.
-Developers should test the app in **devRelease** variant, and QA should test the app in **qaRelease** variant.
+Developers should test the app in **devRelease** variant, and QA should test the app in **stagingRelease** variant.
 
 ## Firebase
 
 There are 3 Firebase projects (one per environment):
 
 - [[DEV] APP_NAME]() - for development,
-- [[QA] APP_NAME]() - for QA testing,
+- [[STAGING] APP_NAME]() - for QA testing,
 - [APP_NAME]() - for production.
 
 Firebase products:
 
-- [App Distribution]() - easy distribution of pre-releases to test and gather feedback from testers (**qa** environment only),
+- [App Distribution]() - easy distribution of pre-releases to test and gather feedback from testers (**staging** environment only),
 - [Analytics]() - for reporting on user actions in the app (**prod** environment only),
-- [Crashlytics]() - monitor app stability during testing and production (**qa** and **prod** environments).
+- [Crashlytics]() - monitor app stability during testing and production (**staging** and **prod** environments).
 
 ## Google Play Store
 
 There are 2 apps in the Play Store Console:
 
-- **[QA] APP_NAME** - we use this one only to create integration between Firebase App Distribution and Play Store in order to publish pre-releases for QA testing.
+- **[STAGING] APP_NAME** - we use this one only to create integration between Firebase App Distribution and Play Store in order to publish pre-releases for QA testing.
 - **APP_NAME** - this is the main app where all setup and releases to production are done.
 
 ## Code Style
