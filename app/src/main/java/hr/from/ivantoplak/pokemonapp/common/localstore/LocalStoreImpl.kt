@@ -13,6 +13,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 
 private const val PreferenceFileName = "hr.from.ivantoplak.pokemonapp.POKEMON_PREFS"
@@ -22,11 +23,16 @@ class LocalStoreImpl(context: Context) : LocalStore {
 
     private val dataStore = context.dataStore
 
-    override fun getStringValue(key: String): Flow<String> {
+    override fun getStringValueFlow(key: String): Flow<String> {
         val prefKey = stringPreferencesKey(key)
         return dataStore.data.map { prefs ->
             prefs[prefKey] ?: ""
         }
+    }
+
+    override suspend fun getStringValue(key: String): String {
+        val prefKey = stringPreferencesKey(key)
+        return dataStore.data.firstOrNull()?.get(prefKey) ?: ""
     }
 
     override suspend fun setStringValue(key: String, value: String) {

@@ -24,7 +24,7 @@ data class ApiSprites(
     val backDefault: String? = "",
 
     @Json(name = "front_default")
-    val frontDefault: String = "",
+    val frontDefault: String? = "",
 )
 
 @JsonClass(generateAdapter = true)

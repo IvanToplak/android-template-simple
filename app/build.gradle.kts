@@ -20,6 +20,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("Boolean", "ENABLE_ANALYTICS", "false")
         buildConfigField("Boolean", "ENABLE_CRASHLYTICS", "false")
+        buildConfigField("String", "API_BASE_URL", "\"https://pokeapi.co/api/v2/\"")
     }
 
     buildTypes {
@@ -48,10 +49,10 @@ android {
             manifestPlaceholders["appName"] = "@string/app_name_dev"
             applicationIdSuffix = ".dev"
         }
-        create("qa") {
+        create("staging") {
             dimension = "default"
-            manifestPlaceholders["appName"] = "@string/app_name_qa"
-            applicationIdSuffix = ".qa"
+            manifestPlaceholders["appName"] = "@string/app_name_staging"
+            applicationIdSuffix = ".staging"
             buildConfigField("Boolean", "ENABLE_CRASHLYTICS", "true")
         }
         create("prod") {
@@ -170,6 +171,7 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.moshi)
+    implementation(libs.okhttp.logging)
 
     // Moshi
     implementation(libs.moshi)

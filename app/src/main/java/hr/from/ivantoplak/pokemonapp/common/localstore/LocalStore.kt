@@ -2,9 +2,19 @@ package hr.from.ivantoplak.pokemonapp.common.localstore
 
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * LocalStore is responsible for storing and retrieving data from the local storage.
+ * Data is stored in a key-value pair format.
+ */
 interface LocalStore {
 
-    fun getStringValue(key: String): Flow<String>
+    companion object Key {
+        const val AuthToken = "KEY_AUTH_TOKEN"
+    }
+
+    fun getStringValueFlow(key: String): Flow<String>
+
+    suspend fun getStringValue(key: String): String
 
     suspend fun setStringValue(key: String, value: String)
 
