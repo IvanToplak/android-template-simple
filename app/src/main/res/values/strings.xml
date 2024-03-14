@@ -12,7 +12,6 @@
     <string name="error_screen_content_body">Something went wrong, please check your internet connection and try again.</string>
     <string name="error_image">Error image</string>
     <string name="go_back">Go back</string>
-    <string name="pokemon_info">Click the refresh button\nto load a pokemon</string>
     <string name="dialog_ok">OK</string>
     <string name="try_again">Try Again</string>
 
