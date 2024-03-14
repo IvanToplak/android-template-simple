@@ -1,41 +1,38 @@
 [versions]
-accompanist = "0.32.0"
-androidGradlePlugin = "8.1.1"
-androidxActivity = "1.7.2"
+accompanist = "0.34.0"
+androidGradlePlugin = "8.3.0"
+androidxActivity = "1.8.2"
 androidxAppCompat = "1.6.1"
-androidxComposeBom = "2023.09.00"
+androidxComposeBom = "2024.02.02"
 androidxConstraintLayoutCompose = "1.0.1"
-androidxComposeCompiler = "1.5.3"
+androidxComposeCompiler = "1.5.10"
 androidxCore = "1.12.0"
 androidxCoreSplashscreen = "1.0.1"
 androidxCoreTesting = "2.2.0"
 androidxDataStore = "1.0.0"
-androidxLifecycle = "2.6.2"
-androidxNavigation = "2.7.2"
+androidxLifecycle = "2.7.0"
+androidxNavigation = "2.7.7"
 androidxTestCore = "1.5.0"
 androidxTestExt = "1.1.5"
 androidxTestRules = "1.5.0"
 androidxTestRunner = "1.5.2"
-androidxWindowManager = "1.1.0"
-coil = "2.4.0"
-dependencyUpdate = "0.48.0"
-junit4 = "4.13.2"
-koin = "3.5.0"
-kotlin = "1.9.10"
-kotlinxCoroutines = "1.7.3"
-kotlinxDatetime = "0.4.0"
-kotlinxCollectionsImmutable = "0.3.5"
+coil = "2.6.0"
+dependencyUpdate = "0.51.0"
+koin = "3.5.3"
+kotlin = "1.9.22"
+kotlinxCoroutines = "1.8.0"
+kotlinxDatetime = "0.5.0"
+kotlinxCollectionsImmutable = "0.3.7"
 kotlinxSerializationJson = "1.5.1"
-ksp = "1.9.10-1.0.13"
-ktlint = "11.5.1"
-lint = "31.1.1"
-material = "1.9.0"
-mockito = "5.1.0"
+ksp = "1.9.22-1.0.17"
+ktlint = "11.6.1"
+material = "1.11.0"
+mockito = "5.2.1"
 mockitoInline = "5.2.0"
-moshi = "1.15.0"
-okhttp = "4.10.0"
+moshi = "1.15.1"
+okhttp = "4.12.0"
 retrofit = "2.9.0"
-room = "2.5.2"
+room = "2.6.1"
 timber = "5.0.1"
 
 [libraries]
@@ -47,13 +44,10 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "androidxCoreTesting" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-constraintlayout-compose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "androidxConstraintLayoutCompose" }
-androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
-androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
 androidx-compose-material-iconsCore = { group = "androidx.compose.material", name = "material-icons-core" }
 androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
-androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-ui-testManifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -65,16 +59,11 @@ androidx-dataStore-preferences = { group = "androidx.datastore", name = "datasto
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
-androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxNavigation" }
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
 androidx-test-ext = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidxTestExt" }
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTestRules" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTestRunner" }
-androidx-window-manager = { module = "androidx.window:window", version.ref = "androidxWindowManager" }
-coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-coil-kt-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
-junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
@@ -86,7 +75,6 @@ kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-lint-api = { group = "com.android.tools.lint", name = "lint-api", version.ref = "lint" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito" }
 mockito-inline = { group = "org.mockito", name = "mockito-inline", version.ref = "mockitoInline" }
 moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
@@ -101,7 +89,6 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
-android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 dependency-update = { id = "com.github.ben-manes.versions", version.ref = "dependencyUpdate" }

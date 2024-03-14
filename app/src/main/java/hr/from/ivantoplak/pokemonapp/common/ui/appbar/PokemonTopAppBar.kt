@@ -1,7 +1,7 @@
 package hr.from.ivantoplak.pokemonapp.common.ui.appbar
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,7 +46,7 @@ fun PokemonTopAppBar(
 @Composable
 fun PokemonBackButton(onClickBack: () -> Unit = {}) {
     IconButton(onClick = { onClickBack() }) {
-        Icon(Icons.Filled.ArrowBack, contentDescription = null)
+        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
     }
 }
 

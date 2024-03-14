@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -115,7 +115,7 @@ private fun MovesScreenBody(
                     move = move,
                 )
                 if (index < moves.lastIndex) {
-                    Divider(color = MaterialTheme.colorScheme.listDivider)
+                    HorizontalDivider(color = MaterialTheme.colorScheme.listDivider)
                 }
             }
         }
